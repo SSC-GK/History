@@ -1,4 +1,5 @@
 
+
 import { config, state } from './state.js';
 import { dom } from './dom.js';
 import { shuffleArray } from './utils.js';
@@ -429,7 +430,7 @@ async function generatePowerPoint() {
         let pptx = new PptxGenJS();
         
         // --- 1. PRESENTATION-LEVEL FORMATTING ---
-        pptx.layout = '16:9';
+        pptx.layout = 'LAYOUT_16x9';
         pptx.author = 'Quiz LM App';
         pptx.company = 'AI-Powered Learning';
         pptx.title = 'Customized Quiz Presentation';
