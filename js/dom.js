@@ -14,6 +14,12 @@ export function cacheDomElements() {
     dom.pptLoadingText = document.getElementById('ppt-loading-text');
     dom.pptLoadingProgressBar = document.getElementById('ppt-loading-progress-bar');
     dom.pptLoadingDetails = document.getElementById('ppt-loading-details');
+    
+    // PDF Loading Overlay
+    dom.pdfLoadingOverlay = document.getElementById('pdf-loading-overlay');
+    dom.pdfLoadingText = document.getElementById('pdf-loading-text');
+    dom.pdfLoadingProgressBar = document.getElementById('pdf-loading-progress-bar');
+    dom.pdfLoadingDetails = document.getElementById('pdf-loading-details');
 
     // Filter Section
     dom.filterSection = document.getElementById('filter-section');
@@ -32,10 +38,12 @@ export function cacheDomElements() {
     });
     dom.startQuizBtn = document.getElementById('start-quiz-btn');
     dom.createPptBtn = document.getElementById('create-ppt-btn');
+    dom.createPdfBtn = document.getElementById('create-pdf-btn');
     dom.resetFiltersBtnQuiz = document.getElementById('reset-filters-btn-quiz');
     dom.resetFiltersBtnPpt = document.getElementById('reset-filters-btn-ppt');
     dom.questionCount = document.getElementById('question-count');
     dom.pptQuestionCount = document.getElementById('ppt-question-count');
+    dom.pdfQuestionCount = document.getElementById('pdf-question-count');
     dom.quickStartButtons = document.querySelectorAll('.quick-start-btn');
     dom.activeFiltersSummaryBarContainer = document.getElementById('active-filters-summary-bar-container');
     dom.activeFiltersSummaryBar = document.getElementById('active-filters-summary-bar');

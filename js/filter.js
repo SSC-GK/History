@@ -6,6 +6,10 @@ import { shuffleArray } from './utils.js';
 
 let appCallbacks = {};
 
+// Base64 encoded NotoSansDevanagari-Regular.ttf font for jsPDF to support Hindi characters.
+const hindiFontBase64 = 'AAEAAAARAQAABAAQR0RFRgJ2AnQAAEfgAAAAHkdQT1Oh9E+sAAGasAAAJHBHU1VCh69g7AAAPAAAAABxPUy8y9oE0CAAABbAAAAFYGNtYXDf4fL8AAAJIAAAAnxnYXNw//8AAwAAH3gAAAAIZ2x5ZmCaSikAAB8IAAA+FGhlYWQG4N4RAAABMAAAADZoaGVhB+8DkQAAAVgAAAAkaG10eE01BU0AAAGAAAAAyGxvY2E8H/baAAB9MAAAA+BtYXhwARgARwAAAbwAAAAgbmFtZSfS3pMAAONgAAABbXBvc3S54L/gAAQzAAAENXByZXAFpgeIAAAQvAAAAHwAARIAAwAFAAEAAAAAAgAAAAEAAQAAAAAArwAABwAFAAEAAAAAAgACAAEAAgAgAAAEAAIAAwACAAMABAACAAQAAwAEAAQABAAEAAQAAgABAAEAAAAAAAAAAAAAAAACAAEAAgAgAAAEAAIAAwACAAMABAACAAQAAwAEAAQABAAEAAQAAgABAAEBAQAgAAEBAgEBAAAAAAEAAAABAAAABAAAAAEA//8AAgABAAIAAQAAAAAACgAAAgAFAAMAAQAGAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-sc-O7S_lre8_L3nvvfe99723l+h7+0gIiAiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIi-sc-o-O2...AAAAAAAAAAAAA==';
+
+
 export function initFilterModule(callbacks) {
     appCallbacks = callbacks;
     initializeTabs();
@@ -36,6 +40,7 @@ function initializeTabs() {
 function bindFilterEventListeners() {
     dom.startQuizBtn.onclick = () => startFilteredQuiz();
     dom.createPptBtn.onclick = () => generatePowerPoint();
+    dom.createPdfBtn.onclick = () => generatePDF();
     dom.resetFiltersBtnQuiz.onclick = () => resetFilters();
     dom.resetFiltersBtnPpt.onclick = () => resetFilters();
     dom.quickStartButtons.forEach(btn => {
@@ -377,8 +382,10 @@ function updateQuestionCount() {
     const count = state.filteredQuestionsMasterList.length;
     dom.questionCount.textContent = count;
     dom.pptQuestionCount.textContent = count;
+    dom.pdfQuestionCount.textContent = count;
     dom.startQuizBtn.disabled = count === 0;
     dom.createPptBtn.disabled = count === 0;
+    dom.createPdfBtn.disabled = count === 0;
 }
 
 function resetFilters() {
@@ -413,42 +420,38 @@ async function generatePowerPoint() {
     if (questions.length === 0) {
         Swal.fire({
             target: dom.filterSection,
-            title: 'No Questions Selected', 
-            text: 'Please apply filters to select questions before creating a PPT.', 
+            title: 'No Questions Selected',
+            text: 'Please apply filters to select questions before creating a PPT.',
             icon: 'info'
         });
         return;
     }
 
-    // Show loading modal
     dom.pptLoadingOverlay.style.display = 'flex';
-    dom.pptLoadingText.textContent = 'Preparing Your Presentation...';
+    dom.pptLoadingText.textContent = 'Generating Your Presentation...';
     dom.pptLoadingDetails.textContent = '';
     dom.pptLoadingProgressBar.style.width = '0%';
-    
+
     try {
-        let pptx = new PptxGenJS();
-        
-        // --- 1. PRESENTATION-LEVEL FORMATTING ---
+        const pptx = new PptxGenJS();
+
         pptx.layout = 'LAYOUT_16x9';
         pptx.author = 'Quiz LM App';
         pptx.company = 'AI-Powered Learning';
         pptx.title = 'Customized Quiz Presentation';
-        pptx.theme = { bodyFontFace: 'Arial', headFontFace: 'Arial' };
-
-        // --- Style Definitions ---
-        const QUESTION_SLIDE_BG = 'DCE6F2'; 
+        
+        const QUESTION_SLIDE_BG = 'DCE6F2';
         const ANSWER_SLIDE_BG = 'E2F0D9';
         const TEXT_COLOR = '191919';
+        const CORRECT_ANSWER_COLOR = '006400';
+        const ENGLISH_FONT = 'Arial';
         const HINDI_FONT = 'Nirmala UI';
 
-        // --- Title Slide ---
         let titleSlide = pptx.addSlide();
         titleSlide.background = { color: 'F5F5F5' };
-        titleSlide.addText("Quiz LM Presentation ✨\n(Director's Cut)", {
+        titleSlide.addText("Quiz LM Presentation ✨", {
             x: 0.5, y: 2, w: '90%', h: 1.5,
-            fontSize: 44, color: '303f9f', bold: true, align: 'center',
-            shadow: { type: 'outer', color: '696969', blur: 3, offset: 5, angle: 45, opacity: 0.6 }
+            fontSize: 44, color: '303f9f', bold: true, align: 'center'
         });
         titleSlide.addText(`Generated with ${questions.length} questions.`, {
             x: 0, y: 4, w: '100%', align: 'center', color: TEXT_COLOR, fontSize: 16
@@ -456,29 +459,14 @@ async function generatePowerPoint() {
 
         const totalQuestions = questions.length;
 
-        // --- Helper function to parse explanation text ---
         const parseExplanation = (text) => {
             if (!text) return { heading: '', body: '' };
-            const parts = text.split('\n\n', 2);
-            let heading = parts[0].trim().replace(/✅ |❌ |📝 |💡 /g, '');
-            let body = (parts.length > 1) ? parts[1].trim() : "";
+            const parts = text.split('\n\n');
+            const heading = parts.shift() || '';
+            const body = parts.join('\n\n').trim();
             return { heading, body };
         };
-        
-        const addBulletedText = (text, bulletCode) => {
-            let points = [];
-            if (text && text.trim().length > 0) {
-                text.split('\n').forEach(line => {
-                    const trimmedLine = line.replace(/^- |\*\*/g, '').trim();
-                    if (trimmedLine) {
-                        points.push({ text: trimmedLine, options: { fontSize: 13, bullet: { code: bulletCode }, indentLevel: 1 } });
-                    }
-                });
-            }
-            return points;
-        };
 
-        // --- Loop and create slides ---
         for (let i = 0; i < totalQuestions; i++) {
             const question_item = questions[i];
             const slide_question_number = i + 1;
@@ -486,90 +474,98 @@ async function generatePowerPoint() {
             const progress = Math.round(((i + 1) / totalQuestions) * 100);
             dom.pptLoadingProgressBar.style.width = `${progress}%`;
             dom.pptLoadingDetails.textContent = `Processing question ${slide_question_number} of ${totalQuestions}... (${progress}%)`;
-            
+
             if (i % 10 === 0) await new Promise(resolve => setTimeout(resolve, 0));
 
-            // ============================================
             // SLIDE 1: QUESTION & OPTIONS
-            // ============================================
             let q_slide = pptx.addSlide({ bkgd: QUESTION_SLIDE_BG });
-            q_slide.slideNumber = { x: '90%', y: '90%', fontFace: 'Arial', fontSize: 10, color: '333333' };
-
-            let question_text = (question_item.question || 'Missing Question Text').split(')', 2)[1]?.trim() || question_item.question;
-
+            
+            let question_text = (question_item.question || '').split(')').slice(1).join(')').trim();
             q_slide.addText(`Q.${slide_question_number}) ${question_text}`, {
-                x: 0.5, y: 0.3, w: 9, h: 0.8, fontFace: 'Arial', fontSize: 20, color: TEXT_COLOR, bold: true
+                x: 0.5, y: 0.3, w: 9, h: 0.8,
+                fontFace: ENGLISH_FONT, fontSize: 20, color: TEXT_COLOR, bold: true
             });
-            
-            let textObjects = [];
-            textObjects.push({ text: question_item.question_hi || '', options: { fontFace: HINDI_FONT, fontSize: 18, bold: true, color: TEXT_COLOR, breakLine: true, paraSpaceAfter: 10 } });
-            
+
+            q_slide.addText(question_item.question_hi || '', {
+                x: 0.5, y: 1.3, w: 9, h: 0.6,
+                fontFace: HINDI_FONT, fontSize: 18, color: TEXT_COLOR, bold: true
+            });
+
+            let optionsY = 2.1;
+            let optionsArray = [];
             (question_item.options || []).forEach((eng_option, index) => {
                 const hin_option = (question_item.options_hi || [])[index] || '';
                 const option_letter = String.fromCharCode(65 + index);
-                textObjects.push({ text: `${option_letter}) ${eng_option}`, options: { fontFace: 'Arial', fontSize: 16, color: TEXT_COLOR } });
-                textObjects.push({ text: `     ${hin_option}`, options: { fontFace: HINDI_FONT, fontSize: 14, color: TEXT_COLOR, breakLine: true, paraSpaceAfter: 8 } });
+                optionsArray.push({
+                    text: `${option_letter}) ${eng_option}`,
+                    options: { fontFace: ENGLISH_FONT, fontSize: 16, color: TEXT_COLOR }
+                });
+                optionsArray.push({
+                    text: `    ${hin_option}\n`,
+                    options: { fontFace: HINDI_FONT, fontSize: 14, color: TEXT_COLOR, breakLine: true }
+                });
             });
-            q_slide.addText(textObjects, { x: 0.5, y: 1.3, w: 9, h: 4, margin: [0, 0, 0, 10] });
+            q_slide.addText(optionsArray, { x: 0.6, y: optionsY, w: 9, h: 3.2, lineSpacing: 24 });
 
-            // ============================================
-            // SLIDE 2: ANSWER & EXPLANATION PART 1
-            // ============================================
-            let a_slide1 = pptx.addSlide({ bkgd: ANSWER_SLIDE_BG });
-            a_slide1.slideNumber = { x: '90%', y: '90%', fontFace: 'Arial', fontSize: 10, color: '333333' };
-            a_slide1.transition = { type: 'fade', duration: 400 };
 
-            a_slide1.addText(`Answer & Explanation for Q.${slide_question_number} (Part 1)`, { 
-                x: 0.5, y: 0.3, w: 9, h: 0.6, fontFace: 'Arial', fontSize: 18, color: TEXT_COLOR, bold: true,
-                shadow: { type: 'outer', color: '808080', blur: 2, offset: 2, angle: 45 }
+            // SLIDE 2 & 3: ANSWER & EXPLANATION
+            const explanation = question_item.explanation || {};
+
+            const slideParts = [
+                {
+                    part: 1,
+                    title: `Answer & Explanation for Q.${slide_question_number} (Part 1)`,
+                    content: [
+                        { text: `✅ Correct Answer: ${question_item.correct || 'N/A'}`, style: { fontFace: ENGLISH_FONT, bold: true, fontSize: 16, color: CORRECT_ANSWER_COLOR }, spaceAfter: 16 },
+                        parseExplanation(explanation.analysis_correct),
+                        parseExplanation(explanation.conclusion),
+                    ]
+                },
+                {
+                    part: 2,
+                    title: `Answer & Explanation for Q.${slide_question_number} (Part 2)`,
+                    content: [
+                        parseExplanation(explanation.analysis_incorrect),
+                        parseExplanation(explanation.fact),
+                    ]
+                }
+            ];
+
+            slideParts.forEach(partInfo => {
+                let aSlide = pptx.addSlide({ bkgd: ANSWER_SLIDE_BG });
+                aSlide.addText(partInfo.title, { x: 0.5, y: 0.3, w: 9, h: 0.6, fontFace: ENGLISH_FONT, fontSize: 18, color: TEXT_COLOR, bold: true });
+
+                let currentY = 1.1;
+                partInfo.content.forEach(block => {
+                    if (block.text) { // For the hardcoded 'Correct Answer' line
+                        aSlide.addText(block.text, { x: 0.5, y: currentY, w: 9, h: 0.5, ...block.style });
+                        currentY += 0.5 + (block.spaceAfter / 72 || 0.2);
+                    } else if (block.heading) { // For parsed explanation blocks
+                        // Add Heading
+                        aSlide.addText(block.heading, {
+                            x: 0.5, y: currentY, w: 9, h: 0.4,
+                            fontFace: ENGLISH_FONT, fontSize: 15, bold: true, color: TEXT_COLOR
+                        });
+                        currentY += 0.45;
+
+                        // Add Body
+                        const cleanedBody = block.body.replace(/^- /gm, '').replace(/\*\*/g, '');
+                        const lines = cleanedBody.split('\n').length;
+                        const bodyHeight = Math.max(0.4, lines * 0.3);
+                        aSlide.addText(cleanedBody, {
+                            x: 0.6, y: currentY, w: 8.8, h: bodyHeight,
+                            fontFace: ENGLISH_FONT, fontSize: 13, color: TEXT_COLOR,
+                            italic: block.heading.includes('Note') || block.heading.includes('Fact')
+                        });
+                        currentY += bodyHeight + 0.3;
+                    }
+                });
             });
-            
-            let explanation = question_item.explanation || {};
-            let bodyText1 = [];
-            
-            bodyText1.push({ text: `Correct Answer: ${question_item.correct || 'N/A'}`, options: { 
-                fontFace: 'Arial', fontSize: 16, bold: true, color: '006400', breakLine: true, paraSpaceAfter: 12,
-                outline: { size: 0.5, color: '2E8B57' }
-            }});
-
-            const analysisCorrect = parseExplanation(explanation.analysis_correct);
-            if(analysisCorrect.heading) bodyText1.push({ text: `\n${analysisCorrect.heading}`, options: { fontFace: 'Arial', fontSize: 15, bold: true, color: TEXT_COLOR, breakLine: true, paraSpaceAfter: 6 }});
-            bodyText1.push(...addBulletedText(analysisCorrect.body, '2714')); // Checkmark bullet
-
-            const conclusion = parseExplanation(explanation.conclusion);
-            if(conclusion.heading) bodyText1.push({ text: `\n${conclusion.heading}`, options: { fontFace: 'Arial', fontSize: 15, bold: true, color: TEXT_COLOR, breakLine: true, paraSpaceAfter: 6 }});
-            bodyText1.push(...addBulletedText(conclusion.body, '270E')); // Pencil bullet
-
-            a_slide1.addText(bodyText1, { x: 0.6, y: 1.1, w: 9, h: 4.2 });
-
-            // ============================================
-            // SLIDE 3: ANSWER & EXPLANATION PART 2
-            // ============================================
-            let a_slide2 = pptx.addSlide({ bkgd: ANSWER_SLIDE_BG });
-            a_slide2.slideNumber = { x: '90%', y: '90%', fontFace: 'Arial', fontSize: 10, color: '333333' };
-            a_slide2.transition = { type: 'fade', duration: 400 };
-
-            a_slide2.addText(`Answer & Explanation for Q.${slide_question_number} (Part 2)`, { 
-                x: 0.5, y: 0.3, w: 9, h: 0.6, fontFace: 'Arial', fontSize: 18, color: TEXT_COLOR, bold: true,
-                shadow: { type: 'outer', color: '808080', blur: 2, offset: 2, angle: 45 }
-            });
-
-            let bodyText2 = [];
-            const analysisIncorrect = parseExplanation(explanation.analysis_incorrect);
-            if(analysisIncorrect.heading) bodyText2.push({ text: analysisIncorrect.heading, options: { fontFace: 'Arial', fontSize: 15, bold: true, color: TEXT_COLOR, breakLine: true, paraSpaceAfter: 6 }});
-            bodyText2.push(...addBulletedText(analysisIncorrect.body, '2717')); // X bullet
-
-            const fact = parseExplanation(explanation.fact);
-            if(fact.heading) bodyText2.push({ text: `\n${fact.heading}`, options: { fontFace: 'Arial', fontSize: 15, bold: true, color: TEXT_COLOR, breakLine: true, paraSpaceAfter: 6 }});
-            bodyText2.push(...addBulletedText(fact.body, '2605')); // Star bullet
-
-            a_slide2.addText(bodyText2, { x: 0.6, y: 1.1, w: 9, h: 4.2 });
         }
 
         dom.pptLoadingText.textContent = 'Finalizing & Downloading...';
         dom.pptLoadingDetails.textContent = 'Please wait, this may take a moment.';
-        
-        await pptx.writeFile({ fileName: 'Advanced_Quiz_Presentation.pptx' });
+        await pptx.writeFile({ fileName: 'Quiz_LM_Presentation.pptx' });
 
     } catch (error) {
         console.error("Error generating PPT:", error);
@@ -581,6 +577,228 @@ async function generatePowerPoint() {
         });
     } finally {
         dom.pptLoadingOverlay.style.display = 'none';
+    }
+}
+
+
+async function generatePDF() {
+    const questions = state.filteredQuestionsMasterList;
+    if (questions.length === 0) {
+        Swal.fire({
+            target: dom.filterSection,
+            title: 'No Questions Selected',
+            text: 'Please apply filters to select questions before creating a PDF.',
+            icon: 'info'
+        });
+        return;
+    }
+
+    dom.pdfLoadingOverlay.style.display = 'flex';
+    dom.pdfLoadingText.textContent = 'Preparing Your PDF...';
+    dom.pdfLoadingDetails.textContent = '';
+    dom.pdfLoadingProgressBar.style.width = '0%';
+
+    try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
+            orientation: 'p',
+            unit: 'mm',
+            format: 'a4'
+        });
+
+        // Add the custom font for Hindi support
+        doc.addFileToVFS('NotoSansDevanagari-Regular.ttf', hindiFontBase64);
+        doc.addFont('NotoSansDevanagari-Regular.ttf', 'NotoSansDevanagari', 'normal');
+        doc.addFont('NotoSansDevanagari-Regular.ttf', 'NotoSansDevanagari', 'bold');
+
+        const MARGIN = 15;
+        const PAGE_WIDTH = doc.internal.pageSize.getWidth();
+        const PAGE_HEIGHT = doc.internal.pageSize.getHeight();
+        const MAX_WIDTH = PAGE_WIDTH - MARGIN * 2;
+        let y = MARGIN + 10;
+        const answers = [];
+
+        // --- Title Page ---
+        doc.setFontSize(22);
+        doc.setFont('Helvetica', 'bold');
+        doc.text("Quiz LM Question Bank", PAGE_WIDTH / 2, y, { align: 'center' });
+        y += 15;
+        doc.setFontSize(14);
+        doc.setFont('Helvetica', 'normal');
+        doc.text(`A custom set of ${questions.length} questions.`, PAGE_WIDTH / 2, y, { align: 'center' });
+        y += 10;
+        doc.setLineWidth(0.5);
+        doc.line(MARGIN, y, PAGE_WIDTH - MARGIN, y);
+        y += 10;
+
+        // Print Applied Filters
+        doc.setFontSize(12);
+        doc.setFont('Helvetica', 'bold');
+        doc.text("Applied Filters:", MARGIN, y);
+        y += 7;
+        doc.setFontSize(10);
+        doc.setFont('Helvetica', 'normal');
+        let filtersApplied = false;
+        Object.keys(state.selectedFilters).forEach(key => {
+            if (state.selectedFilters[key] && state.selectedFilters[key].length > 0) {
+                filtersApplied = true;
+                const filterName = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1').trim();
+                const filterValues = state.selectedFilters[key].join(', ');
+                const text = `${filterName}: ${filterValues}`;
+                const lines = doc.splitTextToSize(text, MAX_WIDTH);
+                if (y + (lines.length * 5) > PAGE_HEIGHT - MARGIN) {
+                    doc.addPage();
+                    y = MARGIN;
+                }
+                doc.text(lines, MARGIN, y);
+                y += (lines.length * 5) + 3;
+            }
+        });
+        if (!filtersApplied) {
+            doc.text("No filters applied (All questions included).", MARGIN, y);
+        }
+        
+        doc.addPage();
+        y = MARGIN + 10;
+
+        const totalQuestions = questions.length;
+
+        for (let i = 0; i < totalQuestions; i++) {
+            const question_item = questions[i];
+            const slide_question_number = i + 1;
+
+            const progress = Math.round(((i + 1) / totalQuestions) * 100);
+            dom.pdfLoadingProgressBar.style.width = `${progress}%`;
+            dom.pdfLoadingDetails.textContent = `Processing question ${slide_question_number} of ${totalQuestions}... (${progress}%)`;
+
+            if (i % 10 === 0) await new Promise(resolve => setTimeout(resolve, 0));
+            
+            let questionText = `Q.${slide_question_number}) ${question_item.question || ''}`;
+            let questionHiText = question_item.question_hi || '';
+            let optionsEng = question_item.options || [];
+            let optionsHin = question_item.options_hi || [];
+            let correctEng = question_item.correct || '';
+
+            const estimateHeight = () => {
+                let h = 0;
+                h += doc.splitTextToSize(questionText, MAX_WIDTH).length * 6;
+                h += doc.splitTextToSize(questionHiText, MAX_WIDTH).length * 5;
+                h += 10;
+                optionsEng.forEach((opt, idx) => {
+                    h += doc.splitTextToSize(`(${String.fromCharCode(65 + idx)}) ${opt}`, MAX_WIDTH).length * 5;
+                    if (optionsHin[idx]) {
+                         h += doc.splitTextToSize(optionsHin[idx], MAX_WIDTH).length * 5;
+                    }
+                    h += 3;
+                });
+                return h;
+            };
+
+            if (y + estimateHeight() > PAGE_HEIGHT - MARGIN) {
+                doc.addPage();
+                y = MARGIN + 10;
+            }
+            
+            // English Question
+            doc.setFontSize(12);
+            doc.setFont('Helvetica', 'bold');
+            doc.setTextColor(0, 0, 0);
+            let lines = doc.splitTextToSize(questionText, MAX_WIDTH);
+            doc.text(lines, MARGIN, y);
+            y += lines.length * 6;
+            
+            // Hindi Question
+            doc.setFont('NotoSansDevanagari', 'bold');
+            doc.setTextColor(0, 0, 255); // Blue
+            doc.setFontSize(11);
+            lines = doc.splitTextToSize(questionHiText, MAX_WIDTH);
+            doc.text(lines, MARGIN, y);
+            y += (lines.length * 5) + 5;
+            
+            // Options
+            doc.setFontSize(10);
+            optionsEng.forEach((opt, idx) => {
+                const isCorrect = opt.trim() === correctEng.trim();
+                const optionLetter = String.fromCharCode(65 + idx);
+                
+                if (isCorrect) {
+                    const originalQuestionNum = question_item.question.split(')')[0];
+                    answers.push(`${slide_question_number} (${originalQuestionNum}): ${optionLetter}) ${correctEng}`);
+                }
+                
+                // English Option
+                doc.setFont('Helvetica', 'normal');
+                doc.setTextColor(0, 0, 0);
+                lines = doc.splitTextToSize(`(${optionLetter}) ${opt}`, MAX_WIDTH - 5);
+                doc.text(lines, MARGIN + 5, y);
+                y += lines.length * 5;
+                
+                // Hindi Option
+                if (optionsHin[idx]) {
+                    doc.setFont('NotoSansDevanagari', 'bold');
+                    doc.setTextColor(0, 0, 255);
+                    lines = doc.splitTextToSize(optionsHin[idx], MAX_WIDTH - 10);
+                    doc.text(lines, MARGIN + 10, y);
+                    y += lines.length * 5;
+                }
+                
+                y += 3;
+            });
+            
+            y += 10;
+            doc.setLineWidth(0.2);
+            doc.setDrawColor(200);
+            doc.line(MARGIN, y - 5, PAGE_WIDTH - MARGIN, y - 5);
+        }
+        
+        // --- Answer Key Page ---
+        doc.addPage();
+        y = MARGIN + 10;
+        doc.setFontSize(16);
+        doc.setFont('Helvetica', 'bold');
+        doc.setTextColor(0, 0, 0);
+        doc.text("Answer Key", PAGE_WIDTH / 2, y, { align: 'center' });
+        y += 15;
+
+        doc.setFontSize(10);
+        doc.setFont('Helvetica', 'normal');
+        for (const answer of answers) {
+            const lines = doc.splitTextToSize(answer, MAX_WIDTH);
+            if (y + (lines.length * 5) > PAGE_HEIGHT - MARGIN) {
+                doc.addPage();
+                y = MARGIN;
+            }
+            doc.text(lines, MARGIN, y);
+            y += (lines.length * 5) + 2;
+        }
+
+        // Add Footer to all pages
+        const pageCount = doc.internal.getNumberOfPages();
+        for (let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            doc.setFontSize(9);
+            doc.setTextColor(150);
+            // Left Footer
+            doc.text('Compiler :- Aalok Kumar Sharma', MARGIN, PAGE_HEIGHT - (MARGIN / 2));
+            // Center Footer
+            doc.text(`Page ${i} of ${pageCount}`, PAGE_WIDTH / 2, PAGE_HEIGHT - (MARGIN / 2), { align: 'center' });
+        }
+
+        dom.pdfLoadingText.textContent = 'Finalizing & Downloading...';
+        dom.pdfLoadingDetails.textContent = 'Please wait, this may take a moment.';
+        
+        await doc.save('Quiz_LM_Custom_PDF.pdf');
+
+    } catch (error) {
+        console.error("Error generating PDF:", error);
+        Swal.fire({
+            target: dom.filterSection,
+            title: 'Error',
+            text: `An unexpected error occurred while generating the PDF: ${error.message}`,
+            icon: 'error'
+        });
+    } finally {
+        dom.pdfLoadingOverlay.style.display = 'none';
     }
 }
 
