@@ -242,6 +242,52 @@ NEW: FILTER SECTION STYLES
     margin-bottom: 30px;
 }
 
+.tab-nav {
+    display: flex;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 25px;
+}
+
+.tab-btn {
+    padding: 12px 20px;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    font-size: 1.05em;
+    font-weight: 600;
+    color: var(--text-color-light);
+    position: relative;
+    transition: color 0.3s ease;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px; /* Overlap with parent border */
+}
+
+.tab-btn i {
+    margin-right: 8px;
+}
+
+.tab-btn:hover {
+    color: var(--primary-color);
+}
+
+.tab-btn.active {
+    color: var(--primary-dark);
+    border-bottom-color: var(--primary-dark);
+}
+
+.tab-panels-container {
+    margin-top: 20px;
+}
+
+.tab-panel {
+    display: none;
+    animation: fade-in-slide-up 0.4s ease-out;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
 .quick-start-section {
     background-color: var(--primary-light);
     border: 1px solid var(--primary-color);
@@ -360,7 +406,7 @@ body[data-theme='dark'] .quick-start-section h3 {
 
 .filter-actions {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     gap: 15px;
     margin-top: 20px;
@@ -369,7 +415,7 @@ body[data-theme='dark'] .quick-start-section h3 {
 }
 
 #start-quiz-btn {
-    padding: 15px 30px;
+    padding: 15px 25px;
     font-size: 1.1em;
     font-weight: bold;
     cursor: pointer;
@@ -378,6 +424,8 @@ body[data-theme='dark'] .quick-start-section h3 {
     background-color: var(--correct-color);
     color: var(--button-text-color);
     transition: all 0.2s ease;
+    flex-grow: 1;
+    max-width: 400px;
 }
 #start-quiz-btn:hover:not(:disabled) {
     background-color: #388e3c;
@@ -390,7 +438,35 @@ body[data-theme='dark'] .quick-start-section h3 {
     opacity: 0.7;
 }
 
-#reset-filters-btn {
+#create-ppt-btn {
+    padding: 15px 25px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    background-color: #f57c00; /* Orange color */
+    color: var(--button-text-color);
+    transition: all 0.2s ease;
+    flex-grow: 1;
+    max-width: 400px;
+}
+#create-ppt-btn i {
+    margin-right: 8px;
+}
+#create-ppt-btn:hover:not(:disabled) {
+    background-color: #e65100;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(245, 124, 0, 0.4);
+}
+#create-ppt-btn:disabled {
+    background-color: #9E9E9E;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+#reset-filters-btn-quiz,
+#reset-filters-btn-ppt {
     padding: 12px 25px;
     font-size: 1em;
     font-weight: 600;
@@ -401,10 +477,13 @@ body[data-theme='dark'] .quick-start-section h3 {
     color: var(--text-color-medium);
     transition: all 0.2s ease;
 }
-#reset-filters-btn:hover {
+
+#reset-filters-btn-quiz:hover,
+#reset-filters-btn-ppt:hover {
     background-color: var(--button-hover-bg);
     border-color: var(--button-hover-border-color);
 }
+
 
 /* --- NEW TAGS MULTI-SELECT STYLES --- */
 .custom-multiselect {
@@ -1755,7 +1834,7 @@ body[data-theme='dark'] .remark-d { background-color: #b71c1c; color: #ffcdd2; }
 /* =======================================================
 7. OVERLAYS & MODALS
 ======================================================= */
-#loading-overlay {
+#loading-overlay, #ppt-loading-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -1797,7 +1876,7 @@ body[data-theme='dark'] .remark-d { background-color: #b71c1c; color: #ffcdd2; }
     margin: 0 auto 10px auto;
 }
 
-#loading-progress-bar {
+#loading-progress-bar, #ppt-loading-progress-bar {
     width: 0%;
     height: 100%;
     background-color: var(--primary-color);
@@ -1805,10 +1884,11 @@ body[data-theme='dark'] .remark-d { background-color: #b71c1c; color: #ffcdd2; }
     transition: width 0.2s ease-out;
 }
 
-#loading-percentage {
+#loading-percentage, #ppt-loading-details {
     font-size: 1em;
     font-weight: 600;
     color: var(--primary-dark);
+    min-height: 1.2em;
 }
 
 #timeout-overlay {
@@ -2553,9 +2633,11 @@ input:checked + .slider:before {
 
     .filter-actions {
         flex-direction: column;
+        align-items: stretch;
     }
 
-    #start-quiz-btn {
+    #reset-filters-btn-quiz,
+    #reset-filters-btn-ppt {
         width: 100%;
     }
 }

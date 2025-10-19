@@ -9,8 +9,16 @@ export function cacheDomElements() {
     dom.loadingProgressBar = document.getElementById('loading-progress-bar');
     dom.loadingPercentage = document.getElementById('loading-percentage');
 
+    // PPT Loading Overlay
+    dom.pptLoadingOverlay = document.getElementById('ppt-loading-overlay');
+    dom.pptLoadingText = document.getElementById('ppt-loading-text');
+    dom.pptLoadingProgressBar = document.getElementById('ppt-loading-progress-bar');
+    dom.pptLoadingDetails = document.getElementById('ppt-loading-details');
+
     // Filter Section
     dom.filterSection = document.getElementById('filter-section');
+    dom.tabButtons = document.querySelectorAll('.tab-btn');
+    dom.tabPanels = document.querySelectorAll('.tab-panel');
     const filterKeys = ['subject', 'topic', 'subTopic', 'difficulty', 'questionType', 'examName', 'examYear', 'tags'];
     filterKeys.forEach(key => {
         dom.filterElements[key] = {
@@ -23,8 +31,11 @@ export function cacheDomElements() {
         };
     });
     dom.startQuizBtn = document.getElementById('start-quiz-btn');
-    dom.resetFiltersBtn = document.getElementById('reset-filters-btn');
+    dom.createPptBtn = document.getElementById('create-ppt-btn');
+    dom.resetFiltersBtnQuiz = document.getElementById('reset-filters-btn-quiz');
+    dom.resetFiltersBtnPpt = document.getElementById('reset-filters-btn-ppt');
     dom.questionCount = document.getElementById('question-count');
+    dom.pptQuestionCount = document.getElementById('ppt-question-count');
     dom.quickStartButtons = document.querySelectorAll('.quick-start-btn');
     dom.activeFiltersSummaryBarContainer = document.getElementById('active-filters-summary-bar-container');
     dom.activeFiltersSummaryBar = document.getElementById('active-filters-summary-bar');

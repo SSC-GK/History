@@ -1,3 +1,4 @@
+
 import { config, state } from './state.js';
 import { dom } from './dom.js';
 import { shuffleArray } from './utils.js';
@@ -6,14 +7,36 @@ let appCallbacks = {};
 
 export function initFilterModule(callbacks) {
     appCallbacks = callbacks;
+    initializeTabs();
     bindFilterEventListeners();
     loadQuestionsForFiltering();
     state.callbacks.confirmGoBackToFilters = callbacks.confirmGoBackToFilters;
 }
 
+function initializeTabs() {
+    dom.tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetPanelId = button.dataset.tab;
+            
+            dom.tabButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            dom.tabPanels.forEach(panel => {
+                if (panel.id === targetPanelId) {
+                    panel.classList.add('active');
+                } else {
+                    panel.classList.remove('active');
+                }
+            });
+        });
+    });
+}
+
 function bindFilterEventListeners() {
     dom.startQuizBtn.onclick = () => startFilteredQuiz();
-    dom.resetFiltersBtn.onclick = () => resetFilters();
+    dom.createPptBtn.onclick = () => generatePowerPoint();
+    dom.resetFiltersBtnQuiz.onclick = () => resetFilters();
+    dom.resetFiltersBtnPpt.onclick = () => resetFilters();
     dom.quickStartButtons.forEach(btn => {
         btn.onclick = () => handleQuickStart(btn.dataset.preset);
     });
@@ -352,7 +375,9 @@ function getQuestionValue(q, filterKey) {
 function updateQuestionCount() {
     const count = state.filteredQuestionsMasterList.length;
     dom.questionCount.textContent = count;
+    dom.pptQuestionCount.textContent = count;
     dom.startQuizBtn.disabled = count === 0;
+    dom.createPptBtn.disabled = count === 0;
 }
 
 function resetFilters() {
@@ -381,6 +406,183 @@ function startFilteredQuiz() {
     }
     appCallbacks.startQuiz();
 }
+
+async function generatePowerPoint() {
+    const questions = state.filteredQuestionsMasterList;
+    if (questions.length === 0) {
+        Swal.fire({
+            target: dom.filterSection,
+            title: 'No Questions Selected', 
+            text: 'Please apply filters to select questions before creating a PPT.', 
+            icon: 'info'
+        });
+        return;
+    }
+
+    // Show loading modal
+    dom.pptLoadingOverlay.style.display = 'flex';
+    dom.pptLoadingText.textContent = 'Preparing Your Presentation...';
+    dom.pptLoadingDetails.textContent = '';
+    dom.pptLoadingProgressBar.style.width = '0%';
+    
+    try {
+        let pptx = new PptxGenJS();
+        
+        // --- 1. PRESENTATION-LEVEL FORMATTING ---
+        pptx.layout = '16:9';
+        pptx.author = 'Quiz LM App';
+        pptx.company = 'AI-Powered Learning';
+        pptx.title = 'Customized Quiz Presentation';
+        pptx.theme = { bodyFontFace: 'Arial', headFontFace: 'Arial' };
+
+        // --- Style Definitions ---
+        const QUESTION_SLIDE_BG = 'DCE6F2'; 
+        const ANSWER_SLIDE_BG = 'E2F0D9';
+        const TEXT_COLOR = '191919';
+        const HINDI_FONT = 'Nirmala UI';
+
+        // --- Title Slide ---
+        let titleSlide = pptx.addSlide();
+        titleSlide.background = { color: 'F5F5F5' };
+        titleSlide.addText("Quiz LM Presentation ✨\n(Director's Cut)", {
+            x: 0.5, y: 2, w: '90%', h: 1.5,
+            fontSize: 44, color: '303f9f', bold: true, align: 'center',
+            shadow: { type: 'outer', color: '696969', blur: 3, offset: 5, angle: 45, opacity: 0.6 }
+        });
+        titleSlide.addText(`Generated with ${questions.length} questions.`, {
+            x: 0, y: 4, w: '100%', align: 'center', color: TEXT_COLOR, fontSize: 16
+        });
+
+        const totalQuestions = questions.length;
+
+        // --- Helper function to parse explanation text ---
+        const parseExplanation = (text) => {
+            if (!text) return { heading: '', body: '' };
+            const parts = text.split('\n\n', 2);
+            let heading = parts[0].trim().replace(/✅ |❌ |📝 |💡 /g, '');
+            let body = (parts.length > 1) ? parts[1].trim() : "";
+            return { heading, body };
+        };
+        
+        const addBulletedText = (text, bulletCode) => {
+            let points = [];
+            if (text && text.trim().length > 0) {
+                text.split('\n').forEach(line => {
+                    const trimmedLine = line.replace(/^- |\*\*/g, '').trim();
+                    if (trimmedLine) {
+                        points.push({ text: trimmedLine, options: { fontSize: 13, bullet: { code: bulletCode }, indentLevel: 1 } });
+                    }
+                });
+            }
+            return points;
+        };
+
+        // --- Loop and create slides ---
+        for (let i = 0; i < totalQuestions; i++) {
+            const question_item = questions[i];
+            const slide_question_number = i + 1;
+
+            const progress = Math.round(((i + 1) / totalQuestions) * 100);
+            dom.pptLoadingProgressBar.style.width = `${progress}%`;
+            dom.pptLoadingDetails.textContent = `Processing question ${slide_question_number} of ${totalQuestions}... (${progress}%)`;
+            
+            if (i % 10 === 0) await new Promise(resolve => setTimeout(resolve, 0));
+
+            // ============================================
+            // SLIDE 1: QUESTION & OPTIONS
+            // ============================================
+            let q_slide = pptx.addSlide({ bkgd: QUESTION_SLIDE_BG });
+            q_slide.slideNumber = { x: '90%', y: '90%', fontFace: 'Arial', fontSize: 10, color: '333333' };
+
+            let question_text = (question_item.question || 'Missing Question Text').split(')', 2)[1]?.trim() || question_item.question;
+
+            q_slide.addText(`Q.${slide_question_number}) ${question_text}`, {
+                x: 0.5, y: 0.3, w: 9, h: 0.8, fontFace: 'Arial', fontSize: 20, color: TEXT_COLOR, bold: true
+            });
+            
+            let textObjects = [];
+            textObjects.push({ text: question_item.question_hi || '', options: { fontFace: HINDI_FONT, fontSize: 18, bold: true, color: TEXT_COLOR, breakLine: true, paraSpaceAfter: 10 } });
+            
+            (question_item.options || []).forEach((eng_option, index) => {
+                const hin_option = (question_item.options_hi || [])[index] || '';
+                const option_letter = String.fromCharCode(65 + index);
+                textObjects.push({ text: `${option_letter}) ${eng_option}`, options: { fontFace: 'Arial', fontSize: 16, color: TEXT_COLOR } });
+                textObjects.push({ text: `     ${hin_option}`, options: { fontFace: HINDI_FONT, fontSize: 14, color: TEXT_COLOR, breakLine: true, paraSpaceAfter: 8 } });
+            });
+            q_slide.addText(textObjects, { x: 0.5, y: 1.3, w: 9, h: 4, margin: [0, 0, 0, 10] });
+
+            // ============================================
+            // SLIDE 2: ANSWER & EXPLANATION PART 1
+            // ============================================
+            let a_slide1 = pptx.addSlide({ bkgd: ANSWER_SLIDE_BG });
+            a_slide1.slideNumber = { x: '90%', y: '90%', fontFace: 'Arial', fontSize: 10, color: '333333' };
+            a_slide1.transition = { type: 'fade', duration: 400 };
+
+            a_slide1.addText(`Answer & Explanation for Q.${slide_question_number} (Part 1)`, { 
+                x: 0.5, y: 0.3, w: 9, h: 0.6, fontFace: 'Arial', fontSize: 18, color: TEXT_COLOR, bold: true,
+                shadow: { type: 'outer', color: '808080', blur: 2, offset: 2, angle: 45 }
+            });
+            
+            let explanation = question_item.explanation || {};
+            let bodyText1 = [];
+            
+            bodyText1.push({ text: `Correct Answer: ${question_item.correct || 'N/A'}`, options: { 
+                fontFace: 'Arial', fontSize: 16, bold: true, color: '006400', breakLine: true, paraSpaceAfter: 12,
+                outline: { size: 0.5, color: '2E8B57' }
+            }});
+
+            const analysisCorrect = parseExplanation(explanation.analysis_correct);
+            if(analysisCorrect.heading) bodyText1.push({ text: `\n${analysisCorrect.heading}`, options: { fontFace: 'Arial', fontSize: 15, bold: true, color: TEXT_COLOR, breakLine: true, paraSpaceAfter: 6 }});
+            bodyText1.push(...addBulletedText(analysisCorrect.body, '2714')); // Checkmark bullet
+
+            const conclusion = parseExplanation(explanation.conclusion);
+            if(conclusion.heading) bodyText1.push({ text: `\n${conclusion.heading}`, options: { fontFace: 'Arial', fontSize: 15, bold: true, color: TEXT_COLOR, breakLine: true, paraSpaceAfter: 6 }});
+            bodyText1.push(...addBulletedText(conclusion.body, '270E')); // Pencil bullet
+
+            a_slide1.addText(bodyText1, { x: 0.6, y: 1.1, w: 9, h: 4.2 });
+
+            // ============================================
+            // SLIDE 3: ANSWER & EXPLANATION PART 2
+            // ============================================
+            let a_slide2 = pptx.addSlide({ bkgd: ANSWER_SLIDE_BG });
+            a_slide2.slideNumber = { x: '90%', y: '90%', fontFace: 'Arial', fontSize: 10, color: '333333' };
+            a_slide2.transition = { type: 'fade', duration: 400 };
+
+            a_slide2.addText(`Answer & Explanation for Q.${slide_question_number} (Part 2)`, { 
+                x: 0.5, y: 0.3, w: 9, h: 0.6, fontFace: 'Arial', fontSize: 18, color: TEXT_COLOR, bold: true,
+                shadow: { type: 'outer', color: '808080', blur: 2, offset: 2, angle: 45 }
+            });
+
+            let bodyText2 = [];
+            const analysisIncorrect = parseExplanation(explanation.analysis_incorrect);
+            if(analysisIncorrect.heading) bodyText2.push({ text: analysisIncorrect.heading, options: { fontFace: 'Arial', fontSize: 15, bold: true, color: TEXT_COLOR, breakLine: true, paraSpaceAfter: 6 }});
+            bodyText2.push(...addBulletedText(analysisIncorrect.body, '2717')); // X bullet
+
+            const fact = parseExplanation(explanation.fact);
+            if(fact.heading) bodyText2.push({ text: `\n${fact.heading}`, options: { fontFace: 'Arial', fontSize: 15, bold: true, color: TEXT_COLOR, breakLine: true, paraSpaceAfter: 6 }});
+            bodyText2.push(...addBulletedText(fact.body, '2605')); // Star bullet
+
+            a_slide2.addText(bodyText2, { x: 0.6, y: 1.1, w: 9, h: 4.2 });
+        }
+
+        dom.pptLoadingText.textContent = 'Finalizing & Downloading...';
+        dom.pptLoadingDetails.textContent = 'Please wait, this may take a moment.';
+        
+        await pptx.writeFile({ fileName: 'Advanced_Quiz_Presentation.pptx' });
+
+    } catch (error) {
+        console.error("Error generating PPT:", error);
+        Swal.fire({
+            target: dom.filterSection,
+            title: 'Error',
+            text: `An unexpected error occurred while generating the presentation: ${error.message}`,
+            icon: 'error'
+        });
+    } finally {
+        dom.pptLoadingOverlay.style.display = 'none';
+    }
+}
+
 
 function toggleMultiSelectDropdown(filterKey, forceClose = false) {
     const dropdown = dom.filterElements[filterKey]?.dropdown;
