@@ -778,26 +778,32 @@ async function generatePDF() {
             dom.pdfLoadingProgressBar.style.width = `${progress}%`;
             dom.pdfLoadingDetails.textContent = `Processing question ${questionNum} of ${questions.length}...`;
             
-            // Add to answer key
-            const correctOptIndex = question_item.options.indexOf(question_item.correct);
-            let letteredCorrect = String.fromCharCode(65 + correctOptIndex);
-            let correctTextToPush = question_item.correct;
-            // Data error fallback: if correct answer text isn't in options, try to get letter from explanation
-            if (correctOptIndex === -1) {
-                const summary = question_item.explanation?.summary || "";
-                const match = summary.match(/Correct Answer: ([A-D])\)/);
-                if (match) {
-                    letteredCorrect = match[1];
-                     // Also get the correct text associated with this letter to ensure consistency
-                    const correctIndexFromLetter = letteredCorrect.charCodeAt(0) - 65;
-                    if (question_item.options[correctIndexFromLetter]) {
-                        correctTextToPush = question_item.options[correctIndexFromLetter];
-                    }
+            // --- Robust Answer Key Generation ---
+            let letteredCorrect = '?';
+            let correctTextToPush = 'Answer not found';
+
+            const summary = question_item.explanation?.summary || "";
+            const summaryMatch = summary.match(/Correct Answer: ([A-D])\)/);
+            const correctOptIndexFromText = question_item.options.indexOf(question_item.correct);
+
+            if (summaryMatch) {
+                // Source of truth is the letter in the explanation summary
+                letteredCorrect = summaryMatch[1];
+                const correctIndexFromLetter = letteredCorrect.charCodeAt(0) - 65;
+                if (question_item.options[correctIndexFromLetter]) {
+                    correctTextToPush = question_item.options[correctIndexFromLetter];
                 } else {
-                    letteredCorrect = '?'; // Fallback if summary also doesn't have it
+                    // Fallback if index from summary letter is out of bounds
+                    correctTextToPush = "Text mismatch in data";
                 }
+            } else if (correctOptIndexFromText !== -1) {
+                // Fallback to using the 'correct' field if summary is malformed
+                letteredCorrect = String.fromCharCode(65 + correctOptIndexFromText);
+                correctTextToPush = question_item.correct;
             }
+            
             answers.push(`${questionNum}. ${letteredCorrect}) ${correctTextToPush}`);
+
 
             // --- Calculate block height before rendering ---
             const cleanQ = cleanQuestionText(question_item.question);
@@ -874,16 +880,17 @@ async function generatePDF() {
 
             const text1 = answers[i];
             const lines1 = doc.splitTextToSize(text1, answerKeyColWidth);
+            const height1 = doc.getTextDimensions(lines1).h;
             
             const text2 = (i + midPoint < answers.length) ? answers[i + midPoint] : null;
             let lines2 = [];
+            let height2 = 0;
             if (text2) {
                 lines2 = doc.splitTextToSize(text2, answerKeyColWidth);
+                height2 = doc.getTextDimensions(lines2).h;
             }
 
-            const maxLines = Math.max(lines1.length, lines2.length);
-            const lineHeight = 12; // A safe line height for font size 10 to prevent overlap
-            const blockHeight = maxLines * lineHeight;
+            const blockHeight = Math.max(height1, height2);
 
 
             if (currentY + blockHeight > PAGE_HEIGHT - MARGIN - 20) { // Extra buffer for footer
