@@ -1,3 +1,4 @@
+
 import { config, state } from './state.js';
 import { dom } from './dom.js';
 import { shuffleArray } from './utils.js';
@@ -650,7 +651,7 @@ async function generatePDF() {
     }
 
     dom.pdfLoadingOverlay.style.display = 'flex';
-    dom.pdfLoadingText.textContent = 'Preparing Your PDF...';
+    dom.pdfLoadingText.textContent = 'Generating Your PDF...';
     dom.pdfLoadingDetails.textContent = '';
     dom.pdfLoadingProgressBar.style.width = '0%';
 
@@ -685,6 +686,12 @@ async function generatePDF() {
         
         // --- Questions Loop ---
         for (let i = 0; i < questions.length; i++) {
+            if (y > MARGIN) {
+                doc.addPage();
+                pageNum++;
+                y = MARGIN;
+            }
+
             const question_item = questions[i];
             const questionNum = i + 1;
 
@@ -698,57 +705,42 @@ async function generatePDF() {
             answers.push(`${questionNum}. ${letteredCorrect}) ${question_item.correct}`);
 
             const cleanQ = cleanQuestionText(question_item.question);
-            const cleanQHi = cleanQuestionText(question_item.question_hi);
-            const questionHtml = `
-              <div style="font-family: 'Poppins', sans-serif; color: #212121; text-align: left; line-height: 1.5;">
-                <p style="font-size: 12pt; font-weight: bold; margin-bottom: 5px;">Q.${questionNum}) ${cleanQ}</p>
-                <p style="font-family: 'Noto Sans Devanagari', sans-serif; font-size: 11pt; color: #303f9f; margin-top: 0; margin-bottom: 15px;">${cleanQHi || ''}</p>
-                <div>
-                  ${question_item.options.map((opt, idx) => `
-                    <div style="display: flex; align-items: baseline; margin-bottom: 12px; font-size: 10pt;">
-                      <div style="width: 25px; font-weight: bold;">(${String.fromCharCode(65 + idx)})</div>
-                      <div style="flex: 1;">
-                        <p style="margin: 0;">${opt}</p>
-                        <p style="margin: 0; font-family: 'Noto Sans Devanagari', sans-serif; color: #303f9f;">${question_item.options_hi[idx] || ''}</p>
-                      </div>
-                    </div>
-                  `).join('')}
-                </div>
-              </div>
-            `;
+            const questionText = `Q.${questionNum}) ${cleanQ}`;
+
+            doc.setFont('Helvetica', 'bold');
+            doc.setFontSize(12);
+            const questionLines = doc.splitTextToSize(questionText, CONTENT_WIDTH);
+            doc.text(questionLines, MARGIN, y);
+            y += (questionLines.length * 12) + 10;
+
+            doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(10);
+            question_item.options.forEach((opt, idx) => {
+                const optionText = `(${String.fromCharCode(65 + idx)}) ${opt}`;
+                const optionLines = doc.splitTextToSize(optionText, CONTENT_WIDTH - 20);
+                
+                if (y + (optionLines.length * 10) > PAGE_HEIGHT - MARGIN) {
+                    doc.addPage();
+                    pageNum++;
+                    y = MARGIN;
+                }
+                doc.text(optionLines, MARGIN + 20, y);
+                y += (optionLines.length * 10) + 5;
+            });
             
-            const renderContainer = dom.pdfRenderContainer;
-            renderContainer.style.width = `${CONTENT_WIDTH}pt`;
-            renderContainer.innerHTML = questionHtml;
-
-            await new Promise(resolve => setTimeout(resolve, 10)); 
-
-            const canvas = await html2canvas(renderContainer, { scale: 2, backgroundColor: null });
-            const imgData = canvas.toDataURL('image/png');
-            const imgHeight = (canvas.height * CONTENT_WIDTH) / canvas.width;
-
-            if (y > MARGIN && (y + imgHeight + 20) > (PAGE_HEIGHT - MARGIN)) {
-                doc.addPage();
-                pageNum++;
-                y = MARGIN;
-            }
-
-            if (pageNum > 1 && y === MARGIN) {
-                // Add header to new pages
-                doc.setFont('Helvetica', 'bold');
-                doc.setFontSize(14);
-                doc.text('Quiz Questions (Continued)', PAGE_WIDTH / 2, y, { align: 'center' });
-                y += 30;
-            }
-
-            doc.addImage(imgData, 'PNG', MARGIN, y, CONTENT_WIDTH, imgHeight);
-            y += imgHeight + 20;
-            
-            doc.setDrawColor(220);
-            doc.line(MARGIN, y, PAGE_WIDTH - MARGIN, y);
             y += 20;
-
-            renderContainer.innerHTML = '';
+            if (y > PAGE_HEIGHT - MARGIN) {
+                if (i < questions.length - 1) { // Don't add a new page if it's the last question
+                    doc.addPage();
+                    pageNum++;
+                    y = MARGIN;
+                }
+            } else {
+                 doc.setDrawColor(220);
+                 doc.line(MARGIN, y, PAGE_WIDTH - MARGIN, y);
+                 y += 20;
+            }
+            await new Promise(resolve => setTimeout(resolve, 5)); // Prevent freezing on large docs
         }
 
         // --- Answer Key Page ---
@@ -758,7 +750,7 @@ async function generatePDF() {
         doc.setFont('Helvetica', 'bold');
         doc.setFontSize(20);
         doc.text('Answer Key', PAGE_WIDTH / 2, y, { align: 'center' });
-        y += 30;
+        y += 40;
 
         doc.setFont('Helvetica', 'normal');
         doc.setFontSize(10);
@@ -777,15 +769,20 @@ async function generatePDF() {
             const lineHeight = lines.length * 10 * 1.2;
 
             if (i < midPoint) {
-                if (col1Y + lineHeight > PAGE_HEIGHT - MARGIN) {
-                    // This logic is simplified; a multi-page answer key would need a new page here.
-                    // For now, we assume it fits.
+                 if (col1Y + lineHeight > PAGE_HEIGHT - MARGIN) {
+                    doc.addPage();
+                    pageNum++;
+                    col1Y = MARGIN;
+                    col2Y = MARGIN; // Reset both columns on new page
                 }
                 doc.text(lines, col1X, col1Y);
                 col1Y += lineHeight;
             } else {
-                if (col2Y + lineHeight > PAGE_HEIGHT - MARGIN) {
-                    // New page logic for second column if needed
+                 if (col2Y + lineHeight > PAGE_HEIGHT - MARGIN) {
+                    doc.addPage();
+                    pageNum++;
+                    col1Y = MARGIN;
+                    col2Y = MARGIN;
                 }
                 doc.text(lines, col2X, col2Y);
                 col2Y += lineHeight;
