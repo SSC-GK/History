@@ -33,8 +33,26 @@ export function initQuizModule(callbacks) {
 
 export function loadQuiz() {
     divideQuestionsIntoGroups(state.filteredQuestionsMasterList);
+
+    // Pre-populate shuffled/sorted order for ALL groups at the start of the quiz.
+    state.questionGroups.forEach(group => {
+        if (state.isShuffleActive) {
+            group.shuffledQuestions = [...group.questions];
+            shuffleArray(group.shuffledQuestions);
+        } else {
+            // Default sort by coded ID (prefix then number)
+            group.shuffledQuestions = [...group.questions].sort((a, b) => {
+                const idA = parseCodedId(a.id);
+                const idB = parseCodedId(b.id);
+                if (idA.prefix < idB.prefix) return -1;
+                if (idA.prefix > idB.prefix) return 1;
+                return idA.num - idB.num;
+            });
+        }
+    });
+    
     state.currentGroupIndex = 0;
-    loadQuestionGroup(state.currentGroupIndex, true);
+    loadQuestionGroup(state.currentGroupIndex);
     startQuizLogicForGroup();
     applyHeaderCollapsedState();
 }
@@ -83,7 +101,7 @@ function divideQuestionsIntoGroups(questionsList) {
     }
 }
 
-function loadQuestionGroup(newGroupIndex, suppressConfirmation = false) {
+function loadQuestionGroup(newGroupIndex) {
     if (newGroupIndex < 0 || newGroupIndex >= state.questionGroups.length) return;
 
     state.currentGroupIndex = newGroupIndex;
@@ -93,23 +111,6 @@ function loadQuestionGroup(newGroupIndex, suppressConfirmation = false) {
         console.error(`Attempted to load a null or undefined question group at index ${newGroupIndex}.`);
         appCallbacks.restartFullQuiz();
         return;
-    }
-
-    if (!state.currentQuizData.shuffledQuestions || state.currentQuizData.shuffledQuestions.length === 0) {
-        if (state.isShuffleActive) {
-            state.currentQuizData.shuffledQuestions = [...state.currentQuizData.questions];
-            shuffleArray(state.currentQuizData.shuffledQuestions);
-        } else {
-            // Default sort by coded ID (prefix then number)
-            state.currentQuizData.shuffledQuestions = [...state.currentQuizData.questions].sort((a, b) => {
-                const idA = parseCodedId(a.id);
-                const idB = parseCodedId(b.id);
-                if (idA.prefix < idB.prefix) return -1;
-                if (idA.prefix > idB.prefix) return 1;
-                return idA.num - idB.num;
-            });
-        }
-        state.currentQuizData.currentQuestionIndex = 0;
     }
     
     if (state.currentQuizData.attempts.length > 0) {
@@ -672,10 +673,10 @@ function populateQuizInternalNavigation() {
             groupHeaderClickable.querySelector('.toggle-icon').classList.add('rotated');
         }
 
-        group.questions.forEach((q) => {
+        group.shuffledQuestions.forEach((q, questionIdx) => {
             const gridItemLink = document.createElement('a');
             gridItemLink.href = '#';
-            gridItemLink.textContent = q.id;
+            gridItemLink.textContent = questionIdx + 1;
             gridItemLink.classList.add('nav-grid-item');
             gridItemLink.dataset.groupIndex = groupIdx;
             gridItemLink.dataset.questionId = q.id;
@@ -687,7 +688,7 @@ function populateQuizInternalNavigation() {
                 gridItemLink.classList.add('marked-for-review');
             }
 
-            if (groupIdx === state.currentGroupIndex && state.currentQuizData && state.currentQuizData.shuffledQuestions[state.currentQuizData.currentQuestionIndex]?.id === q.id) {
+            if (groupIdx === state.currentGroupIndex && state.currentQuizData && state.currentQuizData.currentQuestionIndex === questionIdx) {
                 gridItemLink.classList.add('active-question');
             }
 
