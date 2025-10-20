@@ -1,6 +1,7 @@
 import { config, state, saveState } from './state.js';
 import { dom } from './dom.js';
 import { initializeAllFireballs_anim, animateFireballs_anim } from './animations.js';
+import { Toast } from './utils.js';
 
 export function applyInitialSettings() {
     applyTheme();
@@ -71,8 +72,49 @@ function updateSoundToggleUI() {
 }
 
 export function toggleShuffle() {
-    state.callbacks.toggleShuffle(); // This complex logic is kept in quiz.js
+    const willBeShuffled = dom.shuffleToggle.checked;
+    const wasShuffled = state.isShuffleActive;
+
+    if (willBeShuffled === wasShuffled) return;
+
+    const targetElement = dom.quizMainContainer.style.display !== 'none' ? dom.quizMainContainer : dom.filterSection;
+
+    Swal.fire({
+        target: targetElement,
+        title: 'Change Question Order?',
+        text: state.isQuizActive
+            ? (willBeShuffled ? "This will shuffle your remaining unanswered questions." : "This will sort your remaining questions by ID.")
+            : (willBeShuffled ? "Questions will be shuffled for your next quiz." : "Questions will be sorted by ID for your next quiz."),
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: 'var(--primary-color)',
+        cancelButtonColor: 'var(--wrong-color)',
+        confirmButtonText: `Yes, ${willBeShuffled ? 'Shuffle' : 'Sort'}!`,
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            state.isShuffleActive = willBeShuffled;
+            saveState();
+
+            if (state.isQuizActive && state.callbacks.reorderQuizQuestions) {
+                state.callbacks.reorderQuizQuestions();
+            }
+            
+            Toast.fire({
+                target: targetElement,
+                icon: 'success',
+                title: state.isQuizActive 
+                    ? `Remaining questions have been ${willBeShuffled ? 'shuffled' : 'sorted'}.`
+                    : `Question order set to ${willBeShuffled ? 'shuffled' : 'sorted'} for next quiz.`
+            });
+
+        } else {
+            // Revert the checkbox to its original state if user cancels
+            dom.shuffleToggle.checked = wasShuffled;
+        }
+    });
 }
+
 
 export function updateShuffleToggleUI() {
     if (dom.shuffleToggle) dom.shuffleToggle.checked = state.isShuffleActive;

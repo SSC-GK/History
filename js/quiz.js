@@ -20,12 +20,43 @@ function parseCodedId(idString) {
     return { prefix: idString, num: 0 };
 }
 
+function reorderQuizQuestions() {
+    if (!state.isQuizActive || !state.currentQuizData) return;
+
+    const cd = state.currentQuizData;
+    const currentIndex = cd.currentQuestionIndex;
+    const currentShuffledList = cd.shuffledQuestions;
+    
+    // Separate past/current questions from future ones
+    const pastAndCurrentQuestions = currentShuffledList.slice(0, currentIndex + 1);
+    let futureQuestions = currentShuffledList.slice(currentIndex + 1);
+
+    if (state.isShuffleActive) {
+        shuffleArray(futureQuestions);
+    } else {
+        // Sort remaining questions back to their original order (by ID)
+        futureQuestions.sort((a, b) => {
+            const idA = parseCodedId(a.id);
+            const idB = parseCodedId(b.id);
+            if (idA.prefix < idB.prefix) return -1;
+            if (idA.prefix > idB.prefix) return 1;
+            return idA.num - idB.num;
+        });
+    }
+    
+    cd.shuffledQuestions = [...pastAndCurrentQuestions, ...futureQuestions];
+    
+    // Update navigation to reflect new order
+    populateQuizInternalNavigation();
+}
+
 export function initQuizModule(callbacks) {
     appCallbacks = callbacks;
     state.callbacks.nextQuestionHandler = nextQuestionHandler;
     state.callbacks.previousQuestionHandler = previousQuestionHandler;
     state.callbacks.quizKeyPressHandler = handleKeyPress;
     state.callbacks.toggleQuizInternalNavigation = toggleQuizInternalNavigation;
+    state.callbacks.reorderQuizQuestions = reorderQuizQuestions;
     
     bindQuizEventListeners();
     initializeGemini();
