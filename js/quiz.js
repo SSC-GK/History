@@ -6,6 +6,20 @@ import { applyTextZoom } from './settings.js';
 
 let appCallbacks = {};
 
+// Helper to parse new coded IDs like "HIS1", "POL72"
+function parseCodedId(idString) {
+    if (typeof idString !== 'string') {
+        // Fallback for old numeric IDs during transition
+        return { prefix: '', num: parseInt(idString, 10) || 0 };
+    }
+    const match = idString.match(/^([A-Z]+)(\d+)$/);
+    if (match) {
+        return { prefix: match[1], num: parseInt(match[2], 10) };
+    }
+    // Fallback for non-matching strings or old IDs
+    return { prefix: idString, num: 0 };
+}
+
 export function initQuizModule(callbacks) {
     appCallbacks = callbacks;
     state.callbacks.nextQuestionHandler = nextQuestionHandler;
@@ -35,6 +49,8 @@ function bindQuizEventListeners() {
     dom.lifelineBtn.onclick = () => useLifeline();
     dom.nextBtn.onclick = () => nextQuestionHandler();
     dom.toggleHeaderBtn.addEventListener('click', toggleHeader);
+    dom.bookmarkBtn.addEventListener('click', toggleBookmark);
+
 
     const submitQuizBtn = document.getElementById('submit-quiz-btn');
     if (submitQuizBtn) submitQuizBtn.onclick = () => submitAndReviewAll();
@@ -84,7 +100,14 @@ function loadQuestionGroup(newGroupIndex, suppressConfirmation = false) {
             state.currentQuizData.shuffledQuestions = [...state.currentQuizData.questions];
             shuffleArray(state.currentQuizData.shuffledQuestions);
         } else {
-            state.currentQuizData.shuffledQuestions = [...state.currentQuizData.questions].sort((a, b) => (a.id || 0) - (b.id || 0));
+            // Default sort by coded ID (prefix then number)
+            state.currentQuizData.shuffledQuestions = [...state.currentQuizData.questions].sort((a, b) => {
+                const idA = parseCodedId(a.id);
+                const idB = parseCodedId(b.id);
+                if (idA.prefix < idB.prefix) return -1;
+                if (idA.prefix > idB.prefix) return 1;
+                return idA.num - idB.num;
+            });
         }
         state.currentQuizData.currentQuestionIndex = 0;
     }
@@ -368,13 +391,18 @@ function restoreAttemptedQuestion(attempt) {
 
 function renderQuestionContent() {
     let q = state.currentQuizData.shuffledQuestions[state.currentQuizData.currentQuestionIndex];
+
+    // Robustly remove old question number prefixes from the JSON data
+    const cleanQuestion = (q.question || "").replace(/^(Q\.\d+\)|प्रश्न \d+\))\s*/, '');
+    const cleanQuestionHi = (q.question_hi || "").replace(/^(Q\.\d+\)|प्रश्न \d+\))\s*/, '');
+
     dom.questionTextEl.classList.remove('match-question');
     dom.optionsEl.innerHTML = "";
-    dom.questionTextEl.innerHTML = `${q.question || ""}${(q.question_hi && q.question_hi.trim() !== '') ? '<hr class="lang-separator"><span class="hindi-text">' + q.question_hi + '</span>' : ''}`;
+    dom.questionTextEl.innerHTML = `Q.${state.currentQuizData.currentQuestionIndex + 1}) ${cleanQuestion}${(cleanQuestionHi && cleanQuestionHi.trim() !== '') ? '<hr class="lang-separator"><span class="hindi-text">' + cleanQuestionHi + '</span>' : ''}`;
 
     const sequentialDisplayNumber = state.currentQuizData.currentQuestionIndex + 1;
     dom.sequentialQuestionNumberEl.innerText = `Q.${sequentialDisplayNumber} / ${state.currentQuizData.shuffledQuestions.length}`;
-    dom.actualQuestionNumberEl.innerText = `Actual ID: ${q.id}`;
+    dom.actualQuestionNumberEl.innerText = `ID: ${q.id}`;
     
     // Populate Exam Name and Date/Shift Tags
     if (dom.examNameTag && q.sourceInfo?.examName) {
@@ -665,7 +693,7 @@ function populateQuizInternalNavigation() {
 
             gridItemLink.addEventListener('click', (e) => {
                 e.preventDefault();
-                goToQuestionInAnyGroup(parseInt(e.target.dataset.groupIndex), parseInt(e.target.dataset.questionId));
+                goToQuestionInAnyGroup(parseInt(e.target.dataset.groupIndex, 10), e.target.dataset.questionId);
                 if (panel.classList.contains('open')) toggleQuizInternalNavigation();
             });
             questionGrid.appendChild(gridItemLink);
@@ -688,13 +716,8 @@ function goToQuestionInAnyGroup(targetGroupIndex, targetQuestionId) {
     }
     if (!state.currentQuizData || !state.currentQuizData.shuffledQuestions) return;
     
-    let foundIndex = -1;
-    for (let i = 0; i < state.currentQuizData.shuffledQuestions.length; i++) {
-        if (state.currentQuizData.shuffledQuestions[i].id === targetQuestionId) {
-            foundIndex = i;
-            break;
-        }
-    }
+    const foundIndex = state.currentQuizData.shuffledQuestions.findIndex(q => q.id === targetQuestionId);
+
     if (foundIndex !== -1) {
         state.currentQuizData.currentQuestionIndex = foundIndex;
         displayQuestion();
@@ -723,7 +746,7 @@ function toggleQuizInternalNavigation() {
 }
 
 function toggleBookmark() {
-    const questionId = parseInt(dom.bookmarkBtn.dataset.questionId);
+    const questionId = dom.bookmarkBtn.dataset.questionId;
     if (!questionId) return;
 
     const index = state.bookmarkedQuestions.indexOf(questionId);

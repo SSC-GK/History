@@ -1,5 +1,3 @@
-
-
 import { config, state } from './state.js';
 import { dom } from './dom.js';
 import { shuffleArray } from './utils.js';
@@ -12,6 +10,11 @@ export function initFilterModule(callbacks) {
     bindFilterEventListeners();
     loadQuestionsForFiltering();
     state.callbacks.confirmGoBackToFilters = callbacks.confirmGoBackToFilters;
+}
+
+// Helper to remove old question number formats
+function cleanQuestionText(text) {
+    return (text || "").replace(/^(Q\.\d+\)|प्रश्न \d+\))\s*/, '');
 }
 
 function initializeTabs() {
@@ -532,13 +535,14 @@ async function generatePowerPoint() {
             // SLIDE 1: QUESTION & OPTIONS
             let q_slide = pptx.addSlide({ bkgd: QUESTION_SLIDE_BG });
             
-            let question_text = (question_item.question || '').split(')').slice(1).join(')').trim();
+            let question_text = cleanQuestionText(question_item.question);
             q_slide.addText(`Q.${slide_question_number}) ${question_text}`, {
                 x: 0.5, y: 0.3, w: 9, h: 0.8,
                 fontFace: ENGLISH_FONT, fontSize: 20, color: TEXT_COLOR, bold: true
             });
 
-            q_slide.addText(question_item.question_hi || '', {
+            const question_text_hi = cleanQuestionText(question_item.question_hi);
+            q_slide.addText(question_text_hi || '', {
                 x: 0.5, y: 1.3, w: 9, h: 0.6,
                 fontFace: HINDI_FONT, fontSize: 18, color: TEXT_COLOR, bold: true
             });
@@ -693,10 +697,12 @@ async function generatePDF() {
             const letteredCorrect = String.fromCharCode(65 + correctOptIndex);
             answers.push(`${questionNum}. ${letteredCorrect}) ${question_item.correct}`);
 
+            const cleanQ = cleanQuestionText(question_item.question);
+            const cleanQHi = cleanQuestionText(question_item.question_hi);
             const questionHtml = `
               <div style="font-family: 'Poppins', sans-serif; color: #212121; text-align: left; line-height: 1.5;">
-                <p style="font-size: 12pt; font-weight: bold; margin-bottom: 5px;">${question_item.question}</p>
-                <p style="font-family: 'Noto Sans Devanagari', sans-serif; font-size: 11pt; color: #303f9f; margin-top: 0; margin-bottom: 15px;">${question_item.question_hi || ''}</p>
+                <p style="font-size: 12pt; font-weight: bold; margin-bottom: 5px;">Q.${questionNum}) ${cleanQ}</p>
+                <p style="font-family: 'Noto Sans Devanagari', sans-serif; font-size: 11pt; color: #303f9f; margin-top: 0; margin-bottom: 15px;">${cleanQHi || ''}</p>
                 <div>
                   ${question_item.options.map((opt, idx) => `
                     <div style="display: flex; align-items: baseline; margin-bottom: 12px; font-size: 10pt;">

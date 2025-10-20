@@ -11,7 +11,7 @@ The questions.json file is an array of question objects. Each object represents 
 High-Level Structure:
 
 {
-  "id": Number,
+  "id": "String",
   "sourceInfo": { ... },
   "classification": { ... },
   "tags": [ ... ],
@@ -27,11 +27,18 @@ High-Level Structure:
 
 3. Detailed Field Explanations
 id (Required)
-Type: Number (Integer)
+Type: String
 
-Description: A unique identifier for the question. It must be sequential. Before adding a new question, check the id of the last question in the file and use the next integer.
+Description: A unique coded identifier for the question. It must follow the format `[Prefix][Number]`. The prefix corresponds to the question's subject, and the number must be sequential *within that subject*.
 
-Example: 72
+Procedure:
+1. Determine the subject of your question (e.g., "Polity").
+2. Find the correct three-letter prefix from the table in Section 4 (e.g., "POL").
+3. Find the last question of the *same subject* in the `questions.json` file and find its number.
+4. Increment that number by one.
+5. Combine the prefix and the new number to form the ID.
+
+Example: If the last Polity question has an ID of "POL71", your new Polity question must have an ID of "POL72".
 
 sourceInfo (Required)
 An object containing metadata about the question's origin.
@@ -110,11 +117,11 @@ Example: "MCQ"
 question & question_hi (Required)
 Type: String
 
-Description: The full text of the question in English (question) and Hindi (question_hi). Include the question number (e.g., Q.72)) at the beginning of the string.
+Description: The full text of the question in English (question) and Hindi (question_hi). Do **not** include a question number like "Q.72)" at the beginning.
 
-Example (question): "Q.72) Which article of the Indian Constitution guarantees the 'Right to Freedom of Speech and Expression'?"
+Example (question): "Which article of the Indian Constitution guarantees the 'Right to Freedom of Speech and Expression'?"
 
-Example (question_hi): "प्रश्न 72) भारतीय संविधान का कौन सा अनुच्छेद 'भाषण और अभिव्यक्ति की स्वतंत्रता का अधिकार' की गारंटी देता है?"
+Example (question_hi): "भारतीय संविधान का कौन सा अनुच्छेद 'भाषण और अभिव्यक्ति की स्वतंत्रता का अधिकार' की गारंटी देता है?"
 
 options & options_hi (Required)
 Type: Array of Strings
@@ -156,8 +163,23 @@ Example:
 }
 
 
-4. Predefined Values for Filters
+4. Predefined Values for Filters & ID Prefixes
 To maintain consistency, you must use the exact string values from the lists below for the corresponding fields.
+
+Subject ID Prefixes
+
+| Subject                 | ID Prefix | Example ID |
+| ----------------------- | --------- | ---------- |
+| History                 | `HIS`     | `HIS1`     |
+| Geography               | `GEO`     | `GEO1`     |
+| Economics               | `ECO`     | `ECO1`     |
+| Polity                  | `POL`     | `POL1`     |
+| Physics                 | `PHY`     | `PHY1`     |
+| Chemistry               | `CHE`     | `CHE1`     |
+| Biology                 | `BIO`     | `BIO1`     |
+| Computer                | `COM`     | `COM1`     |
+| Static GK               | `SGK`     | `SGK1`     |
+| Ecology & Environment   | `ENV`     | `ENV1`     |
 
 difficulty
 Easy
@@ -860,10 +882,10 @@ Example:
 
 "explanation": {
   "summary": "Correct Answer: C) Article 19",
-  "analysis_correct": "✅ Why this is correct\n\n- Article 19(1)(a) of the Indian Constitution guarantees the fundamental right to freedom of speech and expression to all citizens.",
-  "analysis_incorrect": "❌ Why other options are incorrect\n\n- **Article 14:** Deals with the right to equality.\n- **Article 21:** Pertains to the protection of life and personal liberty.\n- **Article 32:** Grants the right to constitutional remedies.",
-  "conclusion": "📝 Concluding Note\n\n- Understanding the specific articles related to Fundamental Rights is crucial for the Polity section of competitive exams.",
-  "fact": "💡 Interesting Fact\n\n- The right to freedom of speech is not absolute and is subject to 'reasonable restrictions' on grounds like security of the state, public order, and morality."
+  "analysis_correct": "✅ Why this is correct\n\n- Article 19(1)(a) of the Indian Constitution specifically guarantees the fundamental right to freedom of speech and expression to all citizens of India.",
+  "analysis_incorrect": "❌ Why other options are incorrect\n\n- **Article 14:** Deals with the Right to Equality before the law.\n- **Article 21:** Pertains to the Protection of Life and Personal Liberty.\n- **Article 32:** Grants the Right to Constitutional Remedies, allowing citizens to approach the Supreme Court for the enforcement of their fundamental rights.",
+  "conclusion": "📝 Concluding Note\n\n- Understanding the specific articles related to the six fundamental rights is a core and frequently tested area in the Polity section of competitive exams.",
+  "fact": "💡 Interesting Fact\n\n- The right to freedom of speech is not absolute and is subject to 'reasonable restrictions' imposed by the state on grounds like security of the state, public order, decency or morality."
 }
 
 
@@ -1442,7 +1464,7 @@ subTopic: International Conventions (Ramsar, Kyoto, Paris Agreement)
 Here is a full example that you can use as a template.
 
 {
-  "id": 72,
+  "id": "POL72",
   "sourceInfo": {
     "examName": "CGL PRE",
     "examYear": 2024,
@@ -1458,8 +1480,8 @@ Here is a full example that you can use as a template.
     "difficulty": "Medium",
     "questionType": "MCQ"
   },
-  "question": "Q.72) Which article of the Indian Constitution guarantees the 'Right to Freedom of Speech and Expression'?",
-  "question_hi": "प्रश्न 72) भारतीय संविधान का कौन सा अनुच्छेद 'भाषण और अभिव्यक्ति की स्वतंत्रता का अधिकार' की गारंटी देता है?",
+  "question": "Which article of the Indian Constitution guarantees the 'Right to Freedom of Speech and Expression'?",
+  "question_hi": "भारतीय संविधान का कौन सा अनुच्छेद 'भाषण और अभिव्यक्ति की स्वतंत्रता का अधिकार' की गारंटी देता है?",
   "options": ["Article 14", "Article 21", "Article 19", "Article 32"],
   "options_hi": ["अनुच्छेद 14", "अनुच्छेद 21", "अनुच्छेद 19", "अनुच्छेद 32"],
   "correct": "Article 19",
@@ -1478,7 +1500,7 @@ Before finalizing your addition, please verify the following:
 
  Valid JSON: Your file is valid JSON. Use an online validator if unsure.
 
- Unique ID: The id is a unique integer, one greater than the previous question.
+ Unique ID: The id is a unique coded string (`[Prefix][Number]`), sequential for its subject.
 
  Predefined Values: All values for subject, topic, subTopic, difficulty, questionType, and examName are taken exactly from the approved lists.
 
@@ -1488,72 +1510,4 @@ Before finalizing your addition, please verify the following:
 
  Markdown in Explanation: The explanation fields use Markdown for formatting (e.g., **bold**, - list item).
 
- Question Numbering: The question text strings start with Q.xx).-situ, Ex-situ)
-
-subTopic: National Parks
-
-subTopic: Wildlife Sanctuaries
-
-subTopic: Biosphere Reserves
-
-topic: Environmental Issues & Conventions
-
-subTopic: Pollution (Air, Water, Soil)
-
-subTopic: Climate Change & Global Warming
-
-subTopic: Ozone Depletion
-
-subTopic: International Conventions (Ramsar, Kyoto, Paris Agreement)
-
-5. Complete Example of a New Question
-Here is a full example that you can use as a template.
-
-{
-  "id": 72,
-  "sourceInfo": {
-    "examName": "CGL PRE",
-    "examYear": 2024,
-    "examDateShift": "Shift 1"
-  },
-  "classification": {
-    "subject": "Polity",
-    "topic": "Fundamental Rights & Duties",
-    "subTopic": "Fundamental Rights (Art 12-35)"
-  },
-  "tags": ["Article 19", "FreedomOfSpeech", "Constitution"],
-  "properties": {
-    "difficulty": "Medium",
-    "questionType": "MCQ"
-  },
-  "question": "Q.72) Which article of the Indian Constitution guarantees the 'Right to Freedom of Speech and Expression'?",
-  "question_hi": "प्रश्न 72) भारतीय संविधान का कौन सा अनुच्छेद 'भाषण और अभिव्यक्ति की स्वतंत्रता का अधिकार' की गारंटी देता है?",
-  "options": ["Article 14", "Article 21", "Article 19", "Article 32"],
-  "options_hi": ["अनुच्छेद 14", "अनुच्छेद 21", "अनुच्छेद 19", "अनुच्छेद 32"],
-  "correct": "Article 19",
-  "explanation": {
-    "summary": "Correct Answer: C) Article 19",
-    "analysis_correct": "✅ Why this is correct\n\n- Article 19(1)(a) of the Indian Constitution specifically guarantees the fundamental right to freedom of speech and expression to all citizens of India.",
-    "analysis_incorrect": "❌ Why other options are incorrect\n\n- **Article 14:** Deals with the Right to Equality before the law.\n- **Article 21:** Pertains to the Protection of Life and Personal Liberty.\n- **Article 32:** Grants the Right to Constitutional Remedies, allowing citizens to approach the Supreme Court for the enforcement of their fundamental rights.",
-    "conclusion": "📝 Concluding Note\n\n- Understanding the specific articles related to the six fundamental rights is a core and frequently tested area in the Polity section of competitive exams.",
-    "fact": "💡 Interesting Fact\n\n- The right to freedom of speech is not absolute and is subject to 'reasonable restrictions' imposed by the state on grounds like security of the state, public order, decency or morality."
-  }
-}
-
-
-6. Contribution Checklist
-Before finalizing your addition, please verify the following:
-
- Valid JSON: Your file is valid JSON. Use an online validator if unsure.
-
- Unique ID: The id is a unique integer, one greater than the previous question.
-
- Predefined Values: All values for subject, topic, subTopic, difficulty, questionType, and examName are taken exactly from the approved lists.
-
- Correct Answer Match: The correct string is an exact, case-sensitive match to one of the strings in the options array.
-
- Bilingual Content: Both English (question, options) and Hindi (question_hi, options_hi) fields are present and correctly translated.
-
- Markdown in Explanation: The explanation fields use Markdown for formatting (e.g., **bold**, - list item).
-
- Question Numbering: The question text strings start with Q.xx).
+ Question Numbering: The question text strings do **not** start with Q.xx).

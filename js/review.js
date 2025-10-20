@@ -13,6 +13,11 @@ export function initReviewModule(callbacks) {
     bindReviewEventListeners();
 }
 
+// Helper to remove old question number formats
+function cleanQuestionText(text) {
+    return (text || "").replace(/^(Q\.\d+\)|प्रश्न \d+\))\s*/, '');
+}
+
 function bindReviewEventListeners() {
     dom.reviewBtn.onclick = () => startReview();
     dom.restartBtn.onclick = () => confirmAndRestartCurrentGroup();
@@ -196,7 +201,7 @@ function displayReviewQuestion(index) {
     const attempt = state.filteredAttempts[index];
     state.originalFontSizes.clear();
 
-    dom.reviewQuestionNumberEl.innerText = `Reviewing ${state.currentReviewFilter} (${index + 1}/${state.filteredAttempts.length}) | Actual ID: ${attempt.questionId}`;
+    dom.reviewQuestionNumberEl.innerText = `Reviewing ${state.currentReviewFilter} (${index + 1}/${state.filteredAttempts.length}) | ID: ${attempt.questionId}`;
 
     if (attempt.status === 'Skipped') {
         dom.reviewTimeTakenEl.innerText = `(Not Attempted)`;
@@ -208,7 +213,9 @@ function displayReviewQuestion(index) {
         dom.reviewTimeTakenEl.style.display = 'none';
     }
 
-    dom.reviewQuestionTextEl.innerHTML = `${attempt.question || ""}${attempt.question_hi ? '<hr class="lang-separator"><span class="hindi-text">' + attempt.question_hi + '</span>' : ''}`;
+    const cleanQuestion = cleanQuestionText(attempt.question);
+    const cleanQuestionHi = cleanQuestionText(attempt.question_hi);
+    dom.reviewQuestionTextEl.innerHTML = `${cleanQuestion}${cleanQuestionHi ? '<hr class="lang-separator"><span class="hindi-text">' + cleanQuestionHi + '</span>' : ''}`;
     dom.reviewOptionsEl.innerHTML = "";
 
     const displayedOptionsBilingual = attempt.optionsDisplayedBilingual || [];
