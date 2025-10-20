@@ -1,4 +1,3 @@
-
 import { config, state } from './state.js';
 import { dom } from './dom.js';
 import { shuffleArray } from './utils.js';
@@ -777,7 +776,17 @@ async function generatePDF() {
             
             // Add to answer key
             const correctOptIndex = question_item.options.indexOf(question_item.correct);
-            const letteredCorrect = String.fromCharCode(65 + correctOptIndex);
+            let letteredCorrect = String.fromCharCode(65 + correctOptIndex);
+            // Data error fallback: if correct answer text isn't in options, try to get letter from explanation
+            if (correctOptIndex === -1) {
+                const summary = question_item.explanation?.summary || "";
+                const match = summary.match(/Correct Answer: ([A-D])\)/);
+                if (match) {
+                    letteredCorrect = match[1];
+                } else {
+                    letteredCorrect = '?'; // Fallback if summary also doesn't have it
+                }
+            }
             answers.push(`${questionNum}. ${letteredCorrect}) ${question_item.correct}`);
 
             // --- Calculate block height before rendering ---
@@ -855,16 +864,17 @@ async function generatePDF() {
 
             const text1 = answers[i];
             const lines1 = doc.splitTextToSize(text1, answerKeyColWidth);
-            const lineHeight1 = lines1.length * 10 * 1.2;
+            const { h: height1 } = doc.getTextDimensions(lines1);
 
             const text2 = (i + midPoint < answers.length) ? answers[i + midPoint] : null;
-            let lines2 = [], lineHeight2 = 0;
+            let lines2 = [], height2 = 0;
             if (text2) {
                 lines2 = doc.splitTextToSize(text2, answerKeyColWidth);
-                lineHeight2 = lines2.length * 10 * 1.2;
+                const { h: h2 } = doc.getTextDimensions(lines2);
+                height2 = h2;
             }
 
-            const maxLineHeight = Math.max(lineHeight1, lineHeight2);
+            const maxLineHeight = Math.max(height1, height2);
 
             if (currentY + maxLineHeight > PAGE_HEIGHT - MARGIN - 20) { // Extra buffer for footer
                 doc.addPage();
