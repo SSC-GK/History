@@ -675,9 +675,11 @@ async function generatePDF() {
         
         // --- Title Page ---
         doc.setFont('Helvetica', 'bold');
-        doc.setFontSize(28);
-        doc.text('Quiz LM Question Bank ✨', PAGE_WIDTH / 2, y + 20, { align: 'center' });
-        y += 70;
+        doc.setFontSize(26);
+        const titleText = 'Quiz LM Question Bank';
+        const titleLines = doc.splitTextToSize(titleText, CONTENT_WIDTH);
+        doc.text(titleLines, PAGE_WIDTH / 2, y + 20, { align: 'center' });
+        y += (titleLines.length * 26) + 30;
 
         doc.setFont('Helvetica', 'normal');
         doc.setFontSize(16);
@@ -691,7 +693,25 @@ async function generatePDF() {
         doc.setFontSize(11);
         doc.setTextColor(120);
         doc.text(`Created on: ${indianTimestamp} (IST)`, PAGE_WIDTH / 2, y, { align: 'center' });
-        y += 60;
+        y += 40;
+        
+        // Add Hyperlink
+        const linkText = 'Attempt the quiz';
+        const linkUrl = 'https://cglhustle.free.nf/side_menu/quiz_lm/';
+        doc.setFontSize(12);
+        doc.setFont('Helvetica', 'normal');
+        const textWidth = doc.getTextWidth(linkText);
+        const xOffset = (PAGE_WIDTH - textWidth) / 2;
+        
+        doc.setTextColor(0, 0, 238); // Standard link blue
+        doc.textWithLink(linkText, xOffset, y, { url: linkUrl });
+        doc.setDrawColor(0, 0, 238);
+        doc.line(xOffset, y + 1, xOffset + textWidth, y + 1); // Draw underline
+        y += 40;
+        
+        // Reset text color for filters
+        doc.setTextColor(40);
+
 
         const filterHierarchy = {
             'Classification': ['subject', 'topic', 'subTopic'],
@@ -701,9 +721,7 @@ async function generatePDF() {
         };
 
         let hasFilters = false;
-        doc.setFont('Helvetica', 'normal');
-        doc.setTextColor(40);
-
+        
         for (const category in filterHierarchy) {
             const filtersInCategory = [];
             filterHierarchy[category].forEach(filterKey => {
