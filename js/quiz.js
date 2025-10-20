@@ -689,6 +689,8 @@ function populateQuizInternalNavigation() {
         });
     });
 
+    let questionNumberOffset = 0; // Initialize an offset for global question numbering
+
     state.questionGroups.forEach((group, groupIdx) => {
         const groupItemDiv = document.createElement('div');
         groupItemDiv.classList.add('nav-group-item');
@@ -707,7 +709,7 @@ function populateQuizInternalNavigation() {
         group.shuffledQuestions.forEach((q, questionIdx) => {
             const gridItemLink = document.createElement('a');
             gridItemLink.href = '#';
-            gridItemLink.textContent = questionIdx + 1;
+            gridItemLink.textContent = questionNumberOffset + questionIdx + 1; // Use offset for correct global number
             gridItemLink.classList.add('nav-grid-item');
             gridItemLink.dataset.groupIndex = groupIdx;
             gridItemLink.dataset.questionId = q.id;
@@ -739,6 +741,9 @@ function populateQuizInternalNavigation() {
         });
 
         listContainer.appendChild(groupItemDiv);
+        
+        // Update offset for the next group
+        questionNumberOffset += group.shuffledQuestions.length;
     });
 }
 
