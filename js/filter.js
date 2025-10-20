@@ -443,16 +443,72 @@ async function generatePowerPoint() {
         const ENGLISH_FONT = 'Arial';
         const HINDI_FONT = 'Nirmala UI';
 
+        // --- TITLE SLIDE (WITH DYNAMIC INFO) ---
         let titleSlide = pptx.addSlide();
         titleSlide.background = { color: 'F5F5F5' };
+        
         titleSlide.addText("Quiz LM Presentation ✨", {
-            x: 0.5, y: 2, w: '90%', h: 1.5,
+            x: 0.5, y: 0.8, w: '90%', h: 1,
             fontSize: 44, color: '303f9f', bold: true, align: 'center'
         });
         titleSlide.addText(`Generated with ${questions.length} questions.`, {
-            x: 0, y: 4, w: '100%', align: 'center', color: TEXT_COLOR, fontSize: 16
+            x: 0, y: 2.0, w: '100%', align: 'center', color: TEXT_COLOR, fontSize: 18
         });
 
+        // Timestamp
+        const indianTimestamp = new Date().toLocaleString('en-IN', {
+            timeZone: 'Asia/Kolkata',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        });
+        titleSlide.addText(`Created on: ${indianTimestamp} (IST)`, {
+            x: 0, y: 2.4, w: '100%', align: 'center', color: '757575', fontSize: 11, italic: true
+        });
+
+        // Applied Filters Text
+        const filterTextForPPT = [];
+        const filterHierarchy = {
+            'Classification': ['subject', 'topic', 'subTopic'],
+            'Properties': ['difficulty', 'questionType'],
+            'Source': ['examName', 'examYear'],
+            'Tags': ['tags']
+        };
+
+        let hasFilters = false;
+        for (const category in filterHierarchy) {
+            const filtersInCategory = [];
+            filterHierarchy[category].forEach(filterKey => {
+                const selected = state.selectedFilters[filterKey];
+                if (selected && selected.length > 0) {
+                    hasFilters = true;
+                    const displayName = filterKey.charAt(0).toUpperCase() + filterKey.slice(1).replace(/([A-Z])/g, ' $1').trim();
+                    filtersInCategory.push(`${displayName}: ${selected.join(', ')}`);
+                }
+            });
+
+            if (filtersInCategory.length > 0) {
+                filterTextForPPT.push({ text: category, options: { bold: true, breakLine: true, fontSize: 12, color: '303f9f', align: 'left'} });
+                filtersInCategory.forEach(filterText => {
+                    filterTextForPPT.push({ text: `  • ${filterText}`, options: { breakLine: true, fontSize: 11, color: TEXT_COLOR, align: 'left' }});
+                });
+                filterTextForPPT.push({ text: '', options: { breakLine: true } }); // Spacing
+            }
+        }
+        
+        if (hasFilters) {
+            titleSlide.addText(filterTextForPPT, {
+                x: 1.0, y: 3.0, w: '80%', h: 2.5,
+                lineSpacing: 22,
+                valign: 'top'
+            });
+        }
+        
+        // --- QUESTION & ANSWER SLIDES ---
         const totalQuestions = questions.length;
 
         const parseExplanation = (text) => {
