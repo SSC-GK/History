@@ -20,6 +20,7 @@ export function cacheDomElements() {
     dom.pdfLoadingText = document.getElementById('pdf-loading-text');
     dom.pdfLoadingProgressBar = document.getElementById('pdf-loading-progress-bar');
     dom.pdfLoadingDetails = document.getElementById('pdf-loading-details');
+    dom.pdfRenderContainer = document.getElementById('pdf-render-container');
 
     // Filter Section
     dom.filterSection = document.getElementById('filter-section');

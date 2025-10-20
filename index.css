@@ -2586,8 +2586,19 @@ input:checked + .slider:before {
 
 
 /* =======================================================
-11. RESPONSIVE DESIGN (MEDIA QUERIES)
+11. RESPONSIVE DESIGN & PDF RENDERER
 ======================================================= */
+
+#pdf-render-container {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: white;
+    padding: 20px;
+    font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+    color: var(--text-color-dark);
+}
+
 @media (max-width: 768px) {
     body::before {
         font-size: 8vw;
