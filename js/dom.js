@@ -40,11 +40,14 @@ export function cacheDomElements() {
     dom.startQuizBtn = document.getElementById('start-quiz-btn');
     dom.createPptBtn = document.getElementById('create-ppt-btn');
     dom.createPdfBtn = document.getElementById('create-pdf-btn');
+    dom.downloadJsonBtn = document.getElementById('download-json-btn');
     dom.resetFiltersBtnQuiz = document.getElementById('reset-filters-btn-quiz');
     dom.resetFiltersBtnPpt = document.getElementById('reset-filters-btn-ppt');
+    dom.resetFiltersBtnJson = document.getElementById('reset-filters-btn-json');
     dom.questionCount = document.getElementById('question-count');
     dom.pptQuestionCount = document.getElementById('ppt-question-count');
     dom.pdfQuestionCount = document.getElementById('pdf-question-count');
+    dom.jsonQuestionCount = document.getElementById('json-question-count');
     dom.quickStartButtons = document.querySelectorAll('.quick-start-btn');
     dom.activeFiltersSummaryBarContainer = document.getElementById('active-filters-summary-bar-container');
     dom.activeFiltersSummaryBar = document.getElementById('active-filters-summary-bar');

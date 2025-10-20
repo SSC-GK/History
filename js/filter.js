@@ -40,8 +40,10 @@ function bindFilterEventListeners() {
     dom.startQuizBtn.onclick = () => startFilteredQuiz();
     dom.createPptBtn.onclick = () => generatePowerPoint();
     dom.createPdfBtn.onclick = () => generatePDF();
+    dom.downloadJsonBtn.onclick = () => downloadJSON();
     dom.resetFiltersBtnQuiz.onclick = () => resetFilters();
     dom.resetFiltersBtnPpt.onclick = () => resetFilters();
+    dom.resetFiltersBtnJson.onclick = () => resetFilters();
     dom.quickStartButtons.forEach(btn => {
         btn.onclick = () => handleQuickStart(btn.dataset.preset);
     });
@@ -382,9 +384,11 @@ function updateQuestionCount() {
     dom.questionCount.textContent = count;
     dom.pptQuestionCount.textContent = count;
     dom.pdfQuestionCount.textContent = count;
+    dom.jsonQuestionCount.textContent = count;
     dom.startQuizBtn.disabled = count === 0;
     dom.createPptBtn.disabled = count === 0;
     dom.createPdfBtn.disabled = count === 0;
+    dom.downloadJsonBtn.disabled = count === 0;
 }
 
 function resetFilters() {
@@ -1014,4 +1018,43 @@ function handleQuickStart(preset) {
     }
 
     startFilteredQuiz();
+}
+
+async function downloadJSON() {
+    const questions = state.filteredQuestionsMasterList;
+    if (questions.length === 0) {
+        Swal.fire({
+            target: dom.filterSection,
+            title: 'No Questions Selected',
+            text: 'Please apply filters to select questions before downloading.',
+            icon: 'info'
+        });
+        return;
+    }
+
+    try {
+        // Pretty print the JSON with an indentation of 2 spaces
+        const jsonString = JSON.stringify(questions, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Quiz_LM_Questions.json';
+        document.body.appendChild(a);
+        a.click();
+
+        // Clean up
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+    } catch (error) {
+        console.error("Error generating JSON file:", error);
+        Swal.fire({
+            target: dom.filterSection,
+            title: 'Error',
+            text: `An unexpected error occurred while generating the JSON file: ${error.message}`,
+            icon: 'error'
+        });
+    }
 }

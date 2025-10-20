@@ -92,6 +92,7 @@
         <div class="tab-nav">
             <button class="tab-btn active" data-tab="quiz-panel"><i class="fas fa-list-check"></i> Build a Quiz</button>
             <button class="tab-btn" data-tab="ppt-panel"><i class="fas fa-file-powerpoint"></i> Create PPT or PDF</button>
+            <button class="tab-btn" data-tab="json-panel"><i class="fas fa-file-code"></i> Download JSON</button>
         </div>
 
         <div class="quick-start-section">
@@ -226,6 +227,16 @@
                     <button id="create-ppt-btn" disabled>
                         <i class="fas fa-file-powerpoint"></i> Create PPT 
                         (<span id="ppt-question-count">0</span> Questions)
+                    </button>
+                </div>
+            </div>
+            <!-- JSON Tab Panel -->
+            <div id="json-panel" class="tab-panel">
+                 <div class="filter-actions">
+                    <button id="reset-filters-btn-json"><i class="fas fa-undo"></i> Reset Filters</button>
+                    <button id="download-json-btn" disabled>
+                        <i class="fas fa-download"></i> Download JSON 
+                        (<span id="json-question-count">0</span> Questions)
                     </button>
                 </div>
             </div>

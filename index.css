@@ -449,7 +449,8 @@ body[data-theme='dark'] .quick-start-section h3 {
 
 #start-quiz-btn,
 #create-ppt-btn,
-#create-pdf-btn {
+#create-pdf-btn,
+#download-json-btn {
     padding: 15px 25px;
     font-size: 1.1em;
     font-weight: bold;
@@ -495,9 +496,22 @@ body[data-theme='dark'] .quick-start-section h3 {
     box-shadow: 0 4px 10px rgba(211, 47, 47, 0.4);
 }
 
+#download-json-btn {
+    background-color: #1976d2; /* A nice blue color */
+}
+#download-json-btn i {
+    margin-right: 8px;
+}
+#download-json-btn:hover:not(:disabled) {
+    background-color: #1565c0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(25, 118, 210, 0.4);
+}
+
 #start-quiz-btn:disabled,
 #create-ppt-btn:disabled,
-#create-pdf-btn:disabled {
+#create-pdf-btn:disabled,
+#download-json-btn:disabled {
     background-color: #9E9E9E;
     cursor: not-allowed;
     opacity: 0.7;
@@ -506,7 +520,8 @@ body[data-theme='dark'] .quick-start-section h3 {
 }
 
 #reset-filters-btn-quiz,
-#reset-filters-btn-ppt {
+#reset-filters-btn-ppt,
+#reset-filters-btn-json {
     padding: 12px 25px;
     font-size: 1em;
     font-weight: 600;
@@ -520,7 +535,8 @@ body[data-theme='dark'] .quick-start-section h3 {
 }
 
 #reset-filters-btn-quiz:hover,
-#reset-filters-btn-ppt:hover {
+#reset-filters-btn-ppt:hover,
+#reset-filters-btn-json:hover {
     background-color: var(--button-hover-bg);
     border-color: var(--button-hover-border-color);
 }
@@ -2689,7 +2705,8 @@ input:checked + .slider:before {
     }
 
     #reset-filters-btn-quiz,
-    #reset-filters-btn-ppt {
+    #reset-filters-btn-ppt,
+    #reset-filters-btn-json {
         width: 100%;
     }
 }
