@@ -664,7 +664,6 @@ async function generatePDF() {
         const PAGE_HEIGHT = doc.internal.pageSize.getHeight();
         const CONTENT_WIDTH = PAGE_WIDTH - (MARGIN * 2);
         let y = MARGIN;
-        let pageNum = 1;
 
         const addFooter = (doc, pageNum, totalPages) => {
             doc.setFont('Helvetica', 'italic');
@@ -676,26 +675,85 @@ async function generatePDF() {
         
         // --- Title Page ---
         doc.setFont('Helvetica', 'bold');
-        doc.setFontSize(32);
-        doc.text('Quiz LM Question Bank', PAGE_WIDTH / 2, PAGE_HEIGHT / 2 - 60, { align: 'center' });
+        doc.setFontSize(28);
+        doc.text('Quiz LM Question Bank ✨', PAGE_WIDTH / 2, y + 20, { align: 'center' });
+        y += 70;
+
         doc.setFont('Helvetica', 'normal');
         doc.setFontSize(16);
-        doc.text(`A custom set of ${questions.length} questions.`, PAGE_WIDTH / 2, PAGE_HEIGHT / 2 - 20, { align: 'center' });
-        
+        doc.text(`Generated with ${questions.length} questions.`, PAGE_WIDTH / 2, y, { align: 'center' });
+        y += 30;
+
+        const indianTimestamp = new Date().toLocaleString('en-IN', {
+            timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', hour12: true
+        });
+        doc.setFontSize(11);
+        doc.setTextColor(120);
+        doc.text(`Created on: ${indianTimestamp} (IST)`, PAGE_WIDTH / 2, y, { align: 'center' });
+        y += 60;
+
+        const filterHierarchy = {
+            'Classification': ['subject', 'topic', 'subTopic'],
+            'Properties': ['difficulty', 'questionType'],
+            'Source': ['examName', 'examYear'],
+            'Tags': ['tags']
+        };
+
+        let hasFilters = false;
+        doc.setFont('Helvetica', 'normal');
+        doc.setTextColor(40);
+
+        for (const category in filterHierarchy) {
+            const filtersInCategory = [];
+            filterHierarchy[category].forEach(filterKey => {
+                const selected = state.selectedFilters[filterKey];
+                if (selected && selected.length > 0) {
+                    hasFilters = true;
+                    const displayName = filterKey.charAt(0).toUpperCase() + filterKey.slice(1).replace(/([A-Z])/g, ' $1').trim();
+                    filtersInCategory.push(`${displayName}: ${selected.join(', ')}`);
+                }
+            });
+
+            if (filtersInCategory.length > 0) {
+                if (y > PAGE_HEIGHT - MARGIN) { doc.addPage(); y = MARGIN; }
+                doc.setFont('Helvetica', 'bold');
+                doc.setFontSize(12);
+                doc.setTextColor(48, 63, 159);
+                doc.text(category, MARGIN, y);
+                y += 18;
+
+                filtersInCategory.forEach(filterText => {
+                    if (y > PAGE_HEIGHT - MARGIN) { doc.addPage(); y = MARGIN; }
+                    doc.setFont('Helvetica', 'normal');
+                    doc.setFontSize(10);
+                    doc.setTextColor(40);
+                    const filterLines = doc.splitTextToSize(`• ${filterText}`, CONTENT_WIDTH - 20);
+                    doc.text(filterLines, MARGIN + 20, y);
+                    y += (filterLines.length * 10 * 1.2);
+                });
+                y += 10;
+            }
+        }
+
+        if (!hasFilters) {
+            doc.setFontSize(12);
+            doc.setTextColor(120);
+            doc.text('No filters applied.', MARGIN, y);
+        }
+
         const answers = [];
         
         // --- Questions Loop ---
+        doc.addPage();
+        let pageNum = 2;
+        y = MARGIN;
+        
         for (let i = 0; i < questions.length; i++) {
-            if (y > MARGIN) {
-                doc.addPage();
-                pageNum++;
-                y = MARGIN;
-            }
-
             const question_item = questions[i];
             const questionNum = i + 1;
 
-            const progress = Math.round(((i + 1) / questions.length) * 100);
+            const progress = Math.round((i / questions.length) * 50); // 0-50% for questions
             dom.pdfLoadingProgressBar.style.width = `${progress}%`;
             dom.pdfLoadingDetails.textContent = `Processing question ${questionNum} of ${questions.length}...`;
             
@@ -704,46 +762,57 @@ async function generatePDF() {
             const letteredCorrect = String.fromCharCode(65 + correctOptIndex);
             answers.push(`${questionNum}. ${letteredCorrect}) ${question_item.correct}`);
 
+            // --- Calculate block height before rendering ---
             const cleanQ = cleanQuestionText(question_item.question);
             const questionText = `Q.${questionNum}) ${cleanQ}`;
-
+            
             doc.setFont('Helvetica', 'bold');
             doc.setFontSize(12);
             const questionLines = doc.splitTextToSize(questionText, CONTENT_WIDTH);
+            const questionHeight = (questionLines.length * 12 * 1.2) + 10;
+
+            let optionsHeight = 0;
+            doc.setFont('Helvetica', 'normal');
+            doc.setFontSize(10);
+            question_item.options.forEach((opt, idx) => {
+                const optionText = `(${String.fromCharCode(65 + idx)}) ${opt}`;
+                const optionLines = doc.splitTextToSize(optionText, CONTENT_WIDTH - 20);
+                optionsHeight += (optionLines.length * 10 * 1.2) + 5;
+            });
+
+            const totalQuestionBlockHeight = questionHeight + optionsHeight + 20; // 20 for separator
+            
+            if (y + totalQuestionBlockHeight > PAGE_HEIGHT - MARGIN) {
+                doc.addPage();
+                pageNum++;
+                y = MARGIN;
+            }
+
+            // --- Render the block ---
+            doc.setFont('Helvetica', 'bold');
+            doc.setFontSize(12);
             doc.text(questionLines, MARGIN, y);
-            y += (questionLines.length * 12) + 10;
+            y += (questionLines.length * 12 * 1.2) + 10;
 
             doc.setFont('Helvetica', 'normal');
             doc.setFontSize(10);
             question_item.options.forEach((opt, idx) => {
                 const optionText = `(${String.fromCharCode(65 + idx)}) ${opt}`;
                 const optionLines = doc.splitTextToSize(optionText, CONTENT_WIDTH - 20);
-                
-                if (y + (optionLines.length * 10) > PAGE_HEIGHT - MARGIN) {
-                    doc.addPage();
-                    pageNum++;
-                    y = MARGIN;
-                }
                 doc.text(optionLines, MARGIN + 20, y);
-                y += (optionLines.length * 10) + 5;
+                y += (optionLines.length * 10 * 1.2) + 5;
             });
             
+            y += 15;
+            doc.setDrawColor(220);
+            doc.line(MARGIN, y, PAGE_WIDTH - MARGIN, y);
             y += 20;
-            if (y > PAGE_HEIGHT - MARGIN) {
-                if (i < questions.length - 1) { // Don't add a new page if it's the last question
-                    doc.addPage();
-                    pageNum++;
-                    y = MARGIN;
-                }
-            } else {
-                 doc.setDrawColor(220);
-                 doc.line(MARGIN, y, PAGE_WIDTH - MARGIN, y);
-                 y += 20;
-            }
-            await new Promise(resolve => setTimeout(resolve, 5)); // Prevent freezing on large docs
+
+            await new Promise(resolve => setTimeout(resolve, 1));
         }
 
         // --- Answer Key Page ---
+        dom.pdfLoadingDetails.textContent = `Generating Answer Key...`;
         doc.addPage();
         pageNum++;
         y = MARGIN;
@@ -754,39 +823,43 @@ async function generatePDF() {
 
         doc.setFont('Helvetica', 'normal');
         doc.setFontSize(10);
-        let col1Y = y;
-        let col2Y = y;
-        const midPoint = Math.ceil(answers.length / 2);
         
-        const answerKeyGutter = 20;
+        const answerKeyGutter = 30;
         const answerKeyColWidth = (CONTENT_WIDTH - answerKeyGutter) / 2;
         const col1X = MARGIN;
         const col2X = MARGIN + answerKeyColWidth + answerKeyGutter;
+        let currentY = y;
+        const midPoint = Math.ceil(answers.length / 2);
 
-        for (let i = 0; i < answers.length; i++) {
-            const text = answers[i];
-            const lines = doc.splitTextToSize(text, answerKeyColWidth);
-            const lineHeight = lines.length * 10 * 1.2;
+        for (let i = 0; i < midPoint; i++) {
+            const progress = 50 + Math.round((i / midPoint) * 50); // 50-100% for answer key
+            dom.pdfLoadingProgressBar.style.width = `${progress}%`;
 
-            if (i < midPoint) {
-                 if (col1Y + lineHeight > PAGE_HEIGHT - MARGIN) {
-                    doc.addPage();
-                    pageNum++;
-                    col1Y = MARGIN;
-                    col2Y = MARGIN; // Reset both columns on new page
-                }
-                doc.text(lines, col1X, col1Y);
-                col1Y += lineHeight;
-            } else {
-                 if (col2Y + lineHeight > PAGE_HEIGHT - MARGIN) {
-                    doc.addPage();
-                    pageNum++;
-                    col1Y = MARGIN;
-                    col2Y = MARGIN;
-                }
-                doc.text(lines, col2X, col2Y);
-                col2Y += lineHeight;
+            const text1 = answers[i];
+            const lines1 = doc.splitTextToSize(text1, answerKeyColWidth);
+            const lineHeight1 = lines1.length * 10 * 1.2;
+
+            const text2 = (i + midPoint < answers.length) ? answers[i + midPoint] : null;
+            let lines2 = [], lineHeight2 = 0;
+            if (text2) {
+                lines2 = doc.splitTextToSize(text2, answerKeyColWidth);
+                lineHeight2 = lines2.length * 10 * 1.2;
             }
+
+            const maxLineHeight = Math.max(lineHeight1, lineHeight2);
+
+            if (currentY + maxLineHeight > PAGE_HEIGHT - MARGIN - 20) { // Extra buffer for footer
+                doc.addPage();
+                pageNum++;
+                currentY = MARGIN;
+            }
+
+            doc.text(lines1, col1X, currentY);
+            if (text2) {
+                doc.text(lines2, col2X, currentY);
+            }
+            
+            currentY += maxLineHeight + 5; // Add some space between rows
         }
         
         const totalPages = doc.internal.getNumberOfPages();
