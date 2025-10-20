@@ -781,17 +781,23 @@ async function generatePDF() {
             // Add to answer key
             const correctOptIndex = question_item.options.indexOf(question_item.correct);
             let letteredCorrect = String.fromCharCode(65 + correctOptIndex);
+            let correctTextToPush = question_item.correct;
             // Data error fallback: if correct answer text isn't in options, try to get letter from explanation
             if (correctOptIndex === -1) {
                 const summary = question_item.explanation?.summary || "";
                 const match = summary.match(/Correct Answer: ([A-D])\)/);
                 if (match) {
                     letteredCorrect = match[1];
+                     // Also get the correct text associated with this letter to ensure consistency
+                    const correctIndexFromLetter = letteredCorrect.charCodeAt(0) - 65;
+                    if (question_item.options[correctIndexFromLetter]) {
+                        correctTextToPush = question_item.options[correctIndexFromLetter];
+                    }
                 } else {
                     letteredCorrect = '?'; // Fallback if summary also doesn't have it
                 }
             }
-            answers.push(`${questionNum}. ${letteredCorrect}) ${question_item.correct}`);
+            answers.push(`${questionNum}. ${letteredCorrect}) ${correctTextToPush}`);
 
             // --- Calculate block height before rendering ---
             const cleanQ = cleanQuestionText(question_item.question);
@@ -868,19 +874,19 @@ async function generatePDF() {
 
             const text1 = answers[i];
             const lines1 = doc.splitTextToSize(text1, answerKeyColWidth);
-            const { h: height1 } = doc.getTextDimensions(lines1);
-
+            
             const text2 = (i + midPoint < answers.length) ? answers[i + midPoint] : null;
-            let lines2 = [], height2 = 0;
+            let lines2 = [];
             if (text2) {
                 lines2 = doc.splitTextToSize(text2, answerKeyColWidth);
-                const { h: h2 } = doc.getTextDimensions(lines2);
-                height2 = h2;
             }
 
-            const maxLineHeight = Math.max(height1, height2);
+            const maxLines = Math.max(lines1.length, lines2.length);
+            const lineHeight = 12; // A safe line height for font size 10 to prevent overlap
+            const blockHeight = maxLines * lineHeight;
 
-            if (currentY + maxLineHeight > PAGE_HEIGHT - MARGIN - 20) { // Extra buffer for footer
+
+            if (currentY + blockHeight > PAGE_HEIGHT - MARGIN - 20) { // Extra buffer for footer
                 doc.addPage();
                 pageNum++;
                 currentY = MARGIN;
@@ -891,7 +897,7 @@ async function generatePDF() {
                 doc.text(lines2, col2X, currentY);
             }
             
-            currentY += maxLineHeight + 5; // Add some space between rows
+            currentY += blockHeight + 5; // Add some space between rows
         }
         
         const totalPages = doc.internal.getNumberOfPages();
