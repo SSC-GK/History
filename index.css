@@ -240,6 +240,28 @@ NEW: FILTER SECTION STYLES
     text-align: center;
 }
 
+.home-link-container {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.home-link-container a {
+    text-decoration: none;
+    color: var(--primary-dark);
+    font-weight: 600;
+    font-size: 1em;
+    transition: color 0.3s ease;
+}
+
+.home-link-container a:hover {
+    color: var(--accent-dark);
+    text-decoration: underline;
+}
+
+.home-link-container a i {
+    margin-right: 8px;
+}
+
 #filter-section h1 {
     font-size: 1.8em;
     margin-bottom: 5px;
