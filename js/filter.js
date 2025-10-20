@@ -1,5 +1,3 @@
-
-
 import { config, state } from './state.js';
 import { dom } from './dom.js';
 import { shuffleArray } from './utils.js';
@@ -604,25 +602,33 @@ async function generatePDF() {
         let y = MARGIN;
         let pageNum = 1;
 
-        const renderContainer = dom.pdfRenderContainer;
-
         const renderHindiAsImage = async (text, fontSize, customWidth = CONTENT_WIDTH, fontWeight = 'normal', color = '#303f9f') => {
             if (!text || text.trim() === '') {
                 return { imgData: null, width: 0, height: 0 };
             }
+            // Create a temporary div for rendering to avoid conflicts
+            const renderContainer = document.createElement('div');
+            renderContainer.style.position = 'absolute';
+            renderContainer.style.left = '-9999px';
+            renderContainer.style.top = '0';
+            renderContainer.style.background = 'white';
+            renderContainer.style.fontFamily = `'Noto Sans Devanagari', sans-serif`;
+            document.body.appendChild(renderContainer);
+            
             renderContainer.style.width = `${customWidth}pt`;
             renderContainer.style.fontSize = `${fontSize}pt`;
             renderContainer.style.fontWeight = fontWeight;
-            renderContainer.style.fontFamily = `'Noto Sans Devanagari', sans-serif`;
             renderContainer.style.color = color;
             renderContainer.innerHTML = text;
 
-            await new Promise(resolve => setTimeout(resolve, 5));
+            await new Promise(resolve => setTimeout(resolve, 1)); // Small delay for render
 
             const canvas = await html2canvas(renderContainer, {
                 scale: 1.5,
                 backgroundColor: null
             });
+
+            document.body.removeChild(renderContainer); // Cleanup
 
             const aspectRatio = canvas.height / canvas.width;
             const finalWidth = customWidth;
@@ -656,35 +662,36 @@ async function generatePDF() {
             dom.pdfLoadingProgressBar.style.width = `${progress}%`;
             dom.pdfLoadingDetails.textContent = `Processing question ${questionNum} of ${questions.length}...`;
             
-            // --- Pre-calculation phase ---
+            // --- Pre-calculation phase (English text height) ---
             doc.setFont('Helvetica', 'bold');
             doc.setFontSize(12);
-            const questionText = item.question.split(')').slice(1).join(')').trim();
+            const questionText = (item.question || '').split(')').slice(1).join(')').trim();
             const engQuestionLines = doc.splitTextToSize(`Q.${questionNum}) ${questionText}`, CONTENT_WIDTH);
             const engQuestionHeight = engQuestionLines.length * 12 * 1.15;
 
-            const hinQuestionImg = await renderHindiAsImage(item.question_hi || '', 11, CONTENT_WIDTH, '600', 'var(--primary-dark)');
-
-            let optionsHeight = 0;
-            const optionEngLinesArray = [];
-            const optionImages = [];
+            // --- Parallel Image Generation ---
+            const hindiQuestionPromise = renderHindiAsImage(item.question_hi || '', 11, CONTENT_WIDTH, '600', 'var(--primary-dark)');
             
             const engOptTextWidth = 250;
             const hindiOptionColStart = MARGIN + engOptTextWidth + 15;
             const hindiOptionWidth = PAGE_WIDTH - hindiOptionColStart - MARGIN;
+            const optionImagePromises = (item.options_hi || []).map(hinOpt => renderHindiAsImage(hinOpt || '', 10, hindiOptionWidth));
 
+            const [hinQuestionImg, ...optionImages] = await Promise.all([hindiQuestionPromise, ...optionImagePromises]);
+            
+            let optionsHeight = 0;
+            const optionEngLinesArray = [];
+            
             doc.setFont('Helvetica', 'normal');
             doc.setFontSize(10);
             for (let j = 0; j < (item.options || []).length; j++) {
                 const letter = String.fromCharCode(65 + j);
-                const img = await renderHindiAsImage((item.options_hi || [])[j] || '', 10, hindiOptionWidth);
-                optionImages.push(img);
-                
                 const lines = doc.splitTextToSize(`(${letter}) ${item.options[j]}`, engOptTextWidth);
                 optionEngLinesArray.push(lines);
 
                 const engHeight = lines.length * 10 * 1.15;
-                optionsHeight += Math.max(engHeight, img.height) + 10;
+                const imgHeight = (optionImages[j] || {height: 0}).height;
+                optionsHeight += Math.max(engHeight, imgHeight) + 10;
             }
             
             const totalBlockHeight = engQuestionHeight + 5 + hinQuestionImg.height + 15 + optionsHeight + 15;
@@ -711,14 +718,14 @@ async function generatePDF() {
                 const engOptLines = optionEngLinesArray[j];
                 const hinOptImg = optionImages[j];
                 const engHeight = engOptLines.length * 10 * 1.15;
-                const rowHeight = Math.max(engHeight, hinOptImg.height);
+                const rowHeight = Math.max(engHeight, (hinOptImg || {height: 0}).height);
                 
                 doc.setFont('Helvetica', 'normal');
                 doc.setFontSize(10);
                 doc.setTextColor(66, 66, 66);
                 doc.text(engOptLines, MARGIN + 15, y + 10);
                 
-                if(hinOptImg.imgData){
+                if(hinOptImg && hinOptImg.imgData){
                   doc.addImage(hinOptImg.imgData, 'JPEG', hindiOptionColStart, y, hinOptImg.width, hinOptImg.height);
                 }
                 
@@ -812,10 +819,9 @@ async function generatePDF() {
         });
     } finally {
         dom.pdfLoadingOverlay.style.display = 'none';
-        renderContainer.innerHTML = '';
+        dom.pdfRenderContainer.innerHTML = '';
     }
 }
-
 
 function toggleMultiSelectDropdown(filterKey, forceClose = false) {
     const dropdown = dom.filterElements[filterKey]?.dropdown;
