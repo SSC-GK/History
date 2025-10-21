@@ -80,46 +80,21 @@ function bindFilterEventListeners() {
 
 async function loadQuestionsForFiltering() {
     try {
-        const response = await fetch('/questions.json');
+        const response = await fetch('./questions.json');
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
         const contentLength = response.headers.get('Content-Length');
         const total = parseInt(contentLength, 10);
-        const isGzipped = response.headers.get('Content-Encoding') === 'gzip';
+        let loaded = 0;
 
-        // Best case: Modern browser supporting DecompressionStream for accurate progress
-        if (total && response.body && 'DecompressionStream' in window && isGzipped) {
-            console.log("Using DecompressionStream for accurate progress tracking.");
-            let loaded = 0;
-
-            const progressStream = new TransformStream({
-                transform(chunk, controller) {
-                    loaded += chunk.length;
-                    const progress = Math.min(100, Math.round((loaded / total) * 100));
-                    
-                    if (dom.loadingProgressBar) dom.loadingProgressBar.style.width = `${progress}%`;
-                    if (dom.loadingPercentage) dom.loadingPercentage.textContent = `${progress}%`;
-                    
-                    controller.enqueue(chunk);
-                },
-            });
-            
-            const decompressionStream = new DecompressionStream('gzip');
-            const decompressedStream = response.body
-                .pipeThrough(progressStream)
-                .pipeThrough(decompressionStream);
-
-            const finalResponse = new Response(decompressedStream);
-            state.allQuestionsMasterList = await finalResponse.json();
-
-        } else if (total && response.body) {
-            // Fallback for older browsers or uncompressed responses.
-            // This might show inaccurate progress (>100%) if the file is compressed but the browser doesn't support DecompressionStream.
-            if(isGzipped) console.warn("DecompressionStream not supported. Progress bar may be inaccurate.");
-
+        // Fallback for servers that don't provide Content-Length or browsers that don't support streams
+        if (!total || !response.body) {
+            console.warn("Progress bar not supported by this server/browser. Loading questions...");
+            if (dom.loadingPercentage) dom.loadingPercentage.textContent = 'Loading...';
+            state.allQuestionsMasterList = await response.json();
+        } else {
             const reader = response.body.getReader();
             const chunks = [];
-            let loaded = 0;
             
             while (true) {
                 const { done, value } = await reader.read();
@@ -129,10 +104,12 @@ async function loadQuestionsForFiltering() {
                 loaded += value.length;
                 const progress = Math.round((loaded / total) * 100);
                 
+                // Update UI
                 if (dom.loadingProgressBar) dom.loadingProgressBar.style.width = `${progress}%`;
                 if (dom.loadingPercentage) dom.loadingPercentage.textContent = `${progress}%`;
             }
 
+            // Combine chunks into a single Uint8Array
             const allChunks = new Uint8Array(loaded);
             let position = 0;
             for (const chunk of chunks) {
@@ -140,13 +117,9 @@ async function loadQuestionsForFiltering() {
                 position += chunk.length;
             }
 
+            // Decode and parse JSON
             const resultText = new TextDecoder("utf-8").decode(allChunks);
             state.allQuestionsMasterList = JSON.parse(resultText);
-        } else {
-            // Ultimate fallback for servers without Content-Length or browsers without streams.
-            console.warn("Progress bar not supported by this server/browser. Loading questions...");
-            if (dom.loadingPercentage) dom.loadingPercentage.textContent = 'Loading...';
-            state.allQuestionsMasterList = await response.json();
         }
         
         if (!state.allQuestionsMasterList || state.allQuestionsMasterList.length === 0) {
@@ -155,17 +128,10 @@ async function loadQuestionsForFiltering() {
 
         // Smoothly hide the loader
         if (dom.loadingOverlay) {
-            // Ensure UI shows 100% before hiding
-            if (dom.loadingProgressBar) dom.loadingProgressBar.style.width = '100%';
-            if (dom.loadingPercentage) dom.loadingPercentage.textContent = '100%';
-
-            // Add a short delay so the user can see 100%
-            setTimeout(() => {
-                dom.loadingOverlay.classList.add('fade-out');
-                dom.loadingOverlay.addEventListener('transitionend', () => {
-                    dom.loadingOverlay.style.display = 'none';
-                }, { once: true });
-            }, 300);
+            dom.loadingOverlay.classList.add('fade-out');
+            dom.loadingOverlay.addEventListener('transitionend', () => {
+                dom.loadingOverlay.style.display = 'none';
+            }, { once: true });
         }
         
         populateFilterControls();
