@@ -26,6 +26,7 @@ export function cacheDomElements() {
     dom.filterSection = document.getElementById('filter-section');
     dom.tabButtons = document.querySelectorAll('.tab-btn');
     dom.tabPanels = document.querySelectorAll('.tab-panel');
+    dom.tabTaglines = document.querySelectorAll('.tagline');
     const filterKeys = ['subject', 'topic', 'subTopic', 'difficulty', 'questionType', 'examName', 'examYear', 'tags'];
     filterKeys.forEach(key => {
         dom.filterElements[key] = {

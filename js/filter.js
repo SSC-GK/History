@@ -32,6 +32,14 @@ function initializeTabs() {
                     panel.classList.remove('active');
                 }
             });
+
+            dom.tabTaglines.forEach(tagline => {
+                if (tagline.dataset.tab === targetPanelId) {
+                    tagline.classList.add('active');
+                } else {
+                    tagline.classList.remove('active');
+                }
+            });
         });
     });
 }
