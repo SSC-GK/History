@@ -1,3 +1,4 @@
+
 import { config, state } from './state.js';
 import { dom } from './dom.js';
 import { shuffleArray } from './utils.js';
@@ -501,7 +502,6 @@ async function generatePowerPoint() {
         pptx.company = 'AI-Powered Learning';
         pptx.title = 'Customized Quiz Presentation';
         
-        // Version 10.6: Color Schema
         const TITLE_SLIDE_BG = 'F5F5F5'; // Grey
         const QUESTION_SLIDE_BG = 'D6EAF8'; // Light Blue
         const ANSWER_SLIDE_BG = 'E2F0D9'; // Light Green
@@ -523,7 +523,6 @@ async function generatePowerPoint() {
             x: 0, y: 2.0, w: '100%', align: 'center', color: TEXT_COLOR, fontSize: 18
         });
 
-        // Timestamp
         const indianTimestamp = new Date().toLocaleString('en-IN', {
             timeZone: 'Asia/Kolkata',
             year: 'numeric', month: '2-digit', day: '2-digit',
@@ -533,7 +532,6 @@ async function generatePowerPoint() {
             x: 0, y: 2.4, w: '100%', align: 'center', color: '757575', fontSize: 11, italic: true
         });
 
-        // Applied Filters Text
         const filterTextForPPT = [];
         const filterHierarchy = {
             'Classification': ['subject', 'topic', 'subTopic'],
@@ -570,125 +568,98 @@ async function generatePowerPoint() {
             });
         }
         
-        // --- QUESTION & ANSWER SLIDES ---
+        // --- ASYNCHRONOUS QUESTION & ANSWER SLIDE GENERATION ---
         const totalQuestions = questions.length;
-
-        for (let i = 0; i < totalQuestions; i++) {
-            const question_item = questions[i];
-            const slide_question_number = i + 1;
-
-            const progress = Math.round(((i + 1) / totalQuestions) * 100);
-            dom.pptLoadingProgressBar.style.width = `${progress}%`;
-            dom.pptLoadingDetails.textContent = `Processing question ${slide_question_number} of ${totalQuestions}... (${progress}%)`;
-
-            await new Promise(resolve => setTimeout(resolve, 0));
-
-            // SLIDE 1: QUESTION & OPTIONS
-            let q_slide = pptx.addSlide({ bkgd: QUESTION_SLIDE_BG });
-            
-            let question_text = cleanQuestionText(question_item.question);
-            
-            // Version 10.7: Add exam info
-            const examInfoText = ` (${question_item.sourceInfo.examName}, ${question_item.sourceInfo.examDateShift})`;
-            
-            // Version 10.5: Parse markdown for English question and add exam info
-            const englishQuestionArray = [
-                ...parseMarkdownForPptx(`Q.${slide_question_number}) ${question_text}`),
-                { text: examInfoText, options: { fontSize: 12, color: 'C62828', italic: true } } // Light red
-            ];
-            
-            q_slide.addText(englishQuestionArray, {
-                x: 0.5, y: 0.3, w: 9, h: 1.2,
-                fontFace: ENGLISH_FONT, fontSize: 20, color: TEXT_COLOR, bold: true
-            });
-
-            const question_text_hi = cleanQuestionText(question_item.question_hi);
-            // Version 10.5: Parse markdown for Hindi question
-            q_slide.addText(parseMarkdownForPptx(question_text_hi || ''), {
-                x: 0.5, y: 1.5, w: 9, h: 0.6,
-                fontFace: HINDI_FONT, fontSize: 18, color: TEXT_COLOR, bold: true
-            });
-
-            let optionsY = 2.3;
-            let optionsArray = [];
-            (question_item.options || []).forEach((eng_option, index) => {
-                const hin_option = (question_item.options_hi || [])[index] || '';
-                const option_letter = String.fromCharCode(65 + index);
-                
-                // Version 10.5: Parse markdown for options
-                const engParsed = parseMarkdownForPptx(`${option_letter}) ${eng_option}`);
-                engParsed.forEach(p => { p.options = {...p.options, fontFace: ENGLISH_FONT, fontSize: 16, color: TEXT_COLOR }});
-                optionsArray.push(...engParsed);
-
-                const hinParsed = parseMarkdownForPptx(`    ${hin_option}\n`);
-                hinParsed.forEach(p => { p.options = {...p.options, fontFace: HINDI_FONT, fontSize: 14, color: TEXT_COLOR }});
-                optionsArray.push(...hinParsed);
-            });
-            q_slide.addText(optionsArray, { x: 0.6, y: optionsY, w: 9, h: 3.0, lineSpacing: 24 });
-
-
-            // SLIDE 2 & 3: ANSWER & EXPLANATION
-            const explanation = question_item.explanation || {};
-
-            const slideParts = [
-                {
-                    part: 1,
-                    title: `Answer & Explanation for Q.${slide_question_number} (Part 1)`,
-                    content: [
-                        { text: `✅ Correct Answer: ${question_item.correct || 'N/A'}` },
-                        explanation.analysis_correct,
-                        explanation.conclusion,
-                    ]
-                },
-                {
-                    part: 2,
-                    title: `Answer & Explanation for Q.${slide_question_number} (Part 2)`,
-                    content: [
-                        explanation.analysis_incorrect,
-                        explanation.fact,
-                    ]
-                }
-            ];
-
-            slideParts.forEach(partInfo => {
-                const contentBlocks = partInfo.content.filter(Boolean);
-                if (contentBlocks.length === 0) return;
-
-                let aSlide = pptx.addSlide({ bkgd: ANSWER_SLIDE_BG });
-                aSlide.addText(partInfo.title, { x: 0.5, y: 0.3, w: 9, h: 0.6, fontFace: ENGLISH_FONT, fontSize: 18, color: TEXT_COLOR, bold: true });
-
-                let combinedExplanation = [];
-                contentBlocks.forEach(block => {
-                    if (typeof block === 'string') {
-                        combinedExplanation.push(...parseMarkdownForPptx(block));
-                        combinedExplanation.push({ text: '\n\n' });
-                    } else if (block.text && block.text.includes('Correct Answer')) { // Special handling for the correct answer line
-                        combinedExplanation.push({ text: block.text, options: { bold: true, color: CORRECT_ANSWER_COLOR } });
-                        combinedExplanation.push({ text: '\n\n' });
+        const processQuestionSlides = () => {
+            return new Promise(resolve => {
+                let i = 0;
+                function processNextQuestion() {
+                    if (i >= totalQuestions) {
+                        resolve();
+                        return;
                     }
-                });
+                    
+                    const question_item = questions[i];
+                    const slide_question_number = i + 1;
 
-                if (combinedExplanation.length > 0) {
-                    aSlide.addText(combinedExplanation, {
-                        x: 0.5, y: 1.1, w: 9, h: 4.2,
-                        fontFace: ENGLISH_FONT, fontSize: 14, color: TEXT_COLOR,
-                        lineSpacing: 22
+                    // SLIDE 1: QUESTION & OPTIONS
+                    let q_slide = pptx.addSlide();
+                    q_slide.background = { color: QUESTION_SLIDE_BG };
+                    let question_text = cleanQuestionText(question_item.question);
+                    const examInfoText = ` (${question_item.sourceInfo.examName}, ${question_item.sourceInfo.examDateShift})`;
+                    const englishQuestionArray = [
+                        ...parseMarkdownForPptx(`Q.${slide_question_number}) ${question_text}`),
+                        { text: examInfoText, options: { fontSize: 12, color: 'C62828', italic: true } }
+                    ];
+                    q_slide.addText(englishQuestionArray, { x: 0.5, y: 0.3, w: 9, h: 1.2, fontFace: ENGLISH_FONT, fontSize: 20, color: TEXT_COLOR, bold: true });
+                    const question_text_hi = cleanQuestionText(question_item.question_hi);
+                    q_slide.addText(parseMarkdownForPptx(question_text_hi || ''), { x: 0.5, y: 1.5, w: 9, h: 0.6, fontFace: HINDI_FONT, fontSize: 18, color: TEXT_COLOR, bold: true });
+                    let optionsY = 2.3;
+                    let optionsArray = [];
+                    (question_item.options || []).forEach((eng_option, index) => {
+                        const hin_option = (question_item.options_hi || [])[index] || '';
+                        const option_letter = String.fromCharCode(65 + index);
+                        const engParsed = parseMarkdownForPptx(`${option_letter}) ${eng_option}`);
+                        engParsed.forEach(p => { p.options = {...p.options, fontFace: ENGLISH_FONT, fontSize: 16, color: TEXT_COLOR }});
+                        optionsArray.push(...engParsed);
+                        const hinParsed = parseMarkdownForPptx(`    ${hin_option}\n`);
+                        hinParsed.forEach(p => { p.options = {...p.options, fontFace: HINDI_FONT, fontSize: 14, color: TEXT_COLOR }});
+                        optionsArray.push(...hinParsed);
                     });
+                    q_slide.addText(optionsArray, { x: 0.6, y: optionsY, w: 9, h: 3.0, lineSpacing: 24 });
+
+                    // SLIDE 2 & 3: ANSWER & EXPLANATION
+                    const explanation = question_item.explanation || {};
+                    const slideParts = [
+                        { part: 1, title: `Answer & Explanation for Q.${slide_question_number} (Part 1)`, content: [ { text: `✅ Correct Answer: ${question_item.correct || 'N/A'}` }, explanation.analysis_correct, explanation.conclusion, ] },
+                        { part: 2, title: `Answer & Explanation for Q.${slide_question_number} (Part 2)`, content: [ explanation.analysis_incorrect, explanation.fact, ] }
+                    ];
+                    slideParts.forEach(partInfo => {
+                        const contentBlocks = partInfo.content.filter(Boolean);
+                        if (contentBlocks.length === 0) return;
+                        let aSlide = pptx.addSlide();
+                        aSlide.background = { color: ANSWER_SLIDE_BG };
+                        aSlide.addText(partInfo.title, { x: 0.5, y: 0.3, w: 9, h: 0.6, fontFace: ENGLISH_FONT, fontSize: 18, color: TEXT_COLOR, bold: true });
+                        let combinedExplanation = [];
+                        contentBlocks.forEach(block => {
+                            if (typeof block === 'string') {
+                                combinedExplanation.push(...parseMarkdownForPptx(block));
+                                combinedExplanation.push({ text: '\n\n' });
+                            } else if (block.text && block.text.includes('Correct Answer')) {
+                                combinedExplanation.push({ text: block.text, options: { bold: true, color: CORRECT_ANSWER_COLOR } });
+                                combinedExplanation.push({ text: '\n\n' });
+                            }
+                        });
+                        if (combinedExplanation.length > 0) {
+                            aSlide.addText(combinedExplanation, { x: 0.5, y: 1.1, w: 9, h: 4.2, fontFace: ENGLISH_FONT, fontSize: 14, color: TEXT_COLOR, lineSpacing: 22 });
+                        }
+                    });
+                    
+                    // Update UI
+                    const progress = Math.round(((i + 1) / totalQuestions) * 100);
+                    dom.pptLoadingProgressBar.style.width = `${progress}%`;
+                    dom.pptLoadingDetails.textContent = `Processing question ${slide_question_number} of ${totalQuestions}... (${progress}%)`;
+                    
+                    i++;
+                    
+                    // Yield to event loop to allow UI repaint
+                    setTimeout(processNextQuestion, 10);
                 }
+                processNextQuestion(); // Start the process
             });
-        }
+        };
+        
+        await processQuestionSlides();
 
         dom.pptLoadingText.textContent = 'Finalizing & Downloading...';
         dom.pptLoadingDetails.textContent = 'Please wait, this may take a moment.';
         
-        // Version 10.8: Dynamic filename generation (Corrected)
         let filenameParts = [];
         const { subject, examName } = state.selectedFilters;
         
         const subjects = [...subject].sort();
         const exams = [...examName].sort();
         
-        // Get unique examDateShift values directly from the filtered questions
         const uniqueShifts = [...new Set(questions.map(q => q.sourceInfo?.examDateShift).filter(Boolean))];
         const shifts = uniqueShifts.sort();
 
@@ -700,7 +671,6 @@ async function generatePowerPoint() {
 
         let filename = filenameParts.join('_');
         
-        // Sanitize filename to remove invalid characters
         filename = filename.replace(/[^a-zA-Z0-9_\-]/g, '_').replace(/_+/g, '_');
         if (!filename.trim() || filename.trim() === `${questions.length}Qs`) {
             filename = `Quiz_LM_${questions.length}Qs`;
