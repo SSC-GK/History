@@ -1,4 +1,5 @@
 
+
 import { config, state } from './state.js';
 import { dom } from './dom.js';
 import { shuffleArray } from './utils.js';
@@ -967,7 +968,29 @@ async function generatePDF() {
         dom.pdfLoadingText.textContent = 'Finalizing & Downloading...';
         dom.pdfLoadingDetails.textContent = 'Please wait, this may take a moment.';
         
-        await doc.save('Quiz_LM_Custom_PDF.pdf');
+        let filenameParts = [];
+        const { subject, examName } = state.selectedFilters;
+        
+        const subjects = [...subject].sort();
+        const exams = [...examName].sort();
+        
+        const uniqueShifts = [...new Set(questions.map(q => q.sourceInfo?.examDateShift).filter(Boolean))];
+        const shifts = uniqueShifts.sort();
+
+        if (subjects.length > 0) filenameParts.push(subjects.join('_'));
+        if (exams.length > 0) filenameParts.push(exams.join('_'));
+        if (shifts.length > 0) filenameParts.push(shifts.join('_'));
+        
+        filenameParts.push(`${questions.length}Qs`);
+
+        let filename = filenameParts.join('_');
+        
+        filename = filename.replace(/[^a-zA-Z0-9_\-]/g, '_').replace(/_+/g, '_');
+        if (!filename.trim() || filename.trim() === `${questions.length}Qs`) {
+            filename = `Quiz_LM_${questions.length}Qs`;
+        }
+
+        await doc.save(`${filename}.pdf`);
 
     } catch (error) {
         console.error("Error generating PDF:", error);
