@@ -3,8 +3,8 @@
     "id": "BIO1",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Biology",
@@ -48,8 +48,8 @@
     "id": "BIO2",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Biology",
@@ -92,8 +92,8 @@
     "id": "BIO3",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Biology",
@@ -138,7 +138,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -182,8 +182,8 @@
     "id": "ECO10",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -213,11 +213,11 @@
       "₹50 करोड़ से घटाकर ₹25 करोड़ कर दिया गया",
       "₹25 करोड़ पर नियत रखा गया"
     ],
-    "correct": "Increased from ₹25 crore to ₹100 crore",
+    "correct": "Increased from ₹20 crore to ₹100 crore",
     "explanation": {
-      "summary": "Correct Answer: B) Increased from ₹25 crore to ₹100 crore",
-      "analysis_correct": "✅ Why this is correct\n\n- The MRTP Act of 1969 was designed to prevent the concentration of economic power. Initially, it applied to companies with assets of **₹25 crore** or more. In **1980** it was **50 crore** . In **1985**, as part of a move towards economic liberalization, this threshold was raised significantly to **₹100 crore** to account for inflation and encourage industrial growth.",
-      "analysis_incorrect": "❌ Why other options are incorrect\n\n- The initial threshold was Rs 25 crore, not Rs 20 crore.",
+      "summary": "Correct Answer: B) Increased from ₹20 crore to ₹100 crore",
+      "analysis_correct": "✅ Why this is correct\n\n- The MRTP Act of 1969 was designed to prevent the concentration of economic power. Initially, it applied to companies with assets of **₹20 crore** or more. In **1985**, as part of a move towards economic liberalization, this threshold was raised significantly to **₹100 crore** to account for inflation and encourage industrial growth.",
+      "analysis_incorrect": "❌ Why other options are incorrect\n\n- The initial threshold was Rs 20 crore, not Rs 25 crore.",
       "conclusion": "📝 Concluding Note\n\n- The evolution of the MRTP asset limit shows the government's shifting stance from strict control over large industrial houses to a more liberal approach.",
       "fact": "💡 Interesting Fact\n\n- The MRTP Act was completely repealed and replaced by the Competition Act in 2002, shifting the focus from curbing monopolies to promoting fair competition."
     }
@@ -676,8 +676,8 @@
     "id": "ECO11",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -1171,8 +1171,8 @@
     "id": "ECO12",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -1663,8 +1663,8 @@
     "id": "ECO13",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -2158,8 +2158,8 @@
     "id": "ECO14",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -2654,8 +2654,8 @@
     "id": "ECO15",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -3148,8 +3148,8 @@
     "id": "ECO16",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -3643,8 +3643,8 @@
     "id": "ECO17",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -4137,8 +4137,8 @@
     "id": "ECO18",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -4630,8 +4630,8 @@
     "id": "ECO19",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -4988,7 +4988,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5032,8 +5032,8 @@
     "id": "ECO20",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5077,8 +5077,8 @@
     "id": "ECO21",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5122,8 +5122,8 @@
     "id": "ECO22",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5167,8 +5167,8 @@
     "id": "ECO23",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5213,8 +5213,8 @@
     "id": "ECO24",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5258,8 +5258,8 @@
     "id": "ECO25",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5303,8 +5303,8 @@
     "id": "ECO26",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5347,8 +5347,8 @@
     "id": "ECO27",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5392,8 +5392,8 @@
     "id": "ECO28",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5437,8 +5437,8 @@
     "id": "ECO29",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5481,8 +5481,8 @@
     "id": "ECO3",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5526,8 +5526,8 @@
     "id": "ECO30",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5571,8 +5571,8 @@
     "id": "ECO31",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5616,8 +5616,8 @@
     "id": "ECO32",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5661,8 +5661,8 @@
     "id": "ECO33",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5707,8 +5707,8 @@
     "id": "ECO34",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5752,8 +5752,8 @@
     "id": "ECO35",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5796,8 +5796,8 @@
     "id": "ECO36",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5841,8 +5841,8 @@
     "id": "ECO37",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5886,8 +5886,8 @@
     "id": "ECO38",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5931,8 +5931,8 @@
     "id": "ECO39",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -5976,8 +5976,8 @@
     "id": "ECO4",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -6470,8 +6470,8 @@
     "id": "ECO5",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -6964,8 +6964,8 @@
     "id": "ECO6",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -7459,8 +7459,8 @@
     "id": "ECO7",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -7953,8 +7953,8 @@
     "id": "ECO8",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -8447,8 +8447,8 @@
     "id": "ECO9",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Economics",
@@ -8941,8 +8941,8 @@
     "id": "ENV1",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Ecology & Environment",
@@ -9436,8 +9436,8 @@
     "id": "ENV2",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Ecology & Environment",
@@ -9751,8 +9751,8 @@
     "id": "ENV3",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Ecology & Environment",
@@ -9796,8 +9796,8 @@
     "id": "ENV4",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Ecology & Environment",
@@ -9840,8 +9840,8 @@
     "id": "ENV5",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Ecology & Environment",
@@ -10066,8 +10066,8 @@
     "id": "GEO1",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -10111,8 +10111,8 @@
     "id": "GEO10",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -10605,8 +10605,8 @@
     "id": "GEO11",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -11101,8 +11101,8 @@
     "id": "GEO12",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -11600,8 +11600,8 @@
     "id": "GEO13",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -12099,8 +12099,8 @@
     "id": "GEO14",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -12595,8 +12595,8 @@
     "id": "GEO15",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -13094,8 +13094,8 @@
     "id": "GEO16",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -13593,8 +13593,8 @@
     "id": "GEO17",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -14092,8 +14092,8 @@
     "id": "GEO18",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -14589,8 +14589,8 @@
     "id": "GEO19",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -15089,8 +15089,8 @@
     "id": "GEO2",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -15135,8 +15135,8 @@
     "id": "GEO20",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -15634,8 +15634,8 @@
     "id": "GEO21",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -16126,8 +16126,8 @@
     "id": "GEO22",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -16621,8 +16621,8 @@
     "id": "GEO23",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -17113,8 +17113,8 @@
     "id": "GEO24",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -17608,8 +17608,8 @@
     "id": "GEO25",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -18103,8 +18103,8 @@
     "id": "GEO26",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -18147,8 +18147,8 @@
     "id": "GEO27",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -18192,8 +18192,8 @@
     "id": "GEO28",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -18237,8 +18237,8 @@
     "id": "GEO29",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -18282,8 +18282,8 @@
     "id": "GEO3",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -18326,8 +18326,8 @@
     "id": "GEO30",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -18370,8 +18370,8 @@
     "id": "GEO31",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -18415,8 +18415,8 @@
     "id": "GEO32",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -18460,8 +18460,8 @@
     "id": "GEO33",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -18506,8 +18506,8 @@
     "id": "GEO34",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -18777,8 +18777,8 @@
     "id": "GEO4",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -19276,8 +19276,8 @@
     "id": "GEO5",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -19776,8 +19776,8 @@
     "id": "GEO6",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -20275,8 +20275,8 @@
     "id": "GEO7",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -20771,8 +20771,8 @@
     "id": "GEO8",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -21269,8 +21269,8 @@
     "id": "GEO9",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Geography",
@@ -21768,7 +21768,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -21812,7 +21812,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -21857,7 +21857,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -21902,7 +21902,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -21947,7 +21947,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -21992,7 +21992,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22037,7 +22037,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22082,7 +22082,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22127,7 +22127,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22172,7 +22172,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22217,7 +22217,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22262,7 +22262,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22306,7 +22306,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22351,7 +22351,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22396,7 +22396,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22441,7 +22441,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22486,7 +22486,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22531,7 +22531,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22575,7 +22575,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22620,7 +22620,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22664,7 +22664,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22708,7 +22708,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22753,7 +22753,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22798,7 +22798,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22843,7 +22843,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22888,7 +22888,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22933,7 +22933,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -22978,7 +22978,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23023,7 +23023,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23068,7 +23068,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23113,7 +23113,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23158,7 +23158,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23204,7 +23204,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23249,7 +23249,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23294,7 +23294,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23341,7 +23341,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23386,7 +23386,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23430,7 +23430,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23475,7 +23475,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23519,7 +23519,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23565,7 +23565,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23610,7 +23610,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23655,7 +23655,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23700,7 +23700,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23744,7 +23744,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23789,7 +23789,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23834,7 +23834,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23878,7 +23878,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23923,7 +23923,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -23967,7 +23967,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24011,7 +24011,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24055,7 +24055,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24100,7 +24100,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24145,7 +24145,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24190,7 +24190,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24235,7 +24235,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24279,7 +24279,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24323,7 +24323,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24368,7 +24368,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24412,7 +24412,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24456,7 +24456,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24501,7 +24501,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24547,7 +24547,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24592,7 +24592,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24636,7 +24636,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24680,7 +24680,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24725,7 +24725,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24770,7 +24770,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24816,7 +24816,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24861,7 +24861,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24906,7 +24906,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24951,7 +24951,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -24996,7 +24996,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25040,7 +25040,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25085,7 +25085,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25130,7 +25130,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25174,7 +25174,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25218,7 +25218,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25264,7 +25264,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25309,7 +25309,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25353,7 +25353,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25398,7 +25398,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25442,7 +25442,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25486,7 +25486,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25531,7 +25531,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25576,7 +25576,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25621,7 +25621,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25665,7 +25665,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25709,7 +25709,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25753,7 +25753,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25798,7 +25798,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25843,7 +25843,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25887,7 +25887,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25931,7 +25931,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -25976,7 +25976,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26020,7 +26020,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26065,7 +26065,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26109,7 +26109,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26154,7 +26154,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26200,7 +26200,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26245,7 +26245,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26291,7 +26291,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26336,7 +26336,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26380,7 +26380,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26424,7 +26424,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26468,7 +26468,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26514,7 +26514,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26558,7 +26558,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26602,7 +26602,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26646,7 +26646,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26691,7 +26691,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26735,7 +26735,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26781,7 +26781,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26826,7 +26826,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26872,7 +26872,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26916,7 +26916,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -26960,7 +26960,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27005,7 +27005,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27049,7 +27049,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27094,7 +27094,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27138,7 +27138,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27183,7 +27183,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27228,7 +27228,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27273,7 +27273,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27318,7 +27318,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27364,7 +27364,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27407,7 +27407,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27452,7 +27452,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27496,7 +27496,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27541,7 +27541,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27586,7 +27586,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27630,7 +27630,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27675,7 +27675,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27720,7 +27720,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27765,7 +27765,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27809,7 +27809,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27854,7 +27854,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27898,7 +27898,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27942,7 +27942,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -27987,7 +27987,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28033,7 +28033,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28077,7 +28077,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28122,7 +28122,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28167,7 +28167,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28211,7 +28211,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28256,7 +28256,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28302,7 +28302,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28346,7 +28346,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28391,7 +28391,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28435,7 +28435,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28479,7 +28479,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28524,7 +28524,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28568,7 +28568,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28613,7 +28613,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28658,7 +28658,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28702,7 +28702,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28748,7 +28748,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28794,7 +28794,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28839,7 +28839,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28883,7 +28883,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28928,7 +28928,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -28973,7 +28973,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29017,7 +29017,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29061,7 +29061,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29106,7 +29106,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29150,7 +29150,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29195,7 +29195,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29239,7 +29239,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29284,7 +29284,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29328,7 +29328,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29371,7 +29371,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29416,7 +29416,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29460,7 +29460,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29504,7 +29504,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29549,7 +29549,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29594,7 +29594,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29639,7 +29639,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29684,7 +29684,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29729,7 +29729,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29775,7 +29775,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29821,7 +29821,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29866,7 +29866,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29910,7 +29910,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -29955,7 +29955,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30000,7 +30000,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30044,7 +30044,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30088,7 +30088,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30133,7 +30133,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30178,7 +30178,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30222,7 +30222,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30268,7 +30268,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30313,7 +30313,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30357,7 +30357,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30403,7 +30403,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30448,7 +30448,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30493,7 +30493,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30539,7 +30539,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30583,7 +30583,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30628,7 +30628,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30674,7 +30674,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30718,7 +30718,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30763,7 +30763,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30807,7 +30807,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30852,7 +30852,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30897,7 +30897,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30942,7 +30942,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -30987,7 +30987,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31031,7 +31031,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31075,7 +31075,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31121,7 +31121,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31166,7 +31166,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31211,7 +31211,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31256,7 +31256,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31300,7 +31300,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31345,7 +31345,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31390,7 +31390,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31436,7 +31436,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31480,7 +31480,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31525,7 +31525,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31571,7 +31571,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31617,7 +31617,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31662,7 +31662,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31708,7 +31708,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31753,7 +31753,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31798,7 +31798,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31843,7 +31843,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31888,7 +31888,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31933,7 +31933,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -31978,7 +31978,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32023,7 +32023,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32069,7 +32069,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32114,7 +32114,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32159,7 +32159,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32204,7 +32204,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32250,7 +32250,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32295,7 +32295,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32340,7 +32340,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32386,7 +32386,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32432,7 +32432,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32478,7 +32478,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32524,7 +32524,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32570,7 +32570,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32615,8 +32615,8 @@
     "id": "HIS317",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32659,8 +32659,8 @@
     "id": "HIS318",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32704,8 +32704,8 @@
     "id": "HIS319",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32749,7 +32749,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32792,8 +32792,8 @@
     "id": "HIS320",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32837,8 +32837,8 @@
     "id": "HIS321",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32882,8 +32882,8 @@
     "id": "HIS322",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32927,8 +32927,8 @@
     "id": "HIS323",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -32971,8 +32971,8 @@
     "id": "HIS324",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33016,8 +33016,8 @@
     "id": "HIS325",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33061,8 +33061,8 @@
     "id": "HIS326",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33106,8 +33106,8 @@
     "id": "HIS327",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33151,8 +33151,8 @@
     "id": "HIS328",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33196,8 +33196,8 @@
     "id": "HIS329",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33241,7 +33241,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33286,8 +33286,8 @@
     "id": "HIS330",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33330,8 +33330,8 @@
     "id": "HIS331",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33375,8 +33375,8 @@
     "id": "HIS332",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33420,8 +33420,8 @@
     "id": "HIS333",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33465,8 +33465,8 @@
     "id": "HIS334",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33509,8 +33509,8 @@
     "id": "HIS335",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33554,8 +33554,8 @@
     "id": "HIS336",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33599,8 +33599,8 @@
     "id": "HIS337",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33645,8 +33645,8 @@
     "id": "HIS338",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33690,8 +33690,8 @@
     "id": "HIS339",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33736,7 +33736,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33780,8 +33780,8 @@
     "id": "HIS340",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33825,8 +33825,8 @@
     "id": "HIS341",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33870,8 +33870,8 @@
     "id": "HIS342",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33915,8 +33915,8 @@
     "id": "HIS343",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -33960,8 +33960,8 @@
     "id": "HIS344",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34004,8 +34004,8 @@
     "id": "HIS345",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34048,8 +34048,8 @@
     "id": "HIS346",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34095,8 +34095,8 @@
     "id": "HIS347",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34139,8 +34139,8 @@
     "id": "HIS348",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34184,8 +34184,8 @@
     "id": "HIS349",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34231,7 +34231,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34276,8 +34276,8 @@
     "id": "HIS350",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34320,8 +34320,8 @@
     "id": "HIS351",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34364,8 +34364,8 @@
     "id": "HIS352",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34409,8 +34409,8 @@
     "id": "HIS353",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34453,8 +34453,8 @@
     "id": "HIS354",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34498,8 +34498,8 @@
     "id": "HIS355",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34542,8 +34542,8 @@
     "id": "HIS356",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34587,8 +34587,8 @@
     "id": "HIS357",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34632,8 +34632,8 @@
     "id": "HIS358",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34677,7 +34677,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34722,7 +34722,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34767,7 +34767,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34813,7 +34813,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34859,7 +34859,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34904,7 +34904,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34951,7 +34951,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -34997,7 +34997,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35042,7 +35042,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35089,7 +35089,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35134,7 +35134,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35180,7 +35180,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35225,7 +35225,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35271,7 +35271,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35317,7 +35317,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35364,7 +35364,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35410,7 +35410,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35454,7 +35454,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35499,7 +35499,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35544,7 +35544,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35590,7 +35590,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35636,7 +35636,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35682,7 +35682,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35729,7 +35729,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35774,7 +35774,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35820,7 +35820,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35867,7 +35867,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35913,7 +35913,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -35958,7 +35958,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36004,7 +36004,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36049,7 +36049,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36097,7 +36097,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36143,7 +36143,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36188,7 +36188,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36233,7 +36233,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36279,7 +36279,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36325,7 +36325,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36371,7 +36371,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36417,7 +36417,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36462,7 +36462,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36507,7 +36507,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36552,7 +36552,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36597,7 +36597,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36642,7 +36642,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36687,7 +36687,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36731,7 +36731,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36776,7 +36776,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36821,7 +36821,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36866,7 +36866,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36911,7 +36911,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -36956,7 +36956,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37001,7 +37001,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37046,7 +37046,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37091,7 +37091,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37136,7 +37136,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37181,7 +37181,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37226,7 +37226,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37271,7 +37271,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37316,7 +37316,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37361,7 +37361,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37407,7 +37407,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37452,7 +37452,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37497,7 +37497,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37542,7 +37542,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37587,7 +37587,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37633,7 +37633,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37678,7 +37678,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37722,7 +37722,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37767,7 +37767,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37812,7 +37812,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "History",
@@ -37857,7 +37857,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -37901,8 +37901,8 @@
     "id": "POL10",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -37945,8 +37945,8 @@
     "id": "POL11",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -37989,8 +37989,8 @@
     "id": "POL12",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38034,8 +38034,8 @@
     "id": "POL13",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38079,8 +38079,8 @@
     "id": "POL14",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38123,8 +38123,8 @@
     "id": "POL15",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38167,8 +38167,8 @@
     "id": "POL16",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38212,8 +38212,8 @@
     "id": "POL17",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38256,8 +38256,8 @@
     "id": "POL18",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38301,8 +38301,8 @@
     "id": "POL19",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38347,7 +38347,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38390,8 +38390,8 @@
     "id": "POL20",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38434,8 +38434,8 @@
     "id": "POL21",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38479,8 +38479,8 @@
     "id": "POL22",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38524,8 +38524,8 @@
     "id": "POL23",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38569,8 +38569,8 @@
     "id": "POL24",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38614,8 +38614,8 @@
     "id": "POL25",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38659,8 +38659,8 @@
     "id": "POL26",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38704,8 +38704,8 @@
     "id": "POL27",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38750,8 +38750,8 @@
     "id": "POL28",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38795,8 +38795,8 @@
     "id": "POL29",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38841,7 +38841,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38885,8 +38885,8 @@
     "id": "POL30",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38929,8 +38929,8 @@
     "id": "POL31",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -38974,8 +38974,8 @@
     "id": "POL32",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39019,8 +39019,8 @@
     "id": "POL33",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39063,8 +39063,8 @@
     "id": "POL34",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39108,8 +39108,8 @@
     "id": "POL35",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39152,8 +39152,8 @@
     "id": "POL36",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39198,8 +39198,8 @@
     "id": "POL37",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39243,8 +39243,8 @@
     "id": "POL38",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39288,8 +39288,8 @@
     "id": "POL39",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39333,8 +39333,8 @@
     "id": "POL4",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39377,8 +39377,8 @@
     "id": "POL40",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39421,8 +39421,8 @@
     "id": "POL41",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39467,8 +39467,8 @@
     "id": "POL42",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39513,8 +39513,8 @@
     "id": "POL43",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39558,8 +39558,8 @@
     "id": "POL44",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39604,8 +39604,8 @@
     "id": "POL45",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39693,8 +39693,8 @@
     "id": "POL5",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39737,8 +39737,8 @@
     "id": "POL6",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39781,8 +39781,8 @@
     "id": "POL7",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39826,8 +39826,8 @@
     "id": "POL8",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39871,8 +39871,8 @@
     "id": "POL9",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Polity",
@@ -39917,7 +39917,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -39961,8 +39961,8 @@
     "id": "SGK10",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -40006,8 +40006,8 @@
     "id": "SGK11",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -40051,8 +40051,8 @@
     "id": "SGK12",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -40096,8 +40096,8 @@
     "id": "SGK13",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -40141,8 +40141,8 @@
     "id": "SGK14",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -40186,8 +40186,8 @@
     "id": "SGK15",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -40232,8 +40232,8 @@
     "id": "SGK16",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -40276,8 +40276,8 @@
     "id": "SGK17",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -40321,8 +40321,8 @@
     "id": "SGK18",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -40365,8 +40365,8 @@
     "id": "SGK19",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -40410,7 +40410,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -40453,8 +40453,8 @@
     "id": "SGK20",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -40816,7 +40816,7 @@
     "sourceInfo": {
       "examName": "RRB NTPC UG",
       "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examDateShift": "Aug-Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -40859,8 +40859,8 @@
     "id": "SGK4",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -40904,8 +40904,8 @@
     "id": "SGK5",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -40949,8 +40949,8 @@
     "id": "SGK6",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -40993,8 +40993,8 @@
     "id": "SGK7",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -41037,8 +41037,8 @@
     "id": "SGK8",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
@@ -41081,8 +41081,8 @@
     "id": "SGK9",
     "sourceInfo": {
       "examName": "IB ACIO PRE",
-      "examYear": 2024,
-      "examDateShift": "Various Shifts"
+      "examYear": 2025,
+      "examDateShift": "16-18 Sept 2025"
     },
     "classification": {
       "subject": "Static GK",
