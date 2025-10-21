@@ -80,7 +80,7 @@ function bindFilterEventListeners() {
 
 async function loadQuestionsForFiltering() {
     try {
-        const response = await fetch('./questions.json');
+        const response = await fetch('/questions.json');
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
         const contentLength = response.headers.get('Content-Length');
