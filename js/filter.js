@@ -681,13 +681,16 @@ async function generatePowerPoint() {
         dom.pptLoadingText.textContent = 'Finalizing & Downloading...';
         dom.pptLoadingDetails.textContent = 'Please wait, this may take a moment.';
         
-        // Version 10.8: Dynamic filename generation
+        // Version 10.8: Dynamic filename generation (Corrected)
         let filenameParts = [];
-        const { subject, examName, examDateShift } = state.selectedFilters;
+        const { subject, examName } = state.selectedFilters;
         
         const subjects = [...subject].sort();
         const exams = [...examName].sort();
-        const shifts = [...examDateShift].sort();
+        
+        // Get unique examDateShift values directly from the filtered questions
+        const uniqueShifts = [...new Set(questions.map(q => q.sourceInfo?.examDateShift).filter(Boolean))];
+        const shifts = uniqueShifts.sort();
 
         if (subjects.length > 0) filenameParts.push(subjects.join('_'));
         if (exams.length > 0) filenameParts.push(exams.join('_'));
