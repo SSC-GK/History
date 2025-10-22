@@ -26,7 +26,7 @@ export function initFilterModule(callbacks) {
     initializeTabs();
     bindFilterEventListeners();
     loadQuestionsForFiltering();
-    state.callbacks.confirmGoBackToFilters = callbacks.confirmGoBackToFilters;
+    state.callbacks.confirmGoBackToHome = callbacks.confirmGoBackToHome;
 }
 
 function initializeTabs() {
@@ -94,7 +94,10 @@ function bindFilterEventListeners() {
         dom.dynamicBreadcrumb.addEventListener('click', (e) => {
             if (e.target && e.target.id === 'breadcrumb-filters-link') {
                 e.preventDefault();
-                appCallbacks.confirmGoBackToFilters();
+                appCallbacks.confirmGoBackToHome();
+            } else if (e.target && e.target.id === 'breadcrumb-home-link') {
+                e.preventDefault();
+                appCallbacks.confirmGoBackToHome();
             }
         });
     }

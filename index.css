@@ -87,12 +87,12 @@ body {
     background: linear-gradient(to right, var(--background-gradient-start), var(--background-gradient-end));
     color: var(--text-color-dark);
     margin: 0;
-    padding: 20px 15px;
+    padding: 0; /* Changed padding */
     line-height: 1.6;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center content vertically */
+    justify-content: center;
     align-items: center;
     position: relative;
     overflow-x: hidden;
@@ -117,6 +117,261 @@ body::before {
     white-space: nowrap;
 }
 
+
+/* =======================================================
+1.5. NEW HOMEPAGE & NAVIGATION
+======================================================= */
+#homepage-section {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px 25px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    animation: fade-in-slide-up 0.5s ease-out;
+}
+
+.homepage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    width: 100%;
+}
+
+.logo {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: var(--primary-dark);
+}
+
+.logo i {
+    margin-right: 8px;
+    color: var(--primary-color);
+}
+
+#hamburger-menu-btn {
+    background: var(--container-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    transition: all 0.2s ease;
+    z-index: 1002;
+}
+#hamburger-menu-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.homepage-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.hero-section {
+    margin-bottom: 60px;
+}
+.hero-section h1 {
+    font-size: 3.2em;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 15px;
+    color: var(--text-color-dark);
+}
+.hero-section h1 .highlight {
+    background: -webkit-linear-gradient(45deg, var(--primary-color), var(--accent-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.hero-section p {
+    font-size: 1.1em;
+    color: var(--text-color-medium);
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+}
+.cta-button {
+    padding: 15px 30px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    color: var(--button-text-color);
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(63, 81, 181, 0.4);
+}
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(63, 81, 181, 0.5);
+}
+.cta-button i {
+    margin-left: 10px;
+    transition: transform 0.2s ease;
+}
+.cta-button:hover i {
+    transform: translateX(5px);
+}
+
+.page-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    width: 100%;
+}
+
+.feature-card {
+    background-color: var(--container-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 25px;
+    text-align: left;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 10px var(--shadow-color);
+}
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px var(--shadow-color);
+    border-color: var(--primary-color);
+}
+.card-icon {
+    font-size: 2em;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+.feature-card h3 {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    color: var(--text-color-dark);
+}
+.feature-card p {
+    font-size: 0.95em;
+    color: var(--text-color-medium);
+    margin: 0;
+}
+
+.homepage-footer {
+    padding: 20px 0;
+    text-align: center;
+    color: var(--text-color-light);
+    font-size: 0.9em;
+}
+
+/* SIDE MENU OVERLAY */
+#side-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3000;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+#side-menu-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.side-menu-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    max-width: 90%;
+    height: 100%;
+    background-color: var(--settings-panel-bg);
+    box-shadow: -2px 0 15px rgba(0,0,0,0.2);
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+}
+#side-menu-overlay.visible .side-menu-panel {
+    transform: translateX(0);
+}
+
+.side-menu-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+}
+
+#side-menu-close-btn {
+    background: none;
+    border: none;
+    font-size: 2.2em;
+    line-height: 1;
+    color: var(--text-color-light);
+    cursor: pointer;
+}
+
+.side-menu-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px 30px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#side-menu-profile-pic {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 2px solid var(--primary-color);
+}
+#side-menu-profile-name {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--text-color-dark);
+}
+
+.side-menu-nav ul {
+    list-style: none;
+    padding: 20px 0;
+    margin: 0;
+}
+.side-menu-nav li a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 25px;
+    text-decoration: none;
+    color: var(--text-color-medium);
+    font-size: 1.05em;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.side-menu-nav li a:hover {
+    background-color: var(--button-hover-bg);
+    color: var(--primary-dark);
+}
+.side-menu-nav li a i {
+    width: 24px;
+    text-align: center;
+    font-size: 1.1em;
+    color: var(--primary-color);
+}
+.side-menu-nav li a:hover i {
+    color: var(--primary-dark);
+}
 
 /* =======================================================
 2. LAYOUT & TYPOGRAPHY
@@ -243,6 +498,7 @@ NEW: LOGIN GATE STYLES
     align-items: center;
     text-align: center;
     max-width: 500px;
+    padding: 20px;
 }
 
 .login-content {
@@ -2640,17 +2896,20 @@ body[data-theme='dark'] #review-explanation {
 .hamburger-icon span:nth-child(2) { top: 7px; }
 .hamburger-icon span:nth-child(3) { top: 14px; }
 
-#nav-menu-icon.is-active .hamburger-icon span:nth-child(1) {
+#nav-menu-icon.is-active .hamburger-icon span:nth-child(1),
+#hamburger-menu-btn.is-active .hamburger-icon span:nth-child(1) {
     top: 7px;
     transform: rotate(135deg);
 }
 
-#nav-menu-icon.is-active .hamburger-icon span:nth-child(2) {
+#nav-menu-icon.is-active .hamburger-icon span:nth-child(2),
+#hamburger-menu-btn.is-active .hamburger-icon span:nth-child(2) {
     opacity: 0;
     left: -60px;
 }
 
-#nav-menu-icon.is-active .hamburger-icon span:nth-child(3) {
+#nav-menu-icon.is-active .hamburger-icon span:nth-child(3),
+#hamburger-menu-btn.is-active .hamburger-icon span:nth-child(3) {
     top: 7px;
     transform: rotate(-135deg);
 }
@@ -2700,9 +2959,9 @@ body[data-theme='dark'] #review-explanation {
 }
 
 /* =======================================================
-10. SETTINGS PANEL STYLES
+10. SETTINGS & CONTENT MODAL STYLES
 ======================================================= */
-#settings-overlay {
+#settings-overlay, .content-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -2710,30 +2969,33 @@ body[data-theme='dark'] #review-explanation {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 2500;
-    display: flex;
+    display: none; /* Changed from flex */
     justify-content: center;
     align-items: center;
     opacity: 0;
     transition: opacity 0.3s ease;
-    pointer-events: none;
 }
-#settings-overlay.visible {
+#settings-overlay.visible, .content-modal-overlay.visible {
     opacity: 1;
-    pointer-events: auto;
 }
-#settings-panel {
+#settings-panel, .content-modal-panel {
     background-color: var(--settings-panel-bg);
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     width: 90%;
-    max-width: 400px;
+    max-width: 500px;
     transform: scale(0.95);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
 }
-#settings-overlay.visible #settings-panel {
+#settings-overlay.visible #settings-panel,
+.content-modal-overlay.visible .content-modal-panel {
     transform: scale(1);
 }
-.settings-header {
+
+.settings-header, .content-modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -2741,21 +3003,29 @@ body[data-theme='dark'] #review-explanation {
     border-bottom: 1px solid var(--border-color);
     background-color: var(--settings-header-bg);
     border-radius: 12px 12px 0 0;
+    flex-shrink: 0;
 }
-.settings-header h2 {
+.settings-header h2, .content-modal-header h2 {
     margin: 0;
     font-size: 1.2em;
     color: var(--text-color-dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
-#settings-close-btn {
+.settings-header h2 i, .content-modal-header h2 i {
+    color: var(--primary-color);
+}
+#settings-close-btn, .content-modal-close-btn {
     background: none;
     border: none;
     font-size: 1.8em;
     color: var(--text-color-light);
     cursor: pointer;
 }
-.settings-body {
-    padding: 20px;
+.settings-body, .content-modal-body {
+    padding: 25px;
+    overflow-y: auto;
 }
 .setting-row {
     display: flex;
@@ -2873,6 +3143,42 @@ button.button-danger:hover {
     color: var(--wrong-text);
 }
 
+/* Specific Content Modal Styles */
+.about-us-body { text-align: center; }
+.about-icon { font-size: 3em; color: var(--primary-color); margin-bottom: 10px; }
+.about-us-body h3 { margin-top: 0; color: var(--text-color-dark); }
+.creator-name { font-size: 1.2em; font-weight: 600; color: var(--primary-dark); margin: 5px 0 15px 0; }
+.divider { width: 50px; height: 2px; background-color: var(--border-color); margin: 0 auto 15px auto; }
+.mission-statement { color: var(--text-color-medium); font-size: 0.95em; }
+
+.guide-section { margin-bottom: 20px; }
+.guide-section:last-child { margin-bottom: 0; }
+.guide-section h4 { margin: 0 0 8px 0; color: var(--primary-dark); display: flex; align-items: center; gap: 8px; }
+.guide-section p { margin: 0; color: var(--text-color-medium); font-size: 0.95em; }
+
+.modal-intro { color: var(--text-color-medium); margin-bottom: 25px; }
+.content-creation-actions { display: flex; flex-direction: column; gap: 15px; }
+.content-creation-actions button {
+    padding: 15px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.content-creation-actions button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px var(--shadow-color);
+}
+#modal-create-ppt-btn { background-color: #f57c00; }
+#modal-create-pdf-btn { background-color: #d32f2f; }
+#modal-download-json-btn { background-color: #1976d2; }
 
 /* =======================================================
 11. RESPONSIVE DESIGN & PDF RENDERER
@@ -2882,7 +3188,7 @@ button.button-danger:hover {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 3000;
-    display: flex; justify-content: center; align-items: center;
+    display: none; justify-content: center; align-items: center;
     padding: 15px;
 }
 #privacy-policy-panel {
@@ -2936,9 +3242,11 @@ button.button-danger:hover {
 }
 
 @media (max-width: 768px) {
-    body::before {
-        font-size: 8vw;
-    }
+    body { padding: 0; }
+    body::before { display: none; }
+    
+    .hero-section h1 { font-size: 2.5em; }
+
     .container {
         padding: 20px;
     }
@@ -2974,6 +3282,10 @@ button.button-danger:hover {
 
 
 @media (max-width: 480px) {
+    .hero-section h1 { font-size: 2.0em; }
+    .hero-section p { font-size: 1em; }
+    .cta-button { font-size: 1em; padding: 12px 25px; }
+
     h1 {
         font-size: 1.2em;
     }

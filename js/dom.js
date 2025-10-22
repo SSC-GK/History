@@ -16,6 +16,37 @@ export function cacheDomElements() {
     dom.privacyPolicyOverlay = document.getElementById('privacy-policy-overlay');
     dom.privacyPolicyCloseBtn = document.getElementById('privacy-policy-close-btn');
 
+    // NEW: Homepage and Side Menu
+    dom.homepageSection = document.getElementById('homepage-section');
+    dom.hamburgerMenuBtn = document.getElementById('hamburger-menu-btn');
+    dom.sideMenuOverlay = document.getElementById('side-menu-overlay');
+    dom.sideMenuPanel = document.querySelector('.side-menu-panel');
+    dom.sideMenuCloseBtn = document.getElementById('side-menu-close-btn');
+    dom.sideMenuProfilePic = document.getElementById('side-menu-profile-pic');
+    dom.sideMenuProfileName = document.getElementById('side-menu-profile-name');
+    dom.heroStartQuizBtn = document.getElementById('hero-start-quiz-btn');
+    dom.homeCustomQuizCard = document.getElementById('home-custom-quiz-card');
+    dom.homeContentCreationCard = document.getElementById('home-content-creation-card');
+    dom.homeUserGuideCard = document.getElementById('home-user-guide-card');
+    // Side Menu Links
+    dom.sideMenuSettingsLink = document.getElementById('side-menu-settings-link');
+    dom.sideMenuQuizlmLink = document.getElementById('side-menu-quizlm-link');
+    dom.sideMenuPaidCourseLink = document.getElementById('side-menu-paid-course-link');
+    dom.sideMenuUserGuideLink = document.getElementById('side-menu-user-guide-link');
+    dom.sideMenuAboutUsLink = document.getElementById('side-menu-about-us-link');
+    dom.sideMenuPrivacyLink = document.getElementById('side-menu-privacy-link');
+    
+    // NEW: Content Modals
+    dom.aboutUsOverlay = document.getElementById('about-us-overlay');
+    dom.aboutUsCloseBtn = document.getElementById('about-us-close-btn');
+    dom.userGuideOverlay = document.getElementById('user-guide-overlay');
+    dom.userGuideCloseBtn = document.getElementById('user-guide-close-btn');
+    dom.contentCreationOverlay = document.getElementById('content-creation-overlay');
+    dom.contentCreationCloseBtn = document.getElementById('content-creation-close-btn');
+    dom.modalCreatePptBtn = document.getElementById('modal-create-ppt-btn');
+    dom.modalCreatePdfBtn = document.getElementById('modal-create-pdf-btn');
+    dom.modalDownloadJsonBtn = document.getElementById('modal-download-json-btn');
+
     // Loading Overlay
     dom.loadingOverlay = document.getElementById('loading-overlay');
     dom.loadingText = document.getElementById('loading-text');
@@ -35,6 +66,7 @@ export function cacheDomElements() {
 
     // Filter Section
     dom.filterSection = document.getElementById('filter-section');
+    dom.backToHomeLink = document.getElementById('back-to-home-link');
     dom.tabButtons = document.querySelectorAll('.tab-btn');
     dom.tabPanels = document.querySelectorAll('.tab-panel');
     dom.tabTaglines = document.querySelectorAll('.tagline');

@@ -25,6 +25,77 @@ import { initFilterModule } from './js/filter.js';
 import { initQuizModule, loadQuiz, resumeLoadedQuiz } from './js/quiz.js';
 import { initReviewModule, showFinalScoreScreen } from './js/review.js';
 
+// --- VIEW MANAGER ---
+const mainSections = [
+    'loginGate', 'homepageSection', 'filterSection', 'quizMainContainer', 
+    'quizBreadcrumbContainer', 'finalScoreSection', 'reviewSection'
+];
+const modalOverlays = [
+    'sideMenuOverlay', 'settingsOverlay', 'privacyPolicyOverlay',
+    'aboutUsOverlay', 'userGuideOverlay', 'contentCreationOverlay'
+];
+
+
+/**
+ * Hides all main application sections and shows only the specified one.
+ * @param {string} viewId The ID of the section to show (e.g., 'homepage-section').
+ */
+function showView(viewId) {
+    mainSections.forEach(key => {
+        const element = document.getElementById(key.replace('Section', '-section'));
+        if (dom[key] && dom[key].style) {
+            dom[key].style.display = 'none';
+        }
+    });
+
+    const targetElement = document.getElementById(viewId);
+    if (targetElement) {
+        // Special display types for certain sections
+        if (viewId === 'login-gate') {
+            targetElement.style.display = 'flex';
+        } else if (viewId === 'quiz-main-container') {
+            targetElement.style.display = 'block';
+            if (dom.quizBreadcrumbContainer) dom.quizBreadcrumbContainer.style.display = 'block';
+        } else {
+            targetElement.style.display = 'block';
+        }
+    }
+}
+
+/**
+ * Toggles a modal's visibility with smooth animations.
+ * @param {string} modalKey The key of the modal in the `dom` object (e.g., 'aboutUsOverlay').
+ * @param {boolean} [forceClose=false] If true, forces the modal to close.
+ */
+function toggleModal(modalKey, forceClose = false) {
+    const modalElement = dom[modalKey];
+    if (!modalElement) return;
+
+    const isVisible = modalElement.classList.contains('visible');
+    
+    if (forceClose || isVisible) {
+        modalElement.classList.remove('visible');
+        // Let the animation finish before hiding it completely
+        setTimeout(() => {
+            modalElement.style.display = 'none';
+        }, 300);
+    } else {
+        // Close any other open modals first
+        modalOverlays.forEach(key => {
+            if (key !== modalKey && dom[key] && dom[key].classList.contains('visible')) {
+                toggleModal(key, true);
+            }
+        });
+
+        modalElement.style.display = 'flex';
+        // Allow the browser to render the element before adding the animation class
+        setTimeout(() => {
+            modalElement.classList.add('visible');
+        }, 10);
+    }
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
 
     const app = {
@@ -38,18 +109,21 @@ document.addEventListener('DOMContentLoaded', () => {
             // Centralized auth state listener
             auth.onAuthStateChange((user) => {
                 if (user) {
-                    this.showApp();
+                    this.showApp(user);
                 } else {
                     this.showLoginGate();
                 }
             });
         },
 
-        showApp: async function() {
-            dom.loginGate.style.display = 'none';
-            // The loading overlay is intentionally left visible here, as
-            // the `initFilterModule` will fetch data and hide it upon success.
-            dom.filterSection.style.display = 'block';
+        showApp: async function(user) {
+            showView('homepage-section');
+
+            // Populate side menu with user info
+            if (user && dom.sideMenuProfileName && dom.sideMenuProfilePic) {
+                dom.sideMenuProfileName.textContent = user.user_metadata?.full_name || 'Quiz User';
+                dom.sideMenuProfilePic.src = user.user_metadata?.avatar_url || 'https://via.placeholder.com/60';
+            }
             
             const wasResumed = await this.promptToResumeQuiz();
             if (wasResumed) return; // Resume logic handles the rest, skip normal init
@@ -60,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 endQuiz: this.endQuiz.bind(this),
                 restartCurrentGroup: this.restartCurrentGroup.bind(this),
                 restartFullQuiz: this.restartFullQuiz.bind(this),
-                confirmGoBackToFilters: this.confirmGoBackToFilters.bind(this),
+                confirmGoBackToHome: this.confirmGoBackToHome.bind(this),
                 updateDynamicHeaders: this.updateDynamicHeaders.bind(this),
             };
 
@@ -77,13 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     dom.loadingOverlay.style.display = 'none';
                 }, { once: true });
             }
-
-            dom.loginGate.style.display = 'flex';
-            dom.filterSection.style.display = 'none';
-            dom.quizMainContainer.style.display = 'none';
-            dom.quizBreadcrumbContainer.style.display = 'none';
-            dom.finalScoreSection.style.display = 'none';
-            dom.reviewSection.style.display = 'none';
+            
+            showView('login-gate');
             clearQuizState();
 
             // DPDP Compliance: Consent checkbox logic
@@ -116,9 +185,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     clearQuizState();
                     state.isQuizActive = false;
                     state.questionGroups = [];
+                    // Load the filter data even if not resuming, so it's ready
+                    initFilterModule({startQuiz: this.startQuiz.bind(this)});
                     return false;
                 }
             }
+            // If no active quiz, still init the filter module in the background
+            initFilterModule({startQuiz: this.startQuiz.bind(this)});
             return false;
         },
 
@@ -139,18 +212,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- SCREEN TRANSITION HANDLERS ---
         startQuiz: function() {
             state.isQuizActive = true;
-            dom.filterSection.style.display = 'none';
-            dom.quizMainContainer.style.display = 'block';
-            dom.quizBreadcrumbContainer.style.display = 'block';
+            showView('quiz-main-container');
             loadQuiz();
             this.updateDynamicHeaders();
         },
         
         resumeQuiz: function() {
             state.isQuizActive = true;
-            dom.filterSection.style.display = 'none';
-            dom.quizMainContainer.style.display = 'block';
-            dom.quizBreadcrumbContainer.style.display = 'block';
+            showView('quiz-main-container');
 
             // Initialize modules with callbacks for the resumed session
             const callbacks = {
@@ -158,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 endQuiz: this.endQuiz.bind(this),
                 restartCurrentGroup: this.restartCurrentGroup.bind(this),
                 restartFullQuiz: this.restartFullQuiz.bind(this),
-                confirmGoBackToFilters: this.confirmGoBackToFilters.bind(this),
+                confirmGoBackToHome: this.confirmGoBackToHome.bind(this),
                 updateDynamicHeaders: this.updateDynamicHeaders.bind(this),
             };
             initQuizModule(callbacks);
@@ -194,28 +263,24 @@ document.addEventListener('DOMContentLoaded', () => {
             clearQuizState();
             state.isQuizActive = false;
         
-            dom.filterSection.style.display = 'block';
-            dom.quizMainContainer.style.display = 'none';
-            dom.finalScoreSection.style.display = 'none';
-            dom.reviewSection.style.display = 'none';
-            dom.quizBreadcrumbContainer.style.display = 'none';
+            showView('homepage-section'); // Return to homepage
         
             state.questionGroups = [];
             state.currentGroupIndex = 0;
             state.currentQuizData = null;
         },
 
-        confirmGoBackToFilters: function() {
+        confirmGoBackToHome: function() {
             Swal.fire({
-                target: dom.quizMainContainer,
+                target: dom.quizMainContainer.style.display === 'block' ? dom.quizMainContainer : dom.filterSection,
                 position: 'top',
-                title: 'Return to Filters?',
-                text: "Your current quiz progress will be lost. This will start a new quiz session.",
+                title: 'Return to Homepage?',
+                text: "Your current progress will be lost if you are in a quiz. This action will start a new session.",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: 'var(--primary-color)',
                 cancelButtonColor: 'var(--wrong-color)',
-                confirmButtonText: 'Yes, Go Back!'
+                confirmButtonText: 'Yes, Go Home!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     app.restartFullQuiz();
@@ -241,13 +306,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (dom.dynamicBreadcrumb) {
-                const breadcrumbHtml = `<a href="#" id="breadcrumb-filters-link">Filters</a> &gt; <span class="current-topic">${groupName}</span>${filterText}`;
+                const breadcrumbHtml = `<a href="#" id="breadcrumb-home-link">Home</a> &gt; <a href="#" id="breadcrumb-filters-link">Filters</a> &gt; <span class="current-topic">${groupName}</span>${filterText}`;
                 dom.dynamicBreadcrumb.innerHTML = breadcrumbHtml;
             }
             
             if (dom.quizTitle) dom.quizTitle.textContent = groupName;
             if (dom.scoreTitle) dom.scoreTitle.textContent = `Quiz Result - ${groupName}`;
             if (dom.reviewTitle) dom.reviewTitle.textContent = `Review Answer - ${groupName}`;
+        },
+
+        // --- SIDE MENU ---
+        toggleSideMenu: function(forceClose = false) {
+            const isVisible = dom.sideMenuOverlay.classList.contains('visible');
+            if (forceClose || isVisible) {
+                dom.sideMenuOverlay.classList.remove('visible');
+                dom.hamburgerMenuBtn.classList.remove('is-active');
+            } else {
+                dom.sideMenuOverlay.classList.add('visible');
+                dom.hamburgerMenuBtn.classList.add('is-active');
+            }
         },
 
         // --- GLOBAL EVENT BINDING ---
@@ -257,19 +334,83 @@ document.addEventListener('DOMContentLoaded', () => {
             dom.logoutBtn.onclick = () => auth.signOut();
             dom.deleteAccountBtn.onclick = () => auth.deleteAccount();
 
-            // Privacy Policy Modal
-            dom.privacyPolicyLink.onclick = (e) => {
+            // Homepage Navigation
+            const goToFilters = () => showView('filter-section');
+            dom.heroStartQuizBtn.onclick = goToFilters;
+            dom.homeCustomQuizCard.onclick = goToFilters;
+            
+            // New Modal Triggers from Homepage
+            dom.homeContentCreationCard.onclick = () => toggleModal('contentCreationOverlay');
+            dom.homeUserGuideCard.onclick = () => toggleModal('userGuideOverlay');
+            
+            dom.backToHomeLink.onclick = (e) => {
                 e.preventDefault();
-                dom.privacyPolicyOverlay.style.display = 'flex';
+                showView('homepage-section');
             };
-            dom.privacyPolicyCloseBtn.onclick = () => {
-                dom.privacyPolicyOverlay.style.display = 'none';
+
+            // Side Menu
+            dom.hamburgerMenuBtn.onclick = () => this.toggleSideMenu();
+            dom.sideMenuCloseBtn.onclick = () => this.toggleSideMenu();
+            dom.sideMenuOverlay.onclick = (e) => {
+                if (e.target === dom.sideMenuOverlay) this.toggleSideMenu();
             };
-            dom.privacyPolicyOverlay.onclick = (e) => {
-                if (e.target === dom.privacyPolicyOverlay) {
-                    dom.privacyPolicyOverlay.style.display = 'none';
+
+            // Side Menu Links
+            const setupSideMenuLink = (link, action) => {
+                if (link) {
+                    link.onclick = (e) => {
+                        e.preventDefault();
+                        this.toggleSideMenu(true);
+                        action();
+                    };
                 }
             };
+
+            setupSideMenuLink(dom.sideMenuQuizlmLink, () => showView('filter-section'));
+            setupSideMenuLink(dom.sideMenuPaidCourseLink, () => toggleModal('contentCreationOverlay'));
+            setupSideMenuLink(dom.sideMenuUserGuideLink, () => toggleModal('userGuideOverlay'));
+            setupSideMenuLink(dom.sideMenuAboutUsLink, () => toggleModal('aboutUsOverlay'));
+            setupSideMenuLink(dom.sideMenuSettingsLink, () => toggleSettings(false));
+            setupSideMenuLink(dom.sideMenuPrivacyLink, () => toggleModal('privacyPolicyOverlay'));
+
+            // Content Creation Modal Actions
+            const setupContentCreationAction = (button, tabId) => {
+                if (button) {
+                    button.onclick = () => {
+                        toggleModal('contentCreationOverlay', true);
+                        showView('filter-section');
+                        document.querySelector(`.tab-btn[data-tab="${tabId}"]`).click();
+                    };
+                }
+            };
+            setupContentCreationAction(dom.modalCreatePptBtn, 'ppt-panel');
+            setupContentCreationAction(dom.modalCreatePdfBtn, 'ppt-panel');
+            setupContentCreationAction(dom.modalDownloadJsonBtn, 'json-panel');
+
+
+            // --- Generic Modal Close Logic ---
+            modalOverlays.forEach(modalKey => {
+                const overlay = dom[modalKey];
+                const closeBtn = dom[`${modalKey.replace('Overlay', '')}CloseBtn`];
+                if (overlay) {
+                    overlay.onclick = (e) => {
+                        if (e.target === overlay) {
+                            if (modalKey === 'sideMenuOverlay') this.toggleSideMenu(true);
+                            else if (modalKey === 'settingsOverlay') toggleSettings(true);
+                            else toggleModal(modalKey, true);
+                        }
+                    };
+                }
+                if (closeBtn) {
+                     closeBtn.onclick = () => {
+                         if (modalKey === 'settingsOverlay') toggleSettings(true);
+                         else toggleModal(modalKey, true);
+                     };
+                }
+            });
+            // Specific logic for legacy privacy modal
+            dom.privacyPolicyLink.onclick = (e) => { e.preventDefault(); toggleModal('privacyPolicyOverlay'); };
+
 
             // Settings Panel
             dom.settingsBtn.onclick = async () => {
@@ -281,10 +422,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 toggleSettings(false);
             };
-            dom.settingsOverlay.onclick = (e) => {
-                if (e.target === dom.settingsOverlay) toggleSettings(true);
-            };
-            dom.settingsCloseBtn.onclick = () => toggleSettings(true);
             dom.darkModeToggle.onchange = () => toggleDarkMode();
             dom.soundToggle.onchange = () => toggleMute();
             dom.shuffleToggle.onchange = () => toggleShuffle();
@@ -320,31 +457,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- INPUT HANDLERS (KEYBOARD & SWIPE) ---
         handleKeyPress: function(event) {
-            if (dom.aiExplanationOverlay && dom.aiExplanationOverlay.classList.contains('visible')) {
-                if (event.key === 'Escape') hideAIExplanation();
-                return;
+            const isAnyModalOpen = modalOverlays.some(key => dom[key] && dom[key].classList.contains('visible'));
+
+            if (event.key === 'Escape') {
+                if (dom.aiExplanationOverlay && dom.aiExplanationOverlay.classList.contains('visible')) { hideAIExplanation(); return; }
+                if (dom.navigationPanel && dom.navigationPanel.classList.contains('open')) { state.callbacks.toggleQuizInternalNavigation(); return; }
+                if (isAnyModalOpen) {
+                    modalOverlays.forEach(key => toggleModal(key, true));
+                    if (dom.sideMenuOverlay.classList.contains('visible')) this.toggleSideMenu(true);
+                    if (dom.settingsOverlay.classList.contains('visible')) toggleSettings(true);
+                    return;
+                }
             }
-            if (dom.navigationPanel && dom.navigationPanel.classList.contains('open')) {
-                if (event.key === 'Escape') state.callbacks.toggleQuizInternalNavigation();
-                return;
-            }
-            if (dom.settingsOverlay && dom.settingsOverlay.classList.contains('visible')) {
-                if (event.key === 'Escape') toggleSettings(true);
-                return;
-            }
+
+            if (isAnyModalOpen) return; // Prevent quiz actions if a modal is open
 
             const isQuizActive = dom.quizSection.style.display === 'block';
             const isReviewActive = dom.reviewSection.style.display === 'block';
             const isFinalScoreActive = dom.finalScoreSection.style.display === 'block';
 
             if (isQuizActive) {
-                // Call quiz key handlers
                 state.callbacks.quizKeyPressHandler(event);
             } else if (isReviewActive) {
-                // Call review key handlers
                 state.callbacks.reviewKeyPressHandler(event);
             } else if (isFinalScoreActive) {
-                // Call score screen key handlers
                 state.callbacks.scoreKeyPressHandler(event);
             }
         },
@@ -397,10 +533,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         processSwipe: function(touchEndX, touchEndY) {
             if (state.touchStartX === 0) return;
-
-            if (dom.settingsOverlay.classList.contains('visible') || 
-                dom.aiExplanationOverlay.classList.contains('visible') ||
-                dom.navigationPanel.classList.contains('open')) {
+            
+            const isAnyModalOpen = modalOverlays.some(key => dom[key] && dom[key].classList.contains('visible'));
+            if (isAnyModalOpen || dom.navigationPanel.classList.contains('open')) {
                 state.touchStartX = 0;
                 state.touchStartY = 0;
                 return;

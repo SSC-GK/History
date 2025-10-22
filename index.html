@@ -75,6 +75,34 @@
     <div id="fireball9" class="fireball"></div>
     <div id="fireball10" class="fireball"></div>
     <!-- END: Fireball HTML Elements -->
+
+    <!-- ==================================================================== -->
+    <!-- ==== NEW SIDE MENU OVERLAY (HAMBURGER MENU) - HIDDEN BY DEFAULT ==== -->
+    <!-- ==================================================================== -->
+    <div id="side-menu-overlay">
+        <div class="side-menu-panel">
+            <div class="side-menu-header">
+                <button id="side-menu-close-btn" aria-label="Close Menu">&times;</button>
+            </div>
+            <div class="side-menu-profile">
+                <img id="side-menu-profile-pic" src="https://via.placeholder.com/60" alt="User Profile Picture">
+                <span id="side-menu-profile-name">User Name</span>
+            </div>
+            <nav class="side-menu-nav">
+                <ul>
+                    <li><a href="#" id="side-menu-settings-link"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="#" id="side-menu-quizlm-link"><i class="fas fa-list-check"></i> QuizLM</a></li>
+                    <li>
+                        <a href="#" id="side-menu-paid-course-link"><i class="fas fa-file-powerpoint"></i> Create: PP, PDF, JSON</a>
+                    </li>
+                    <li><a href="#" id="side-menu-user-guide-link"><i class="fas fa-book"></i> USER guide</a></li>
+                    <li><a href="#" id="side-menu-about-us-link"><i class="fas fa-users"></i> About us</a></li>
+                    <li><a href="#" id="side-menu-privacy-link"><i class="fas fa-shield-alt"></i> Privacy policy</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
     
     <!-- ==================================================================== -->
     <!-- ==== NEW LOGIN GATE - SHOWN TO UNAUTHENTICATED USERS ==== -->
@@ -104,12 +132,59 @@
     </section>
 
     <!-- ==================================================================== -->
-    <!-- ==== FILTER SECTION - HIDDEN BY DEFAULT ==== -->
+    <!-- ==== NEW HOMEPAGE SECTION - SHOWN AFTER LOGIN ==== -->
+    <!-- ==================================================================== -->
+    <section id="homepage-section" style="display: none;">
+        <header class="homepage-header">
+            <div class="logo">
+                <i class="fas fa-brain"></i> Quiz LM
+            </div>
+            <button id="hamburger-menu-btn" aria-label="Open Menu">
+                <div class="hamburger-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+        </header>
+        <main class="homepage-main">
+            <div class="hero-section">
+                <h1>Master Your Subjects, <br><span class="highlight">One Quiz at a Time.</span></h1>
+                <p>Build custom quizzes from a vast question bank, generate study materials, and track your progress like never before.</p>
+                <button id="hero-start-quiz-btn" class="cta-button">Start a New Quiz <i class="fas fa-arrow-right"></i></button>
+            </div>
+
+            <div class="page-content">
+                <div class="feature-card" id="home-custom-quiz-card">
+                    <div class="card-icon"><i class="fas fa-list-check"></i></div>
+                    <h3>Build a Custom Quiz</h3>
+                    <p>Use powerful filters to create targeted quizzes based on subject, topic, difficulty, and more.</p>
+                </div>
+                <div class="feature-card" id="home-content-creation-card">
+                    <div class="card-icon"><i class="fas fa-file-export"></i></div>
+                    <h3>Content Creation Tools</h3>
+                    <p>Generate downloadable PPT, PDF, or JSON files from your selected questions for offline study.</p>
+                </div>
+                <div class="feature-card" id="home-user-guide-card">
+                    <div class="card-icon"><i class="fas fa-book-open-reader"></i></div>
+                    <h3>User Guide</h3>
+                    <p>Explore all the features of Quiz LM and learn how to make the most of your study sessions.</p>
+                </div>
+            </div>
+        </main>
+        <footer class="homepage-footer">
+            <p>&copy; 2024 Quiz LM by Aalok Kumar Sharma. All Rights Reserved.</p>
+        </footer>
+    </section>
+
+    <!-- ==================================================================== -->
+    <!-- ==== FILTER SECTION - NOW HIDDEN, ACCESSED FROM HOMEPAGE ==== -->
     <!-- ==================================================================== -->
     <section id="filter-section" class="container" style="display: none;">
-        <div class="app-version">v11.3</div>
+        <div class="app-version">v12.1</div>
         <div class="home-link-container">
-            <a href="https://cglhustle.free.nf/side_menu/quiz_lm/"><i class="fas fa-home"></i> HOME</a>
+            <!-- This will be updated to go back to the new homepage view -->
+            <a href="#" id="back-to-home-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
         </div>
         <h1>Customize Your Session</h1>
         <p class="filter-subtitle">Select your criteria to build a targeted practice quiz or generate a custom PPT or PDF.</p>
@@ -576,6 +651,76 @@
         </div>
     </div>
     <!-- === END OF PRIVACY POLICY MODAL === -->
+
+    <!-- ==================================================================== -->
+    <!-- ==== NEW CONTENT MODALS (ABOUT, USER GUIDE, ETC) ==== -->
+    <!-- ==================================================================== -->
+
+    <!-- ABOUT US MODAL -->
+    <div id="about-us-overlay" class="content-modal-overlay">
+        <div class="content-modal-panel">
+            <div class="content-modal-header">
+                <h2><i class="fas fa-users"></i> About Us</h2>
+                <button id="about-us-close-btn" class="content-modal-close-btn">&times;</button>
+            </div>
+            <div class="content-modal-body about-us-body">
+                <i class="fas fa-brain about-icon"></i>
+                <h3>Quiz LM</h3>
+                <p>Created with passion by</p>
+                <p class="creator-name">Aalok Kumar Sharma</p>
+                <div class="divider"></div>
+                <p class="mission-statement">
+                    Our mission is to provide a powerful, flexible, and modern platform for students and enthusiasts to master their subjects through targeted practice and offline study materials.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- USER GUIDE MODAL -->
+    <div id="user-guide-overlay" class="content-modal-overlay">
+        <div class="content-modal-panel">
+            <div class="content-modal-header">
+                <h2><i class="fas fa-book"></i> User Guide</h2>
+                <button id="user-guide-close-btn" class="content-modal-close-btn">&times;</button>
+            </div>
+            <div class="content-modal-body">
+                <div class="guide-section">
+                    <h4><i class="fas fa-list-check"></i> Build a Custom Quiz</h4>
+                    <p>Navigate to the "Build a Custom Quiz" section from the homepage. Use the extensive filters for subject, topic, difficulty, and more to create a quiz tailored to your needs. Your progress is saved if you need to leave and come back.</p>
+                </div>
+                <div class="guide-section">
+                    <h4><i class="fas fa-file-export"></i> Create Study Materials</h4>
+                    <p>Use the same filters to select questions and then choose to generate a bilingual PowerPoint (PPT), an English-only PDF, or a JSON file for your own projects. It's perfect for offline study and presentations.</p>
+                </div>
+                 <div class="guide-section">
+                    <h4><i class="fas fa-chart-line"></i> Review & Analyze</h4>
+                    <p>After completing a quiz, you get a detailed score report. Use the "Review Answers" feature to go through each question, check the correct answers, and read detailed explanations to understand the concepts better.</p>
+                </div>
+                <div class="guide-section">
+                    <h4><i class="fas fa-cog"></i> Personalize Your Experience</h4>
+                    <p>Open the settings menu to toggle dark mode, sound effects, question shuffling, and background animations to make the app experience truly your own.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENT CREATION MODAL -->
+    <div id="content-creation-overlay" class="content-modal-overlay">
+        <div class="content-modal-panel">
+            <div class="content-modal-header">
+                <h2><i class="fas fa-file-export"></i> Content Creation Tools</h2>
+                <button id="content-creation-close-btn" class="content-modal-close-btn">&times;</button>
+            </div>
+            <div class="content-modal-body">
+                <p class="modal-intro">Select your desired format to begin. You will be taken to the filter page to select the questions for your document.</p>
+                <div class="content-creation-actions">
+                    <button id="modal-create-ppt-btn"><i class="fas fa-file-powerpoint"></i> Create PPT Presentation</button>
+                    <button id="modal-create-pdf-btn"><i class="fas fa-file-pdf"></i> Create PDF Document</button>
+                    <button id="modal-download-json-btn"><i class="fas fa-file-code"></i> Download as JSON</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- PDF Render Container -->
     <div id="pdf-render-container"></div>
