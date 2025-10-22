@@ -1,14 +1,19 @@
-import { config, state, saveSettings } from './state.js';
+import { config, state, saveSettings, subscribe } from './state.js';
 import { dom } from './dom.js';
 import { initializeAllFireballs_anim, animateFireballs_anim } from './animations.js';
 import { Toast } from './utils.js';
 
-export function applyInitialSettings() {
-    applyTheme();
-    applyAnimationSetting();
-    updateSoundToggleUI();
-    updateShuffleToggleUI();
-    updateHapticToggleUI();
+/**
+ * Initializes all settings-related subscriptions. This function is called once
+ * when the application starts. It makes the settings UI reactive to state changes.
+ */
+export function initSettingsModule() {
+    subscribe('isDarkMode', (data) => applyTheme(data.newValue));
+    subscribe('animationsDisabled', (data) => applyAnimationSetting(data.newValue));
+    subscribe('isMuted', (data) => updateSoundToggleUI(data.newValue));
+    subscribe('isShuffleActive', (data) => updateShuffleToggleUI(data.newValue));
+    subscribe('isHapticEnabled', (data) => updateHapticToggleUI(data.newValue));
+    subscribe('isHeaderCollapsed', (data) => applyHeaderCollapsedState(data.newValue));
 }
 
 export function toggleSettings(forceClose = false) {
@@ -29,45 +34,42 @@ export function toggleSettings(forceClose = false) {
 
 export function toggleDarkMode() {
     state.isDarkMode = !state.isDarkMode;
-    applyTheme();
     saveSettings();
 }
 
-function applyTheme() {
-    document.body.dataset.theme = state.isDarkMode ? 'dark' : 'light';
-    if (dom.darkModeToggle) dom.darkModeToggle.checked = state.isDarkMode;
+function applyTheme(isDark) {
+    document.body.dataset.theme = isDark ? 'dark' : 'light';
+    if (dom.darkModeToggle) dom.darkModeToggle.checked = isDark;
 }
 
 export function toggleAnimations() {
     state.animationsDisabled = !state.animationsDisabled;
-    applyAnimationSetting();
     saveSettings();
 }
 
-function applyAnimationSetting() {
-    document.body.classList.toggle('animations-disabled', state.animationsDisabled);
-    if (dom.animationsToggle) dom.animationsToggle.checked = !state.animationsDisabled;
+function applyAnimationSetting(isDisabled) {
+    document.body.classList.toggle('animations-disabled', isDisabled);
+    if (dom.animationsToggle) dom.animationsToggle.checked = !isDisabled;
     
-    if (!state.animationsDisabled && !state.isAnimating) {
+    if (!isDisabled && !state.isAnimating) {
         if (initializeAllFireballs_anim()) {
             state.isAnimating = true;
             animateFireballs_anim();
         }
-    } else if (state.animationsDisabled) {
+    } else if (isDisabled) {
         state.isAnimating = false;
     }
 }
 
 export function toggleMute() {
     state.isMuted = !state.isMuted;
-    updateSoundToggleUI();
     saveSettings();
 }
 
-function updateSoundToggleUI() {
-    if (dom.soundToggle) dom.soundToggle.checked = !state.isMuted;
+function updateSoundToggleUI(isMuted) {
+    if (dom.soundToggle) dom.soundToggle.checked = !isMuted;
     if (dom.muteBtnReview) {
-        dom.muteBtnReview.innerHTML = state.isMuted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+        dom.muteBtnReview.innerHTML = isMuted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
     }
 }
 
@@ -116,18 +118,24 @@ export function toggleShuffle() {
 }
 
 
-export function updateShuffleToggleUI() {
-    if (dom.shuffleToggle) dom.shuffleToggle.checked = state.isShuffleActive;
+function updateShuffleToggleUI(isShuffleActive) {
+    if (dom.shuffleToggle) dom.shuffleToggle.checked = isShuffleActive;
 }
 
 export function toggleHapticFeedback() {
     state.isHapticEnabled = !state.isHapticEnabled;
-    updateHapticToggleUI();
     saveSettings();
 }
 
-function updateHapticToggleUI() {
-    if (dom.hapticToggle) dom.hapticToggle.checked = state.isHapticEnabled;
+function updateHapticToggleUI(isHapticEnabled) {
+    if (dom.hapticToggle) dom.hapticToggle.checked = isHapticEnabled;
+}
+
+function applyHeaderCollapsedState(isCollapsed) {
+    dom.collapsibleHeaderContent.classList.toggle('collapsed', isCollapsed);
+    dom.toggleHeaderBtn.classList.toggle('collapsed', isCollapsed);
+    dom.quizHeaderBar.classList.toggle('collapsed', isCollapsed);
+    dom.toggleHeaderBtn.setAttribute('aria-expanded', !isCollapsed);
 }
 
 export function zoomIn() {

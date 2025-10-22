@@ -1,0 +1,88 @@
+/* ======================================================= */
+/* === AUTHENTICATION / LOGIN GATE STYLES === */
+/* ======================================================= */
+#login-gate {
+    display: flex; /* Changed from none to flex */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    max-width: 500px;
+}
+
+.login-content {
+    animation: fade-in-slide-up 0.5s ease-out;
+}
+
+#login-gate h1 {
+    font-size: 2em;
+    color: var(--primary-dark);
+}
+
+.login-subtitle {
+    font-size: 1.1em;
+    color: var(--text-color-medium);
+    margin-top: -10px;
+    margin-bottom: 25px;
+}
+
+#login-gate p {
+    color: var(--text-color-light);
+}
+
+.google-sign-in-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 12px 24px;
+    border: 1px solid var(--button-border-color);
+    border-radius: 8px;
+    background-color: var(--button-bg);
+    color: var(--text-color-dark);
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px var(--shadow-color);
+    margin-top: 20px;
+}
+
+.google-sign-in-btn:hover {
+    background-color: var(--button-hover-bg);
+    box-shadow: 0 4px 10px var(--shadow-color);
+    transform: translateY(-2px);
+}
+
+.google-sign-in-btn img {
+    width: 24px;
+    height: 24px;
+}
+
+.consent-section {
+    margin: 20px 0;
+    text-align: left;
+    font-size: 0.9em;
+    color: var(--text-color-medium);
+}
+.consent-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.consent-item input[type="checkbox"] {
+    margin-right: 10px;
+    accent-color: var(--primary-color);
+}
+.consent-item label a {
+    color: var(--primary-dark);
+    text-decoration: underline;
+    font-weight: 600;
+}
+.google-sign-in-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--button-hover-bg);
+    box-shadow: none;
+    transform: none;
+}

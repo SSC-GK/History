@@ -1,0 +1,268 @@
+/* ======================================================= */
+/* === 1. ROOT VARIABLES & GLOBAL STYLES === */
+/* ======================================================= */
+:root {
+    --primary-color: #3f51b5;
+    --primary-dark: #303f9f;
+    --primary-light: #c5cae9;
+    --accent-color: #ffb300;
+    --accent-dark: #ffa000;
+    --background-gradient-start: #f8f9fa;
+    --background-gradient-end: #e8eaf6;
+    --text-color-dark: #212121;
+    --text-color-medium: #424242;
+    --text-color-light: #757575;
+    --container-bg: rgba(255, 255, 255, 0.99);
+    --border-color: #e0e0e0;
+    --correct-color: #4caf50;
+    --correct-text: #ffffff;
+    --wrong-color: #f44336;
+    --wrong-text: #ffffff;
+    --reveal-correct-bg: #e8f5e9;
+    --reveal-correct-text: #2e7d32;
+    --reveal-correct-border: var(--correct-color);
+    --icon-color: var(--primary-color);
+    --button-text-color: #ffffff;
+    --timer-bar-color: var(--primary-color);
+    --ai-tutor-color: #fcfcfc;
+    --ai-tutor-color-dark: #d6d4d3;
+    --shadow-color: rgba(0, 0, 0, 0.12);
+    --body-watermark-color: rgba(48, 63, 159, 0.08);
+    --button-bg: #ffffff;
+    --button-hover-bg: #f5f5f5;
+    --button-border-color: #bdbdbd;
+    --button-hover-border-color: #999;
+    --settings-panel-bg: #ffffff;
+    --settings-header-bg: #f8f9fa;
+}
+
+body[data-theme='dark'] {
+    --primary-color: #818cf8;
+    --primary-dark: #a5b4fc;
+    --primary-light: #4f46e5;
+    --accent-color: #facc15;
+    --accent-dark: #eab308;
+    --background-gradient-start: #111827;
+    --background-gradient-end: #1e293b;
+    --text-color-dark: #f8fafc;
+    --text-color-medium: #cbd5e1;
+    --text-color-light: #94a3b8;
+    --container-bg: #1e293b;
+    --border-color: #334155;
+    --correct-color: #22c55e;
+    --correct-text: #ffffff;
+    --wrong-color: #ef4444;
+    --wrong-text: #ffffff;
+    --reveal-correct-bg: rgba(34, 197, 94, 0.15);
+    --reveal-correct-text: #4ade80;
+    --reveal-correct-border: var(--correct-color);
+    --shadow-color: rgba(0, 0, 0, 0.7);
+    --body-watermark-color: rgba(232, 234, 246, 0.05);
+    --button-bg: #334155;
+    --button-hover-bg: #475569;
+    --button-border-color: #475569;
+    --button-hover-border-color: #64748b;
+    --settings-panel-bg: #1e293b;
+    --settings-header-bg: #111827;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    background: linear-gradient(to right, var(--background-gradient-start), var(--background-gradient-end));
+    color: var(--text-color-dark);
+    margin: 0;
+    padding: 20px 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.animations-disabled .fireball {
+    display: none;
+}
+
+body::before {
+    content: "CGL Hustle";
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 4vw;
+    color: var(--body-watermark-color);
+    font-weight: 700;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+
+/* ======================================================= */
+/* === 2. LAYOUT & TYPOGRAPHY === */
+/* ======================================================= */
+.container {
+    max-width: 850px;
+    width: 95%;
+    padding: 25px 30px;
+    background: var(--container-bg);
+    border-radius: 12px;
+    box-shadow: 0px 8px 25px var(--shadow-color);
+    border: 1px solid var(--border-color);
+    text-align: left;
+    position: relative;
+    z-index: 1;
+}
+
+.quiz-breadcrumb-container {
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto 15px auto;
+    padding: 10px 0px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 6px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+body[data-theme='dark'] .quiz-breadcrumb-container {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.quiz-breadcrumb {
+    font-size: 0.85em;
+    color: var(--text-color-medium);
+    text-align: left;
+    padding-left: 15px;
+}
+
+.quiz-breadcrumb a {
+    color: var(--primary-dark);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.quiz-breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.quiz-breadcrumb span.current-topic {
+    color: var(--text-color-dark);
+    font-weight: bold;
+}
+
+.quiz-breadcrumb span.breadcrumb-filters {
+    color: var(--text-color-light);
+    font-weight: 500;
+    font-size: 0.9em;
+    margin-left: 8px;
+}
+
+h1 {
+    font-size: 1.4em;
+    color: var(--primary-dark);
+    margin-bottom: 15px;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+h1 .icon {
+    font-size: 0.9em;
+    margin-left: 10px;
+    vertical-align: middle;
+    color: var(--icon-color);
+}
+
+h2 {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    text-align: left;
+    font-weight: 500;
+    color: var(--text-color-dark);
+    min-height: 60px;
+    line-height: 1.5;
+}
+
+/* Hindi Font Styling */
+.hindi-text,
+#question-text .hindi-text,
+.options button .hindi-text,
+#review-question-text .hindi-text,
+#review-options button .hindi-text,
+#explanation .hindi-text,
+#review-explanation .hindi-text {
+    font-family: "Noto Sans Devanagari", sans-serif;
+}
+
+
+h2 hr.lang-separator {
+    border: 0;
+    height: 1px;
+    background: var(--border-color);
+    margin: 8px 0;
+}
+
+h2 .hindi-text {
+    color: var(--text-color-medium);
+    font-size: 0.98em;
+}
+
+.gemini-color {
+    max-width: 100%;
+    max-height: 25px;
+    width: auto;
+    height: auto;
+}
+
+/* ======================================================= */
+/* === 11. RESPONSIVE DESIGN & PDF RENDERER === */
+/* ======================================================= */
+#pdf-render-container {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: white;
+    padding: 20px;
+    font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+    color: var(--text-color-dark);
+}
+
+@media (max-width: 768px) {
+    body::before {
+        font-size: 8vw;
+    }
+    .container {
+        padding: 20px;
+    }
+    h1 {
+        font-size: 1.3em;
+    }
+    h2 {
+        font-size: 1em;
+        min-height: 50px;
+    }
+}
+
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.2em;
+    }
+    h2 {
+        font-size: 0.95em;
+    }
+}

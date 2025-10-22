@@ -1,4 +1,4 @@
-import { config, state, saveQuizState, clearQuizState } from './state.js';
+import { config, state, saveQuizState, clearQuizState, subscribe } from './state.js';
 import { dom } from './dom.js';
 import { playSound, triggerHapticFeedback, shuffleArray, buildExplanationHtml, Toast } from './utils.js';
 import { typewriterAnimate } from './animations.js';
@@ -60,6 +60,9 @@ export function initQuizModule(callbacks) {
     
     bindQuizEventListeners();
     initializeGemini();
+
+    // Subscribe to changes in bookmarked questions to update the UI reactively
+    subscribe('bookmarkedQuestions', updateBookmarkButton);
 }
 
 export function loadQuiz() {
@@ -801,18 +804,22 @@ function toggleBookmark() {
     const questionId = dom.bookmarkBtn.dataset.questionId;
     if (!questionId) return;
 
-    const index = state.bookmarkedQuestions.indexOf(questionId);
+    // Create a new array to ensure the proxy's 'set' handler is triggered
+    const newBookmarks = [...state.bookmarkedQuestions];
+    const index = newBookmarks.indexOf(questionId);
+
     if (index > -1) {
-        state.bookmarkedQuestions.splice(index, 1);
+        newBookmarks.splice(index, 1);
     } else {
-        state.bookmarkedQuestions.push(questionId);
+        newBookmarks.push(questionId);
     }
-    updateBookmarkButton();
+
+    state.bookmarkedQuestions = newBookmarks; // This assignment triggers the proxy
     saveSettings();
 }
 
 function updateBookmarkButton() {
-    if (!dom.bookmarkBtn || !state.currentQuizData) return;
+    if (!dom.bookmarkBtn || !state.currentQuizData || !state.currentQuizData.shuffledQuestions[state.currentQuizData.currentQuestionIndex]) return;
     const currentQuestionId = state.currentQuizData.shuffledQuestions[state.currentQuizData.currentQuestionIndex].id;
     const isBookmarked = state.bookmarkedQuestions.includes(currentQuestionId);
     dom.bookmarkBtn.classList.toggle('bookmarked', isBookmarked);
@@ -854,7 +861,7 @@ function updateQuizProgressBar() {
 
 function toggleHeader() {
     state.isHeaderCollapsed = !state.isHeaderCollapsed;
-    applyHeaderCollapsedState();
+    // UI update is now handled by the state subscriber in settings.js
     saveSettings();
 }
 

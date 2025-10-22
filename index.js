@@ -9,12 +9,12 @@ import * as auth from './js/auth.js';
 import { Toast } from './js/utils.js';
 import { initializeAllFireballs_anim, animateFireballs_anim } from './js/animations.js';
 import { 
-    applyInitialSettings, 
-    toggleSettings, 
-    toggleDarkMode, 
-    toggleMute, 
-    toggleShuffle, 
-    toggleAnimations, 
+    initSettingsModule,
+    toggleSettings,
+    toggleDarkMode,
+    toggleMute,
+    toggleShuffle,
+    toggleAnimations,
     toggleHapticFeedback,
     zoomIn,
     zoomOut,
@@ -31,7 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- CORE INITIALIZATION ---
         init: function() {
             cacheDomElements();
-            this.loadAndApplySettings();
+            initSettingsModule(); // Set up settings subscribers
+            this.loadAndApplySettings(); // Load settings, which triggers subscribers
             this.bindGlobalEventListeners();
             this.startBackgroundAnimations();
             
@@ -123,8 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         loadAndApplySettings: function() {
-            loadSettings();
-            applyInitialSettings();
+            loadSettings(); // This loads settings into the proxied state, automatically triggering UI updates
         },
 
         startBackgroundAnimations: function() {

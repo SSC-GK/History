@@ -1,0 +1,136 @@
+/* ======================================================= */
+/* === 9. ANIMATIONS & SPECIAL EFFECTS === */
+/* ======================================================= */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fade-in-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.9); opacity: 0.7; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+@keyframes pulse-red {
+    0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+}
+
+@keyframes pulse-green {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+@keyframes shake-red {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.hamburger-icon {
+    width: 24px;
+    height: 18px;
+    position: relative;
+    transform: rotate(0deg);
+    transition: .5s ease-in-out;
+}
+
+.hamburger-icon span {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: var(--text-color-dark);
+    border-radius: 3px;
+    opacity: 1;
+    left: 0;
+    transform: rotate(0deg);
+    transition: .25s ease-in-out;
+}
+
+.hamburger-icon span:nth-child(1) { top: 0px; }
+.hamburger-icon span:nth-child(2) { top: 7px; }
+.hamburger-icon span:nth-child(3) { top: 14px; }
+
+#nav-menu-icon.is-active .hamburger-icon span:nth-child(1) {
+    top: 7px;
+    transform: rotate(135deg);
+}
+
+#nav-menu-icon.is-active .hamburger-icon span:nth-child(2) {
+    opacity: 0;
+    left: -60px;
+}
+
+#nav-menu-icon.is-active .hamburger-icon span:nth-child(3) {
+    top: 7px;
+    transform: rotate(-135deg);
+}
+
+.fireball {
+    position: fixed;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+#fireball1 { background: radial-gradient(circle, #ffcc00, #ff6600, #cc3300, #660000); box-shadow: 0 0 10px #ff6600, 0 0 15px #ffcc00; }
+#fireball2 { background: radial-gradient(circle, #E0BBE4, #957DAD, #6A0DAD, #301934); box-shadow: 0 0 12px #BFA8D8, 0 0 18px #E0BBE4; }
+#fireball3 { background: radial-gradient(circle, #44ccff, #0088ff, #0044ee, #000099); box-shadow: 0 0 10px #0088ff, 0 0 15px #44ccff; }
+#fireball4 { background: radial-gradient(circle, #ccff44, #88ff00, #44ee00, #009900); box-shadow: 0 0 10px #88ff00, 0 0 15px #ccff44; }
+#fireball5 { background: radial-gradient(circle, #ff44cc, #ff0088, #ee0044, #990000); box-shadow: 0 0 10px #ff0088, 0 0 15px #ff44cc; }
+#fireball6 { background: radial-gradient(circle, #ffffff, #dddddd, #bbbbbb, #888888); box-shadow: 0 0 10px #dddddd, 0 0 15px #ffffff; }
+#fireball7 { background: radial-gradient(circle, #FFEB99 , #FFD700 , #DAA520 , #B8860B ); box-shadow: 0 0 10px #FFD700, 0 0 15px #FFEB99; }
+#fireball8 { background: radial-gradient(circle, #626199, #003cff, #00e6ee, #00998c); box-shadow: 0 0 10px #003cff, 0 0 15px #44ffc7; }
+#fireball9 { background: radial-gradient(circle, #FF6347 , #DC143C , #B22222 , #800000 ); box-shadow: 0 0 10px #DC143C, 0 0 15px #FF6347; }
+#fireball10 { background: radial-gradient(circle, #C19A6B , #A0522D , #8B4513 , #5D4037 ); box-shadow: 0 0 10px #A0522D, 0 0 15px #C19A6B; }
+
+/* NEW: Question Count Pop Effect */
+@keyframes pop-effect {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.25);
+    color: var(--accent-dark);
+    font-weight: 700;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+#question-count.count-updated,
+#ppt-question-count.count-updated,
+#pdf-question-count.count-updated,
+#json-question-count.count-updated {
+  display: inline-block; /* Needed for transform to work correctly */
+  animation: pop-effect 0.4s ease-in-out;
+}
