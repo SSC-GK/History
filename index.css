@@ -2587,6 +2587,28 @@ body[data-theme='dark'] #review-explanation {
 #fireball9 { background: radial-gradient(circle, #FF6347 , #DC143C , #B22222 , #800000 ); box-shadow: 0 0 10px #DC143C, 0 0 15px #FF6347; }
 #fireball10 { background: radial-gradient(circle, #C19A6B , #A0522D , #8B4513 , #5D4037 ); box-shadow: 0 0 10px #A0522D, 0 0 15px #C19A6B; }
 
+/* NEW: Question Count Pop Effect */
+@keyframes pop-effect {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.25);
+    color: var(--accent-dark);
+    font-weight: 700;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+#question-count.count-updated,
+#ppt-question-count.count-updated,
+#pdf-question-count.count-updated,
+#json-question-count.count-updated {
+  display: inline-block; /* Needed for transform to work correctly */
+  animation: pop-effect 0.4s ease-in-out;
+}
 
 /* =======================================================
 10. SETTINGS PANEL STYLES

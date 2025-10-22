@@ -639,7 +639,7 @@ function getGeminiExplanation() {
     dom.aiExplainerBtn.disabled = true;
     dom.aiExplainerBtn.classList.add('ai-thinking');
     dom.aiExplanationBody.classList.add('is-loading');
-    dom.aiExplanationBody.innerHTML = `<div class="ai-loading-container"><lottie-player src="https://assets9.lottiefiles.com/packages/lf20_j1adxtyb.json" background="transparent" speed="1" style="width: 200px; height: 200px;" loop autoplay></lottie-player><p>Connecting to AI service...</p></div>`;
+    dom.aiExplanationBody.innerHTML = `<div class="ai-loading-container"><lottie-player src="https://assets9.lottiefiles.com/packages/lf20_j1adxtyb.json" background="transparent" speed="5" style="width: 200px; height: 200px;" loop autoplay></lottie-player><p>Connecting to AI service...</p></div>`;
 
     setTimeout(() => {
         dom.aiExplanationBody.classList.remove('is-loading');

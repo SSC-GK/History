@@ -5,6 +5,21 @@ import { supabase } from './supabaseClient.js';
 
 let appCallbacks = {};
 
+/**
+ * Triggers a "pop" animation on a given element to provide visual feedback.
+ * @param {HTMLElement} element The element to animate.
+ */
+function triggerCountAnimation(element) {
+    if (!element) return;
+    
+    // Remove the class first to re-trigger the animation if it was just added
+    element.classList.remove('count-updated');
+    // We need a short delay to allow the browser to process the removal before re-adding
+    requestAnimationFrame(() => {
+        element.classList.add('count-updated');
+    });
+}
+
 export function initFilterModule(callbacks) {
     appCallbacks = callbacks;
     initializeTabs();
@@ -382,16 +397,32 @@ function getQuestionValue(q, filterKey) {
 }
 
 function updateQuestionCount(count) {
-    dom.questionCount.textContent = count;
-    dom.pptQuestionCount.textContent = count;
-    dom.pdfQuestionCount.textContent = count;
-    dom.jsonQuestionCount.textContent = count;
+    const countElements = [
+        dom.questionCount,
+        dom.pptQuestionCount,
+        dom.pdfQuestionCount,
+        dom.jsonQuestionCount
+    ];
+    
+    // Check if the count has actually changed to avoid unnecessary animations
+    const hasChanged = dom.questionCount.textContent !== String(count);
+
+    countElements.forEach(el => {
+        if (el) {
+            el.textContent = count;
+            if (hasChanged) {
+                triggerCountAnimation(el);
+            }
+        }
+    });
+
     const hasQuestions = count > 0;
     dom.startQuizBtn.disabled = !hasQuestions;
     dom.createPptBtn.disabled = !hasQuestions;
     dom.createPdfBtn.disabled = !hasQuestions;
     dom.downloadJsonBtn.disabled = !hasQuestions;
 }
+
 
 function setButtonsLoading(isLoading) {
     dom.startQuizBtn.classList.toggle('loading', isLoading);
