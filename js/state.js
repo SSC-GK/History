@@ -1,36 +1,3 @@
-// Simple Event Emitter (Pub/Sub)
-class EventEmitter {
-    constructor() {
-        this.events = {};
-    }
-
-    subscribe(eventName, fn) {
-        if (!this.events[eventName]) {
-            this.events[eventName] = [];
-        }
-        this.events[eventName].push(fn);
-        
-        // Return an unsubscribe function
-        return () => {
-            this.events[eventName] = this.events[eventName].filter(eventFn => fn !== eventFn);
-        };
-    }
-
-    publish(eventName, data) {
-        const event = this.events[eventName];
-        if (event) {
-            event.forEach(fn => {
-                fn.call(null, data);
-            });
-        }
-    }
-}
-
-const events = new EventEmitter();
-export const subscribe = events.subscribe.bind(events);
-
-
-// --- CONFIG & STATE ---
 export const config = {
     questionsPerGroup: 50,
     timePerQuestion: 60,
@@ -46,8 +13,7 @@ export const config = {
     filterKeys: ['subject', 'topic', 'subTopic', 'difficulty', 'questionType', 'examName', 'examYear', 'tags']
 };
 
-// Internal state object that should not be mutated directly from outside
-const internalState = {
+export let state = {
     allQuestionsMasterList: [],
     filteredQuestionsMasterList: [],
     questionGroups: [],
@@ -86,36 +52,6 @@ const internalState = {
     callbacks: {}, // To store callbacks for inter-module communication
 };
 
-// Proxy handler to intercept state changes and publish events
-const stateHandler = {
-    set: function(obj, prop, value) {
-        const oldValue = obj[prop];
-        
-        // Prevent unnecessary event publishing if value is the same
-        if (oldValue === value) {
-            return true;
-        }
-
-        // For arrays, a deep comparison might be needed if you want to avoid firing on identical content
-        if (Array.isArray(oldValue) && Array.isArray(value) && JSON.stringify(oldValue) === JSON.stringify(value)) {
-            return true;
-        }
-
-        // Update the actual internal state object
-        obj[prop] = value;
-        
-        // Announce the change to any subscribers
-        events.publish(prop, { newValue: value, oldValue: oldValue });
-        
-        return true; // Indicate success
-    }
-};
-
-// Export the proxied state object. All mutations will now be intercepted.
-export const state = new Proxy(internalState, stateHandler);
-
-// --- LOCAL STORAGE FUNCTIONS ---
-
 export function saveSettings() {
     try {
         const settingsToSave = {
@@ -139,8 +75,6 @@ export function loadSettings() {
         if (savedSettingsJSON) {
             const savedSettings = JSON.parse(savedSettingsJSON);
             
-            // These assignments will trigger the proxy's 'set' handler,
-            // which in turn publishes events to update the UI.
             state.isShuffleActive = savedSettings.isShuffleActive || false;
             state.isMuted = savedSettings.isMuted || false;
             state.isDarkMode = savedSettings.isDarkMode || false;
@@ -175,7 +109,6 @@ export function loadQuizState() {
         const savedSessionJSON = localStorage.getItem('quizActiveSession');
         if (savedSessionJSON) {
             const savedSession = JSON.parse(savedSessionJSON);
-            // These assignments also trigger the proxy
             state.isQuizActive = savedSession.isQuizActive || false;
             state.questionGroups = savedSession.questionGroups || [];
             state.currentGroupIndex = savedSession.currentGroupIndex || 0;

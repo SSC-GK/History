@@ -1,4 +1,4 @@
-import { config, state, saveQuizState, clearQuizState, subscribe } from './state.js';
+import { config, state, saveQuizState, clearQuizState } from './state.js';
 import { dom } from './dom.js';
 import { playSound, triggerHapticFeedback, shuffleArray, buildExplanationHtml, Toast } from './utils.js';
 import { typewriterAnimate } from './animations.js';
@@ -55,13 +55,11 @@ export function initQuizModule(callbacks) {
     state.callbacks.nextQuestionHandler = nextQuestionHandler;
     state.callbacks.previousQuestionHandler = previousQuestionHandler;
     state.callbacks.quizKeyPressHandler = handleKeyPress;
+    state.callbacks.toggleQuizInternalNavigation = toggleQuizInternalNavigation;
     state.callbacks.reorderQuizQuestions = reorderQuizQuestions;
     
     bindQuizEventListeners();
     initializeGemini();
-
-    // Subscribe to changes in bookmarked questions to update the UI reactively
-    subscribe('bookmarkedQuestions', updateBookmarkButton);
 }
 
 export function loadQuiz() {
@@ -667,16 +665,6 @@ function getGeminiExplanation() {
 }
 
 function handleKeyPress(event) {
-    if (event.key === 'Escape') {
-        toggleQuizInternalNavigation();
-        return; // The only action for Escape is to toggle the menu.
-    }
-
-    // If the navigation panel is open, don't process other quiz shortcuts
-    if (dom.navigationPanel && dom.navigationPanel.classList.contains('open')) {
-        return;
-    }
-    
     if (event.key >= '1' && event.key <= '4') {
         const targetButton = dom.optionsEl.querySelector(`button[data-index="${event.key}"]:not(:disabled)`);
         if (targetButton) targetButton.click();
@@ -690,7 +678,7 @@ function handleKeyPress(event) {
         if (dom.aiExplainerBtn && !dom.aiExplainerBtn.disabled) dom.aiExplainerBtn.click();
     } else if (event.key.toLowerCase() === 'b') {
         if (dom.bookmarkBtn) dom.bookmarkBtn.click();
-    }
+    } else if (event.key === 'Escape') toggleQuizInternalNavigation();
 }
 
 function populateQuizInternalNavigation() {
@@ -813,22 +801,18 @@ function toggleBookmark() {
     const questionId = dom.bookmarkBtn.dataset.questionId;
     if (!questionId) return;
 
-    // Create a new array to ensure the proxy's 'set' handler is triggered
-    const newBookmarks = [...state.bookmarkedQuestions];
-    const index = newBookmarks.indexOf(questionId);
-
+    const index = state.bookmarkedQuestions.indexOf(questionId);
     if (index > -1) {
-        newBookmarks.splice(index, 1);
+        state.bookmarkedQuestions.splice(index, 1);
     } else {
-        newBookmarks.push(questionId);
+        state.bookmarkedQuestions.push(questionId);
     }
-
-    state.bookmarkedQuestions = newBookmarks; // This assignment triggers the proxy
+    updateBookmarkButton();
     saveSettings();
 }
 
 function updateBookmarkButton() {
-    if (!dom.bookmarkBtn || !state.currentQuizData || !state.currentQuizData.shuffledQuestions[state.currentQuizData.currentQuestionIndex]) return;
+    if (!dom.bookmarkBtn || !state.currentQuizData) return;
     const currentQuestionId = state.currentQuizData.shuffledQuestions[state.currentQuizData.currentQuestionIndex].id;
     const isBookmarked = state.bookmarkedQuestions.includes(currentQuestionId);
     dom.bookmarkBtn.classList.toggle('bookmarked', isBookmarked);
@@ -870,7 +854,7 @@ function updateQuizProgressBar() {
 
 function toggleHeader() {
     state.isHeaderCollapsed = !state.isHeaderCollapsed;
-    // UI update is now handled by the state subscriber in settings.js
+    applyHeaderCollapsedState();
     saveSettings();
 }
 

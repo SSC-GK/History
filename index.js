@@ -9,12 +9,12 @@ import * as auth from './js/auth.js';
 import { Toast } from './js/utils.js';
 import { initializeAllFireballs_anim, animateFireballs_anim } from './js/animations.js';
 import { 
-    initSettingsModule,
-    toggleSettings,
-    toggleDarkMode,
-    toggleMute,
-    toggleShuffle,
-    toggleAnimations,
+    applyInitialSettings, 
+    toggleSettings, 
+    toggleDarkMode, 
+    toggleMute, 
+    toggleShuffle, 
+    toggleAnimations, 
     toggleHapticFeedback,
     zoomIn,
     zoomOut,
@@ -31,8 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- CORE INITIALIZATION ---
         init: function() {
             cacheDomElements();
-            initSettingsModule(); // Set up settings subscribers
-            this.loadAndApplySettings(); // Load settings, which triggers subscribers
+            this.loadAndApplySettings();
             this.bindGlobalEventListeners();
             this.startBackgroundAnimations();
             
@@ -47,16 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         showApp: async function() {
-            // FIX: Ensure the loading overlay is visible before fetching data.
-            // This prevents a blank screen if the login gate briefly appears and hides it.
-            if (dom.loadingOverlay.style.display === 'none' || dom.loadingOverlay.classList.contains('fade-out')) {
-                dom.loadingOverlay.classList.remove('fade-out');
-                dom.loadingOverlay.style.display = 'flex';
-            }
-
             dom.loginGate.style.display = 'none';
-            // The loading overlay is now guaranteed to be visible, and the 
-            // `initFilterModule` will fetch data and hide it upon success.
+            // The loading overlay is intentionally left visible here, as
+            // the `initFilterModule` will fetch data and hide it upon success.
             dom.filterSection.style.display = 'block';
             
             const wasResumed = await this.promptToResumeQuiz();
@@ -78,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         
         showLoginGate: function() {
-            // Hide the loading overlay for unauthenticated users so they can interact.
+            // FIX: Hide the loading overlay for unauthenticated users.
             if (dom.loadingOverlay.style.display !== 'none') {
                 dom.loadingOverlay.classList.add('fade-out');
                 dom.loadingOverlay.addEventListener('transitionend', () => {
@@ -131,7 +123,8 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         loadAndApplySettings: function() {
-            loadSettings(); // This loads settings into the proxied state, automatically triggering UI updates
+            loadSettings();
+            applyInitialSettings();
         },
 
         startBackgroundAnimations: function() {
@@ -327,10 +320,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- INPUT HANDLERS (KEYBOARD & SWIPE) ---
         handleKeyPress: function(event) {
-            // First, handle GLOBAL overlays that can appear on top of any screen.
-            // These take precedence over screen-specific key handlers.
             if (dom.aiExplanationOverlay && dom.aiExplanationOverlay.classList.contains('visible')) {
                 if (event.key === 'Escape') hideAIExplanation();
+                return;
+            }
+            if (dom.navigationPanel && dom.navigationPanel.classList.contains('open')) {
+                if (event.key === 'Escape') state.callbacks.toggleQuizInternalNavigation();
                 return;
             }
             if (dom.settingsOverlay && dom.settingsOverlay.classList.contains('visible')) {
@@ -338,27 +333,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // The quiz navigation panel is NOT a global overlay; it's part of the quiz screen.
-            // Its keypress logic is handled entirely within the quiz module's handler.
-
-            // Second, determine the active screen and delegate the event.
             const isQuizActive = dom.quizSection.style.display === 'block';
             const isReviewActive = dom.reviewSection.style.display === 'block';
             const isFinalScoreActive = dom.finalScoreSection.style.display === 'block';
 
             if (isQuizActive) {
-                // Let the quiz module handle its own keyboard shortcuts
-                if (state.callbacks.quizKeyPressHandler) {
-                    state.callbacks.quizKeyPressHandler(event);
-                }
+                // Call quiz key handlers
+                state.callbacks.quizKeyPressHandler(event);
             } else if (isReviewActive) {
-                if (state.callbacks.reviewKeyPressHandler) {
-                    state.callbacks.reviewKeyPressHandler(event);
-                }
+                // Call review key handlers
+                state.callbacks.reviewKeyPressHandler(event);
             } else if (isFinalScoreActive) {
-                if (state.callbacks.scoreKeyPressHandler) {
-                    state.callbacks.scoreKeyPressHandler(event);
-                }
+                // Call score screen key handlers
+                state.callbacks.scoreKeyPressHandler(event);
             }
         },
 
