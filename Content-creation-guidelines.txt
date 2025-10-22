@@ -1,4 +1,4 @@
-Content Contribution Guidelines for questions.json
+Content Contribution Guidelines for questions.json (v2.0)
 
 1. Introduction
 This document provides the official guidelines for adding new questions to the questions.json data file for the Quiz App. To ensure data consistency, application stability, and a high-quality user experience, it is mandatory to follow this structure precisely.
@@ -184,9 +184,7 @@ Subject ID Prefixes
 
 difficulty
 Easy
-
 Medium
-
 Hard
 
 questionType
@@ -570,16 +568,10 @@ Here is a full example that you can use as a template.
 6. Contribution Checklist
 Before finalizing your addition, please verify the following:
 
- Valid JSON: Your file is valid JSON. Use an online validator if unsure.
-
- Unique ID: The id is a unique coded string (`[Prefix][Number]`), sequential for its subject.
-
- Predefined Values: All values for subject, topic, subTopic, difficulty, questionType, and examName are taken exactly from the approved lists.
-
- Correct Answer Match: The correct string is an exact, case-sensitive match to one of the strings in the options array.
-
- Bilingual Content: Both English (question, options) and Hindi (question_hi, options_hi) fields are present and correctly translated.
-
- Markdown in Explanation: The explanation fields use Markdown and are fully bilingual as per the new format.
-
- Question Numbering: The question text strings do **not** start with Q.xx).
+- Valid JSON: Your file is valid JSON. Use an online validator if unsure.
+- Unique ID: The id is a unique coded string (`[Prefix][Number]`), sequential for its subject.
+- Predefined Values: All values for subject, topic, subTopic, difficulty, questionType, and examName are taken exactly from the approved lists.
+- Correct Answer Match: The correct string is an exact, case-sensitive match to one of the strings in the options array.
+- Bilingual Content: Both English (question, options) and Hindi (question_hi, options_hi) fields are present and correctly translated.
+- Markdown in Explanation: The explanation fields use Markdown and are fully bilingual as per the new format.
+- Question Numbering: The question text strings do **not** start with Q.xx).
