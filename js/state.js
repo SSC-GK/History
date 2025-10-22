@@ -43,6 +43,7 @@ export let state = {
     touchStartY: 0,
     isMouseDown: false,
     isQuizActive: false,
+    userProfile: null, // To store profile data like subscription status
     selectedFilters: {
         subject: [], topic: [], subTopic: [], 
         difficulty: [], questionType: [], 

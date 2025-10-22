@@ -24,6 +24,7 @@ export function cacheDomElements() {
     dom.sideMenuCloseBtn = document.getElementById('side-menu-close-btn');
     dom.sideMenuProfilePic = document.getElementById('side-menu-profile-pic');
     dom.sideMenuProfileName = document.getElementById('side-menu-profile-name');
+    dom.sideMenuSubscriptionStatus = document.getElementById('side-menu-subscription-status');
     dom.heroStartQuizBtn = document.getElementById('hero-start-quiz-btn');
     dom.homeCustomQuizCard = document.getElementById('home-custom-quiz-card');
     dom.homeContentCreationCard = document.getElementById('home-content-creation-card');

@@ -40,8 +40,10 @@ const modalOverlays = [
 /**
  * Hides all main application sections and shows only the specified one.
  * @param {string} viewId The ID of the section to show (e.g., 'homepage-section').
+ * @param {object} [options={}] Optional parameters for the view.
+ * @param {string} [options.mode] Special mode for a view, e.g., 'quiz' for filterSection.
  */
-function showView(viewId) {
+function showView(viewId, options = {}) {
     mainSections.forEach(key => {
         const element = document.getElementById(key.replace('Section', '-section'));
         if (dom[key] && dom[key].style) {
@@ -61,7 +63,30 @@ function showView(viewId) {
             targetElement.style.display = 'block';
         }
     }
+
+    // --- NEW LOGIC: Conditionally show/hide tabs on filter page ---
+    if (viewId === 'filter-section') {
+        const pptTab = document.querySelector('.tab-btn[data-tab="ppt-panel"]');
+        const jsonTab = document.querySelector('.tab-btn[data-tab="json-panel"]');
+        const quizTab = document.querySelector('.tab-btn[data-tab="quiz-panel"]');
+
+        if (options.mode === 'quiz') {
+            // Quiz-only mode: Hide premium tabs
+            if (pptTab) pptTab.style.display = 'none';
+            if (jsonTab) jsonTab.style.display = 'none';
+            
+            // Ensure the quiz tab is selected as it's the only one visible
+            if (quizTab && !quizTab.classList.contains('active')) {
+                quizTab.click();
+            }
+        } else { 
+            // Default/Content Creation mode: Show all tabs
+            if (pptTab) pptTab.style.display = ''; // Reset to default CSS style
+            if (jsonTab) jsonTab.style.display = ''; // Reset to default CSS style
+        }
+    }
 }
+
 
 /**
  * Toggles a modal's visibility with smooth animations.
@@ -119,11 +144,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         showApp: async function(user) {
             showView('homepage-section');
+            
+            // Fetch user profile from Supabase and store it in the state
+            const profile = await auth.fetchUserProfile(user.id);
+            state.userProfile = profile;
 
-            // Populate side menu with user info
-            if (user && dom.sideMenuProfileName && dom.sideMenuProfilePic) {
+            // Populate side menu with user info from the 'profiles' table for consistency
+            if (profile) {
+                dom.sideMenuProfileName.textContent = profile.full_name || 'Quiz User';
+                dom.sideMenuProfilePic.src = profile.avatar_url || 'https://via.placeholder.com/60';
+                dom.sideMenuSubscriptionStatus.textContent = profile.subscription_status || 'free';
+            } else if (user) { // Fallback to auth metadata if profile is somehow missing
                 dom.sideMenuProfileName.textContent = user.user_metadata?.full_name || 'Quiz User';
                 dom.sideMenuProfilePic.src = user.user_metadata?.avatar_url || 'https://via.placeholder.com/60';
+                dom.sideMenuSubscriptionStatus.textContent = 'free';
             }
             
             const wasResumed = await this.promptToResumeQuiz();
@@ -159,6 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             showView('login-gate');
             clearQuizState();
+            state.userProfile = null; // Clear profile on logout
 
             // DPDP Compliance: Consent checkbox logic
             const updateSignInButtonState = () => {
@@ -356,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             // Homepage Navigation
-            const goToFilters = () => showView('filter-section');
+            const goToFilters = () => showView('filter-section', { mode: 'quiz' });
             dom.heroStartQuizBtn.onclick = goToFilters;
             dom.homeCustomQuizCard.onclick = goToFilters;
             
@@ -387,7 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             };
 
-            setupSideMenuLink(dom.sideMenuQuizlmLink, () => showView('filter-section'));
+            setupSideMenuLink(dom.sideMenuQuizlmLink, () => showView('filter-section', { mode: 'quiz' }));
             setupSideMenuLink(dom.sideMenuPaidCourseLink, () => toggleModal('contentCreationOverlay'));
             setupSideMenuLink(dom.sideMenuUserGuideLink, () => toggleModal('userGuideOverlay'));
             setupSideMenuLink(dom.sideMenuAboutUsLink, () => toggleModal('aboutUsOverlay'));
@@ -407,7 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (button) {
                     button.onclick = () => {
                         toggleModal('contentCreationOverlay', true);
-                        showView('filter-section');
+                        showView('filter-section'); // This will show all tabs by default now
                         document.querySelector(`.tab-btn[data-tab="${tabId}"]`).click();
                     };
                 }

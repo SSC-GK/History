@@ -1,4 +1,5 @@
 
+
 /* ======================================================= */
 /* === MASTER STYLESHEET FOR ALL SCHOOL QUIZZES (V2.0) === */
 /* ======================================================= */
@@ -362,6 +363,24 @@ body[data-theme='dark'] .paid-tag {
     font-size: 1.1em;
     font-weight: 600;
     color: var(--text-color-dark);
+}
+
+.subscription-badge {
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-top: 8px;
+    text-transform: capitalize;
+    border: 1px solid var(--primary-color);
+}
+
+body[data-theme='dark'] .subscription-badge {
+    background-color: var(--primary-light);
+    color: var(--text-color-dark);
+    border-color: var(--primary-dark);
 }
 
 .side-menu-nav ul {

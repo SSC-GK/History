@@ -56,6 +56,36 @@ export async function getCurrentUser() {
     return user;
 }
 
+
+/**
+ * Fetches the user's profile from the 'profiles' table in Supabase.
+ * @param {string} userId The UUID of the user.
+ * @returns {Promise<object|null>} The user's profile object or null if not found or an error occurs.
+ */
+export async function fetchUserProfile(userId) {
+    if (!userId) return null;
+    try {
+        const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', userId)
+            .single(); // Use .single() to get one object, not an array
+
+        if (error) {
+            // PGRST116 means no rows were found, which is a valid scenario we can handle gracefully.
+            if (error.code !== 'PGRST116') {
+                throw error;
+            }
+            return null; // No profile found
+        }
+        return data;
+    } catch (error) {
+        console.error('Error fetching user profile:', error.message);
+        return null;
+    }
+}
+
+
 /**
  * Handles the account deletion process.
  * NOTE: This requires a backend Supabase Edge Function to securely delete user data.
