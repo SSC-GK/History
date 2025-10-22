@@ -327,12 +327,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- INPUT HANDLERS (KEYBOARD & SWIPE) ---
         handleKeyPress: function(event) {
+            // First, handle GLOBAL overlays that can appear on top of any screen.
+            // These take precedence over screen-specific key handlers.
             if (dom.aiExplanationOverlay && dom.aiExplanationOverlay.classList.contains('visible')) {
                 if (event.key === 'Escape') hideAIExplanation();
-                return;
-            }
-            if (dom.navigationPanel && dom.navigationPanel.classList.contains('open')) {
-                if (event.key === 'Escape') state.callbacks.toggleQuizInternalNavigation();
                 return;
             }
             if (dom.settingsOverlay && dom.settingsOverlay.classList.contains('visible')) {
@@ -340,19 +338,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // The quiz navigation panel is NOT a global overlay; it's part of the quiz screen.
+            // Its keypress logic is handled entirely within the quiz module's handler.
+
+            // Second, determine the active screen and delegate the event.
             const isQuizActive = dom.quizSection.style.display === 'block';
             const isReviewActive = dom.reviewSection.style.display === 'block';
             const isFinalScoreActive = dom.finalScoreSection.style.display === 'block';
 
             if (isQuizActive) {
-                // Call quiz key handlers
-                state.callbacks.quizKeyPressHandler(event);
+                // Let the quiz module handle its own keyboard shortcuts
+                if (state.callbacks.quizKeyPressHandler) {
+                    state.callbacks.quizKeyPressHandler(event);
+                }
             } else if (isReviewActive) {
-                // Call review key handlers
-                state.callbacks.reviewKeyPressHandler(event);
+                if (state.callbacks.reviewKeyPressHandler) {
+                    state.callbacks.reviewKeyPressHandler(event);
+                }
             } else if (isFinalScoreActive) {
-                // Call score screen key handlers
-                state.callbacks.scoreKeyPressHandler(event);
+                if (state.callbacks.scoreKeyPressHandler) {
+                    state.callbacks.scoreKeyPressHandler(event);
+                }
             }
         },
 

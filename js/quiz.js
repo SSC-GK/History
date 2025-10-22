@@ -55,7 +55,6 @@ export function initQuizModule(callbacks) {
     state.callbacks.nextQuestionHandler = nextQuestionHandler;
     state.callbacks.previousQuestionHandler = previousQuestionHandler;
     state.callbacks.quizKeyPressHandler = handleKeyPress;
-    state.callbacks.toggleQuizInternalNavigation = toggleQuizInternalNavigation;
     state.callbacks.reorderQuizQuestions = reorderQuizQuestions;
     
     bindQuizEventListeners();
@@ -668,6 +667,16 @@ function getGeminiExplanation() {
 }
 
 function handleKeyPress(event) {
+    if (event.key === 'Escape') {
+        toggleQuizInternalNavigation();
+        return; // The only action for Escape is to toggle the menu.
+    }
+
+    // If the navigation panel is open, don't process other quiz shortcuts
+    if (dom.navigationPanel && dom.navigationPanel.classList.contains('open')) {
+        return;
+    }
+    
     if (event.key >= '1' && event.key <= '4') {
         const targetButton = dom.optionsEl.querySelector(`button[data-index="${event.key}"]:not(:disabled)`);
         if (targetButton) targetButton.click();
@@ -681,7 +690,7 @@ function handleKeyPress(event) {
         if (dom.aiExplainerBtn && !dom.aiExplainerBtn.disabled) dom.aiExplainerBtn.click();
     } else if (event.key.toLowerCase() === 'b') {
         if (dom.bookmarkBtn) dom.bookmarkBtn.click();
-    } else if (event.key === 'Escape') toggleQuizInternalNavigation();
+    }
 }
 
 function populateQuizInternalNavigation() {
