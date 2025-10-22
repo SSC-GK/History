@@ -75,11 +75,26 @@
     <div id="fireball9" class="fireball"></div>
     <div id="fireball10" class="fireball"></div>
     <!-- END: Fireball HTML Elements -->
+    
+    <!-- ==================================================================== -->
+    <!-- ==== NEW LOGIN GATE - SHOWN TO UNAUTHENTICATED USERS ==== -->
+    <!-- ==================================================================== -->
+    <section id="login-gate" class="container" style="display: none;">
+        <div class="login-content">
+            <h1>Welcome to Quiz LM</h1>
+            <p class="login-subtitle">Your personalized quiz generation platform.</p>
+            <p>Please sign in to access your questions and create custom quizzes.</p>
+            <button id="sign-in-btn" class="google-sign-in-btn">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google icon">
+                <span>Sign in with Google</span>
+            </button>
+        </div>
+    </section>
 
     <!-- ==================================================================== -->
-    <!-- ==== NEW FILTER SECTION - THE NEW HOMEPAGE ==== -->
+    <!-- ==== FILTER SECTION - HIDDEN BY DEFAULT ==== -->
     <!-- ==================================================================== -->
-    <section id="filter-section" class="container">
+    <section id="filter-section" class="container" style="display: none;">
         <div class="app-version">v11.3</div>
         <div class="home-link-container">
             <a href="https://cglhustle.free.nf/side_menu/quiz_lm/"><i class="fas fa-home"></i> HOME</a>
@@ -481,6 +496,10 @@
                         <input type="checkbox" id="haptic-toggle">
                         <span class="slider"></span>
                     </label>
+                </div>
+                 <div class="setting-row">
+                    <label for="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</label>
+                    <button id="logout-btn" class="button-secondary">Logout</button>
                 </div>
             </div>
         </div>

@@ -5,6 +5,7 @@
 // Import all modules
 import { config, state, loadSettings, saveSettings, loadQuizState, clearQuizState } from './js/state.js';
 import { dom, cacheDomElements } from './js/dom.js';
+import * as auth from './js/auth.js';
 import { Toast } from './js/utils.js';
 import { initializeAllFireballs_anim, animateFireballs_anim } from './js/animations.js';
 import { 
@@ -28,9 +29,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const app = {
         // --- CORE INITIALIZATION ---
-        init: async function() {
+        init: function() {
             cacheDomElements();
             this.loadAndApplySettings();
+            this.bindGlobalEventListeners();
+            this.startBackgroundAnimations();
+            
+            // Centralized auth state listener
+            auth.onAuthStateChange((user) => {
+                if (user) {
+                    this.showApp();
+                } else {
+                    this.showLoginGate();
+                }
+            });
+        },
+
+        showApp: async function() {
+            dom.loginGate.style.display = 'none';
+            dom.filterSection.style.display = 'block';
             
             const wasResumed = await this.promptToResumeQuiz();
             if (wasResumed) return; // Resume logic handles the rest, skip normal init
@@ -48,9 +65,16 @@ document.addEventListener('DOMContentLoaded', () => {
             initFilterModule(callbacks);
             initQuizModule(callbacks);
             initReviewModule(callbacks);
-
-            this.bindGlobalEventListeners();
-            this.startBackgroundAnimations();
+        },
+        
+        showLoginGate: function() {
+            dom.loginGate.style.display = 'flex';
+            dom.filterSection.style.display = 'none';
+            dom.quizMainContainer.style.display = 'none';
+            dom.quizBreadcrumbContainer.style.display = 'none';
+            dom.finalScoreSection.style.display = 'none';
+            dom.reviewSection.style.display = 'none';
+            clearQuizState();
         },
         
         promptToResumeQuiz: async function() {
@@ -121,8 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             initQuizModule(callbacks);
             initReviewModule(callbacks);
+            // Re-bind listeners in case they were lost
             this.bindGlobalEventListeners();
-            this.startBackgroundAnimations();
             
             resumeLoadedQuiz();
             this.updateDynamicHeaders();
@@ -210,6 +234,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- GLOBAL EVENT BINDING ---
         bindGlobalEventListeners: function() {
+            // Auth Buttons
+            dom.signInBtn.onclick = () => auth.signInWithGoogle();
+            dom.logoutBtn.onclick = () => auth.signOut();
+            
             // Settings Panel
             dom.settingsBtn.onclick = () => toggleSettings(false);
             dom.settingsOverlay.onclick = (e) => {

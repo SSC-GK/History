@@ -4,6 +4,11 @@ export let dom = {
 };
 
 export function cacheDomElements() {
+    // Auth Elements
+    dom.loginGate = document.getElementById('login-gate');
+    dom.signInBtn = document.getElementById('sign-in-btn');
+    dom.logoutBtn = document.getElementById('logout-btn');
+
     // Loading Overlay
     dom.loadingOverlay = document.getElementById('loading-overlay');
     dom.loadingText = document.getElementById('loading-text');
