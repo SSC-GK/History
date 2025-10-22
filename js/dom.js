@@ -4,10 +4,17 @@ export let dom = {
 };
 
 export function cacheDomElements() {
-    // Auth Elements
+    // Auth & Consent
     dom.loginGate = document.getElementById('login-gate');
     dom.signInBtn = document.getElementById('sign-in-btn');
     dom.logoutBtn = document.getElementById('logout-btn');
+    dom.ageConsentCheckbox = document.getElementById('age-consent-checkbox');
+    dom.privacyConsentCheckbox = document.getElementById('privacy-consent-checkbox');
+    dom.privacyPolicyLink = document.getElementById('privacy-policy-link');
+
+    // Privacy Policy Modal
+    dom.privacyPolicyOverlay = document.getElementById('privacy-policy-overlay');
+    dom.privacyPolicyCloseBtn = document.getElementById('privacy-policy-close-btn');
 
     // Loading Overlay
     dom.loadingOverlay = document.getElementById('loading-overlay');
@@ -131,6 +138,8 @@ export function cacheDomElements() {
     dom.animationsToggle = document.getElementById('animations-toggle');
     dom.hapticToggle = document.getElementById('haptic-toggle');
     dom.bookmarkBtn = document.getElementById('bookmark-btn');
+    dom.userEmailDisplay = document.getElementById('user-email-display');
+    dom.deleteAccountBtn = document.getElementById('delete-account-btn');
 
     // Dynamic Headers
     dom.dynamicBreadcrumb = document.getElementById('dynamic-breadcrumb');

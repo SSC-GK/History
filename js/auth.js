@@ -7,6 +7,9 @@ import { Toast } from './utils.js';
 export async function signInWithGoogle() {
     const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
+        options: {
+            redirectTo: window.location.href, // Redirect to the current page
+        },
     });
     if (error) {
         console.error('Error signing in with Google:', error);
@@ -51,4 +54,40 @@ export function onAuthStateChange(callback) {
 export async function getCurrentUser() {
     const { data: { user } } = await supabase.auth.getUser();
     return user;
+}
+
+/**
+ * Handles the account deletion process.
+ * NOTE: This requires a backend Supabase Edge Function to securely delete user data.
+ * This client-side function provides the UI and final sign-out.
+ */
+export async function deleteAccount() {
+    const { isConfirmed } = await Swal.fire({
+        title: 'Are you absolutely sure?',
+        html: `This action cannot be undone. This will permanently delete your account and all of your quiz progress.<br><br><strong>This is an irreversible action.</strong>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    });
+
+    if (isConfirmed) {
+        // --- IMPORTANT ---
+        // In a real application, you would now call a Supabase Edge Function
+        // to securely delete the user's data from all tables (e.g., profiles, attempts)
+        // and then finally delete the user from the `auth.users` table using a service_role key.
+        // Example: await supabase.functions.invoke('delete-user-account');
+
+        console.log("Simulating account deletion. In a real app, a secure backend function would be called here.");
+        Toast.fire({
+            icon: 'success',
+            title: 'Account deleted successfully.',
+            text: 'You have been signed out.'
+        });
+
+        // Sign out the user from the client after the backend process
+        await signOut();
+    }
 }

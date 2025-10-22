@@ -83,8 +83,20 @@
         <div class="login-content">
             <h1>Welcome to Quiz LM</h1>
             <p class="login-subtitle">Your personalized quiz generation platform.</p>
-            <p>Please sign in to access your questions and create custom quizzes.</p>
-            <button id="sign-in-btn" class="google-sign-in-btn">
+            <p>To continue, please confirm you are over 18 and agree to our Privacy Policy.</p>
+            
+            <div class="consent-section">
+                <div class="consent-item">
+                    <input type="checkbox" id="age-consent-checkbox">
+                    <label for="age-consent-checkbox">I confirm that I am 18 years of age or older.</label>
+                </div>
+                <div class="consent-item">
+                    <input type="checkbox" id="privacy-consent-checkbox">
+                    <label for="privacy-consent-checkbox">I have read and agree to the <a href="#" id="privacy-policy-link">Privacy Policy</a>.</label>
+                </div>
+            </div>
+
+            <button id="sign-in-btn" class="google-sign-in-btn" disabled>
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google icon">
                 <span>Sign in with Google</span>
             </button>
@@ -497,15 +509,74 @@
                         <span class="slider"></span>
                     </label>
                 </div>
-                 <div class="setting-row">
+
+                <div class="settings-section-divider">Account Information</div>
+                <div class="setting-row info-row">
+                    <label for="user-email-display"><i class="fas fa-envelope"></i> Email</label>
+                    <span id="user-email-display">Loading...</span>
+                </div>
+                <div class="setting-row">
                     <label for="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</label>
                     <button id="logout-btn" class="button-secondary">Logout</button>
+                </div>
+                
+                <div class="settings-section-divider">Danger Zone</div>
+                <div class="setting-row">
+                    <label for="delete-account-btn"><i class="fas fa-trash-alt"></i> Delete Account</label>
+                    <button id="delete-account-btn" class="button-danger">Delete Account</button>
                 </div>
             </div>
         </div>
     </div>
     <!-- === END OF SETTINGS MODAL === -->
     
+    <!-- === PRIVACY POLICY MODAL === -->
+    <div id="privacy-policy-overlay" style="display: none;">
+        <div id="privacy-policy-panel">
+            <div class="privacy-policy-header">
+                <h2>Privacy Policy</h2>
+                <button id="privacy-policy-close-btn" title="Close">×</button>
+            </div>
+            <div class="privacy-policy-body">
+                <h3>1. Introduction</h3>
+                <p>Welcome to Quiz LM. This Privacy Policy explains how we collect, use, and protect your personal data in compliance with India's Digital Personal Data Protection (DPDP) Act, 2023.</p>
+                
+                <h3>2. Data We Collect</h3>
+                <p>We collect the following personal data:</p>
+                <ul>
+                    <li><strong>Information from Google:</strong> When you sign in, we receive your name, email address, and profile picture from your Google account.</li>
+                    <li><strong>Quiz Data:</strong> We track your quiz attempts, scores, and progress within the app to provide you with your performance history.</li>
+                </ul>
+
+                <h3>3. How We Use Your Data</h3>
+                <p>Your data is used for the following purposes:</p>
+                <ul>
+                    <li>To authenticate and identify you as a user.</li>
+                    <li>To save your quiz progress and performance.</li>
+                    <li>To personalize your experience and improve our application.</li>
+                </ul>
+
+                <h3>4. Your Rights</h3>
+                <p>Under the DPDP Act, you have the right to:</p>
+                <ul>
+                    <li>Access a summary of the personal data we process.</li>
+                    <li>Correct or erase your personal data.</li>
+                    <li>Withdraw your consent at any time by deleting your account.</li>
+                </ul>
+
+                <h3>5. Data Security</h3>
+                <p>We use secure services provided by Supabase to store and protect your data. All data is handled with strict confidentiality.</p>
+
+                <h3>6. Children's Privacy</h3>
+                <p>This service is not intended for users under the age of 18. We require all users to confirm they are 18 or older before creating an account.</p>
+
+                <h3>7. Deleting Your Account</h3>
+                <p>You can delete your account and all associated data at any time from the Settings panel within the app. This action is irreversible.</p>
+            </div>
+        </div>
+    </div>
+    <!-- === END OF PRIVACY POLICY MODAL === -->
+
     <!-- PDF Render Container -->
     <div id="pdf-render-container"></div>
 

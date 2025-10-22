@@ -85,6 +85,14 @@ document.addEventListener('DOMContentLoaded', () => {
             dom.finalScoreSection.style.display = 'none';
             dom.reviewSection.style.display = 'none';
             clearQuizState();
+
+            // DPDP Compliance: Consent checkbox logic
+            const updateSignInButtonState = () => {
+                dom.signInBtn.disabled = !(dom.ageConsentCheckbox.checked && dom.privacyConsentCheckbox.checked);
+            };
+            dom.ageConsentCheckbox.onchange = updateSignInButtonState;
+            dom.privacyConsentCheckbox.onchange = updateSignInButtonState;
+            updateSignInButtonState(); // Set initial state
         },
         
         promptToResumeQuiz: async function() {
@@ -247,9 +255,32 @@ document.addEventListener('DOMContentLoaded', () => {
             // Auth Buttons
             dom.signInBtn.onclick = () => auth.signInWithGoogle();
             dom.logoutBtn.onclick = () => auth.signOut();
-            
+            dom.deleteAccountBtn.onclick = () => auth.deleteAccount();
+
+            // Privacy Policy Modal
+            dom.privacyPolicyLink.onclick = (e) => {
+                e.preventDefault();
+                dom.privacyPolicyOverlay.style.display = 'flex';
+            };
+            dom.privacyPolicyCloseBtn.onclick = () => {
+                dom.privacyPolicyOverlay.style.display = 'none';
+            };
+            dom.privacyPolicyOverlay.onclick = (e) => {
+                if (e.target === dom.privacyPolicyOverlay) {
+                    dom.privacyPolicyOverlay.style.display = 'none';
+                }
+            };
+
             // Settings Panel
-            dom.settingsBtn.onclick = () => toggleSettings(false);
+            dom.settingsBtn.onclick = async () => {
+                const user = await auth.getCurrentUser();
+                if (user && user.email) {
+                    dom.userEmailDisplay.textContent = user.email;
+                } else {
+                    dom.userEmailDisplay.textContent = 'Not available';
+                }
+                toggleSettings(false);
+            };
             dom.settingsOverlay.onclick = (e) => {
                 if (e.target === dom.settingsOverlay) toggleSettings(true);
             };

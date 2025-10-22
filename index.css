@@ -294,6 +294,34 @@ NEW: LOGIN GATE STYLES
     height: 24px;
 }
 
+.consent-section {
+    margin: 20px 0;
+    text-align: left;
+    font-size: 0.9em;
+    color: var(--text-color-medium);
+}
+.consent-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.consent-item input[type="checkbox"] {
+    margin-right: 10px;
+    accent-color: var(--primary-color);
+}
+.consent-item label a {
+    color: var(--primary-dark);
+    text-decoration: underline;
+    font-weight: 600;
+}
+.google-sign-in-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--button-hover-bg);
+    box-shadow: none;
+    transform: none;
+}
+
 /* =======================================================
 NEW: FILTER SECTION STYLES
 ======================================================= */
@@ -2811,10 +2839,91 @@ button.button-secondary:hover {
     color: var(--wrong-text);
 }
 
+.settings-section-divider {
+    font-size: 0.8em;
+    font-weight: 600;
+    color: var(--text-color-light);
+    text-transform: uppercase;
+    margin: 25px 0 15px 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--border-color);
+}
+.info-row {
+    margin-bottom: 10px !important;
+}
+#user-email-display {
+    font-size: 0.95em;
+    color: var(--text-color-medium);
+    font-weight: 500;
+    word-break: break-all;
+}
+button.button-danger {
+    padding: 8px 16px;
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--wrong-color);
+    border-radius: 6px;
+    background-color: transparent;
+    color: var(--wrong-color);
+    transition: all 0.2s ease;
+}
+button.button-danger:hover {
+    background-color: var(--wrong-color);
+    color: var(--wrong-text);
+}
+
 
 /* =======================================================
 11. RESPONSIVE DESIGN & PDF RENDERER
 ======================================================= */
+
+#privacy-policy-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 3000;
+    display: flex; justify-content: center; align-items: center;
+    padding: 15px;
+}
+#privacy-policy-panel {
+    background-color: var(--settings-panel-bg);
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+.privacy-policy-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--settings-header-bg);
+    border-radius: 12px 12px 0 0;
+    flex-shrink: 0;
+}
+.privacy-policy-header h2 {
+    margin: 0; font-size: 1.2em; color: var(--text-color-dark);
+}
+#privacy-policy-close-btn {
+    background: none; border: none; font-size: 1.8em; color: var(--text-color-light); cursor: pointer;
+}
+.privacy-policy-body {
+    padding: 10px 25px 25px 25px;
+    overflow-y: auto;
+}
+.privacy-policy-body h3 {
+    color: var(--primary-dark);
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.privacy-policy-body ul {
+    padding-left: 20px;
+}
+.privacy-policy-body li {
+    margin-bottom: 8px;
+}
 
 #pdf-render-container {
     position: absolute;
