@@ -90,7 +90,29 @@ async function generatePowerPoint(questions, selectedFilters) {
     titleSlide.addText("Quiz LM Presentation ✨", { x: 0.5, y: 0.8, w: '90%', h: 1, fontSize: 44, color: '303f9f', bold: true, align: 'center' });
     titleSlide.addText(`Generated with ${questions.length} questions.`, { x: 0, y: 2.0, w: '100%', align: 'center', color: TEXT_COLOR, fontSize: 18 });
     
-    // ... (Filter text generation logic is the same) ...
+    // RESTORED: Filter text generation logic
+    let filterTextForPpt = [];
+    let hasFilters = false;
+    for (const key in selectedFilters) {
+        if (selectedFilters[key] && selectedFilters[key].length > 0) {
+            hasFilters = true;
+            const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
+            filterTextForPpt.push({ text: `• ${capitalizedKey}: `, options: { bold: true } });
+            filterTextForPpt.push({ text: selectedFilters[key].join(', ') + '\n' });
+        }
+    }
+
+    if (hasFilters) {
+        titleSlide.addText(
+            [{ text: "Applied Filters:", options: { bold: true, fontSize: 16 } }, { text: '\n', options: { fontSize: 8 } }, ...filterTextForPpt],
+            { x: 1.0, y: 2.8, w: '80%', h: 2, fontSize: 14, color: '363636', align: 'left' }
+        );
+    } else {
+        titleSlide.addText(
+            'No specific filters applied.',
+            { x: 0, y: 3.0, w: '100%', align: 'center', color: '757575', fontSize: 16, italic: true }
+        );
+    }
     
     const totalQuestions = questions.length;
     for (let i = 0; i < totalQuestions; i++) {
@@ -171,7 +193,6 @@ async function generatePDF(questions, selectedFilters) {
     const { jsPDF } = self.jspdf;
     const doc = new jsPDF({ unit: 'pt', format: 'a4' });
     
-    // ... (All PDF generation logic, constants, and loops remain the same) ...
     const MARGIN = 40;
     const PAGE_WIDTH = doc.internal.pageSize.getWidth();
     const PAGE_HEIGHT = doc.internal.pageSize.getHeight();
@@ -187,14 +208,46 @@ async function generatePDF(questions, selectedFilters) {
     };
 
     // --- Title Page ---
-    // ... (Title page logic is the same) ...
+    doc.setFont('Helvetica', 'bold');
+    doc.setFontSize(24);
+    doc.text('Quiz LM - Custom Question Set', PAGE_WIDTH / 2, y, { align: 'center' });
+    y += 40;
 
+    doc.setFontSize(14);
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, PAGE_WIDTH / 2, y, { align: 'center' });
+    y += 20;
+    doc.text(`Total Questions: ${questions.length}`, PAGE_WIDTH / 2, y, { align: 'center' });
+    y += 40;
+
+    doc.setFont('Helvetica', 'bold');
+    doc.setFontSize(16);
+    doc.text('Applied Filters:', MARGIN, y);
+    y += 25;
+
+    doc.setFont('Helvetica', 'normal');
+    doc.setFontSize(11);
+    let filterText = '';
+    for (const key in selectedFilters) {
+        if (selectedFilters[key] && selectedFilters[key].length > 0) {
+            const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
+            filterText += `${capitalizedKey}: ${selectedFilters[key].join(', ')}\n`;
+        }
+    }
+    if (filterText.trim() === '') {
+        filterText = 'No specific filters applied (all questions).';
+    }
+    const filterLines = doc.splitTextToSize(filterText, CONTENT_WIDTH);
+    doc.text(filterLines, MARGIN, y);
+    
     const answers = [];
-        
+    let pageNum = 1;
+
     // --- Questions Loop ---
-    doc.addPage();
-    let pageNum = 2;
-    y = MARGIN;
+    if (questions.length > 0) {
+        doc.addPage();
+        pageNum++;
+        y = MARGIN;
+    }
     
     for (let i = 0; i < questions.length; i++) {
         const question_item = questions[i];
@@ -203,18 +256,10 @@ async function generatePDF(questions, selectedFilters) {
         const progress = Math.round((i / questions.length) * 50);
         self.postMessage({ type: 'progress', value: progress, details: `Processing question ${questionNum} of ${questions.length}...` });
 
-        // ... (Answer key generation, height calculation, and rendering logic is the same) ...
         let letteredCorrect = '?';
         let correctTextToPush = 'Answer not found';
-        const summary = question_item.explanation?.summary || "";
-        const summaryMatch = summary.match(/Correct Answer: ([A-D])\)/);
         const correctOptIndexFromText = question_item.options.indexOf(question_item.correct);
-
-        if (summaryMatch) {
-            letteredCorrect = summaryMatch[1];
-            const correctIndexFromLetter = letteredCorrect.charCodeAt(0) - 65;
-            correctTextToPush = question_item.options[correctIndexFromLetter] || "Text mismatch";
-        } else if (correctOptIndexFromText !== -1) {
+        if (correctOptIndexFromText !== -1) {
             letteredCorrect = String.fromCharCode(65 + correctOptIndexFromText);
             correctTextToPush = question_item.correct;
         }
@@ -227,27 +272,31 @@ async function generatePDF(questions, selectedFilters) {
         doc.setFontSize(12);
         const questionLines = doc.splitTextToSize(questionText, CONTENT_WIDTH);
         const questionHeight = (questionLines.length * 12 * 1.2) + 10;
+        
         let optionsHeight = 0;
         doc.setFont('Helvetica', 'normal');
         doc.setFontSize(10);
-        question_item.options.forEach((opt, idx) => {
+        (question_item.options || []).forEach((opt, idx) => {
             const optionText = `(${String.fromCharCode(65 + idx)}) ${opt}`;
             const optionLines = doc.splitTextToSize(optionText, CONTENT_WIDTH - 20);
             optionsHeight += (optionLines.length * 10 * 1.2) + 5;
         });
+        
         const totalQuestionBlockHeight = questionHeight + optionsHeight + 20;
         if (y + totalQuestionBlockHeight > PAGE_HEIGHT - MARGIN) {
             doc.addPage();
             pageNum++;
             y = MARGIN;
         }
+        
         doc.setFont('Helvetica', 'bold');
         doc.setFontSize(12);
         doc.text(questionLines, MARGIN, y);
         y += (questionLines.length * 12 * 1.2) + 10;
+        
         doc.setFont('Helvetica', 'normal');
         doc.setFontSize(10);
-        question_item.options.forEach((opt, idx) => {
+        (question_item.options || []).forEach((opt, idx) => {
             const optionText = `(${String.fromCharCode(65 + idx)}) ${opt}`;
             const optionLines = doc.splitTextToSize(optionText, CONTENT_WIDTH - 20);
             doc.text(optionLines, MARGIN + 20, y);
@@ -260,12 +309,53 @@ async function generatePDF(questions, selectedFilters) {
     }
 
     // --- Answer Key Page ---
-    doc.addPage();
-    // ... (Answer key page logic is the same) ...
-     for (let i = 0; i < Math.ceil(answers.length / 2); i++) {
-        const progress = 50 + Math.round((i / Math.ceil(answers.length / 2)) * 50);
-        self.postMessage({ type: 'progress', value: progress, details: `Generating Answer Key...` });
-        // ...
+    if (answers.length > 0) {
+        doc.addPage();
+        pageNum++;
+        y = MARGIN;
+        doc.setFont('Helvetica', 'bold');
+        doc.setFontSize(18);
+        doc.text('Answer Key', PAGE_WIDTH / 2, y, { align: 'center' });
+        y += 30;
+
+        doc.setFont('Helvetica', 'normal');
+        doc.setFontSize(10);
+        
+        const col1_x = MARGIN;
+        const col2_x = PAGE_WIDTH / 2 + 20;
+        let current_y = y;
+        
+        const half = Math.ceil(answers.length / 2);
+
+        for (let i = 0; i < answers.length; i++) {
+            const progress = 50 + Math.round(((i + 1) / answers.length) * 50);
+            self.postMessage({ type: 'progress', value: progress, details: `Generating Answer Key... (${i+1}/${answers.length})` });
+
+            const isCol1 = i < half;
+            const x = isCol1 ? col1_x : col2_x;
+            if (!isCol1 && i === half) {
+                current_y = y; // Reset y for the second column
+            }
+
+            const answerLines = doc.splitTextToSize(answers[i], (PAGE_WIDTH / 2) - MARGIN - 20);
+            
+            if (current_y + (answerLines.length * 10 * 1.2) > PAGE_HEIGHT - MARGIN) {
+                doc.addPage();
+                pageNum++;
+                current_y = MARGIN;
+                y = MARGIN;
+                doc.setFont('Helvetica', 'bold');
+                doc.setFontSize(18);
+                doc.text('Answer Key (Continued)', PAGE_WIDTH / 2, current_y, { align: 'center' });
+                current_y += 30;
+                y += 30;
+                doc.setFont('Helvetica', 'normal');
+                doc.setFontSize(10);
+            }
+
+            doc.text(answerLines, x, current_y);
+            current_y += (answerLines.length * 10 * 1.2) + 5;
+        }
     }
     
     const totalPages = doc.internal.getNumberOfPages();
@@ -274,7 +364,6 @@ async function generatePDF(questions, selectedFilters) {
         addFooter(doc, i, totalPages);
     }
     
-    // ... (Filename generation logic is the same) ...
     let filename = `Quiz_LM_${questions.length}Qs.pdf`; // Simplified filename
 
     const blob = doc.output('blob');
