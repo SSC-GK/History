@@ -10,7 +10,8 @@ import { Toast } from './js/utils.js';
 import { initializeAllFireballs_anim, animateFireballs_anim } from './js/animations.js';
 import { 
     applyInitialSettings, 
-    toggleSettings, 
+    toggleQuizSettings,
+    toggleProfileSettings,
     toggleDarkMode, 
     toggleMute, 
     toggleShuffle, 
@@ -31,7 +32,7 @@ const mainSections = [
     'quizBreadcrumbContainer', 'finalScoreSection', 'reviewSection'
 ];
 const modalOverlays = [
-    'sideMenuOverlay', 'settingsOverlay', 'privacyPolicyOverlay',
+    'sideMenuOverlay', 'quizSettingsOverlay', 'profileSettingsOverlay', 'privacyPolicyOverlay',
     'aboutUsOverlay', 'userGuideOverlay', 'contentCreationOverlay'
 ];
 
@@ -136,7 +137,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 restartFullQuiz: this.restartFullQuiz.bind(this),
                 confirmGoBackToHome: this.confirmGoBackToHome.bind(this),
                 updateDynamicHeaders: this.updateDynamicHeaders.bind(this),
+                toggleQuizInternalNavigation: () => { /* Placeholder, will be populated by quiz module */ },
             };
+
+            // This is a shared state object for callbacks, allowing modules to register their functions.
+            state.callbacks = callbacks;
 
             initFilterModule(callbacks);
             initQuizModule(callbacks);
@@ -229,11 +234,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 restartFullQuiz: this.restartFullQuiz.bind(this),
                 confirmGoBackToHome: this.confirmGoBackToHome.bind(this),
                 updateDynamicHeaders: this.updateDynamicHeaders.bind(this),
+                toggleQuizInternalNavigation: () => {}, // Placeholder
             };
+            state.callbacks = callbacks;
             initQuizModule(callbacks);
             initReviewModule(callbacks);
-            // Re-bind listeners in case they were lost
-            this.bindGlobalEventListeners();
             
             resumeLoadedQuiz();
             this.updateDynamicHeaders();
@@ -333,6 +338,13 @@ document.addEventListener('DOMContentLoaded', () => {
             dom.signInBtn.onclick = () => auth.signInWithGoogle();
             dom.logoutBtn.onclick = () => auth.signOut();
             dom.deleteAccountBtn.onclick = () => auth.deleteAccount();
+            
+            // Bug Fix 1: Centralize quiz nav menu listener
+            dom.navMenuIcon.onclick = () => {
+                if (state.callbacks.toggleQuizInternalNavigation) {
+                    state.callbacks.toggleQuizInternalNavigation();
+                }
+            };
 
             // Homepage Navigation
             const goToFilters = () => showView('filter-section');
@@ -350,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Side Menu
             dom.hamburgerMenuBtn.onclick = () => this.toggleSideMenu();
-            dom.sideMenuCloseBtn.onclick = () => this.toggleSideMenu();
+            dom.sideMenuCloseBtn.onclick = () => this.toggleSideMenu(true); // Bug Fix 2
             dom.sideMenuOverlay.onclick = (e) => {
                 if (e.target === dom.sideMenuOverlay) this.toggleSideMenu();
             };
@@ -370,7 +382,15 @@ document.addEventListener('DOMContentLoaded', () => {
             setupSideMenuLink(dom.sideMenuPaidCourseLink, () => toggleModal('contentCreationOverlay'));
             setupSideMenuLink(dom.sideMenuUserGuideLink, () => toggleModal('userGuideOverlay'));
             setupSideMenuLink(dom.sideMenuAboutUsLink, () => toggleModal('aboutUsOverlay'));
-            setupSideMenuLink(dom.sideMenuSettingsLink, () => toggleSettings(false));
+            setupSideMenuLink(dom.sideMenuSettingsLink, async () => {
+                const user = await auth.getCurrentUser();
+                if (user && user.email) {
+                    dom.userEmailDisplay.textContent = user.email;
+                } else {
+                    dom.userEmailDisplay.textContent = 'Not available';
+                }
+                toggleProfileSettings(false);
+            });
             setupSideMenuLink(dom.sideMenuPrivacyLink, () => toggleModal('privacyPolicyOverlay'));
 
             // Content Creation Modal Actions
@@ -391,19 +411,23 @@ document.addEventListener('DOMContentLoaded', () => {
             // --- Generic Modal Close Logic ---
             modalOverlays.forEach(modalKey => {
                 const overlay = dom[modalKey];
-                const closeBtn = dom[`${modalKey.replace('Overlay', '')}CloseBtn`];
+                const closeBtnKey = `${modalKey.replace('Overlay', '')}CloseBtn`;
+                const closeBtn = dom[closeBtnKey];
+
                 if (overlay) {
                     overlay.onclick = (e) => {
                         if (e.target === overlay) {
                             if (modalKey === 'sideMenuOverlay') this.toggleSideMenu(true);
-                            else if (modalKey === 'settingsOverlay') toggleSettings(true);
+                            else if (modalKey === 'quizSettingsOverlay') toggleQuizSettings(true);
+                            else if (modalKey === 'profileSettingsOverlay') toggleProfileSettings(true);
                             else toggleModal(modalKey, true);
                         }
                     };
                 }
                 if (closeBtn) {
                      closeBtn.onclick = () => {
-                         if (modalKey === 'settingsOverlay') toggleSettings(true);
+                         if (modalKey === 'quizSettingsOverlay') toggleQuizSettings(true);
+                         else if (modalKey === 'profileSettingsOverlay') toggleProfileSettings(true);
                          else toggleModal(modalKey, true);
                      };
                 }
@@ -412,16 +436,8 @@ document.addEventListener('DOMContentLoaded', () => {
             dom.privacyPolicyLink.onclick = (e) => { e.preventDefault(); toggleModal('privacyPolicyOverlay'); };
 
 
-            // Settings Panel
-            dom.settingsBtn.onclick = async () => {
-                const user = await auth.getCurrentUser();
-                if (user && user.email) {
-                    dom.userEmailDisplay.textContent = user.email;
-                } else {
-                    dom.userEmailDisplay.textContent = 'Not available';
-                }
-                toggleSettings(false);
-            };
+            // Settings Panels
+            dom.quizSettingsBtn.onclick = () => toggleQuizSettings(false);
             dom.darkModeToggle.onchange = () => toggleDarkMode();
             dom.soundToggle.onchange = () => toggleMute();
             dom.shuffleToggle.onchange = () => toggleShuffle();
@@ -463,9 +479,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (dom.aiExplanationOverlay && dom.aiExplanationOverlay.classList.contains('visible')) { hideAIExplanation(); return; }
                 if (dom.navigationPanel && dom.navigationPanel.classList.contains('open')) { state.callbacks.toggleQuizInternalNavigation(); return; }
                 if (isAnyModalOpen) {
-                    modalOverlays.forEach(key => toggleModal(key, true));
-                    if (dom.sideMenuOverlay.classList.contains('visible')) this.toggleSideMenu(true);
-                    if (dom.settingsOverlay.classList.contains('visible')) toggleSettings(true);
+                    modalOverlays.forEach(key => {
+                        if (dom[key] && dom[key].classList.contains('visible')) {
+                             if (key === 'sideMenuOverlay') this.toggleSideMenu(true);
+                             else if (key === 'quizSettingsOverlay') toggleQuizSettings(true);
+                             else if (key === 'profileSettingsOverlay') toggleProfileSettings(true);
+                             else toggleModal(key, true);
+                        }
+                    });
                     return;
                 }
             }

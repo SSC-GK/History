@@ -11,18 +11,34 @@ export function applyInitialSettings() {
     updateHapticToggleUI();
 }
 
-export function toggleSettings(forceClose = false) {
+export function toggleQuizSettings(forceClose = false) {
     if (forceClose) {
-        dom.settingsOverlay.classList.remove('visible');
-        setTimeout(() => dom.settingsOverlay.style.display = 'none', 300);
+        dom.quizSettingsOverlay.classList.remove('visible');
+        setTimeout(() => dom.quizSettingsOverlay.style.display = 'none', 300);
     } else {
-        const isVisible = dom.settingsOverlay.classList.contains('visible');
+        const isVisible = dom.quizSettingsOverlay.classList.contains('visible');
         if (isVisible) {
-            dom.settingsOverlay.classList.remove('visible');
-            setTimeout(() => dom.settingsOverlay.style.display = 'none', 300);
+            dom.quizSettingsOverlay.classList.remove('visible');
+            setTimeout(() => dom.quizSettingsOverlay.style.display = 'none', 300);
         } else {
-            dom.settingsOverlay.style.display = 'flex';
-            setTimeout(() => dom.settingsOverlay.classList.add('visible'), 10);
+            dom.quizSettingsOverlay.style.display = 'flex';
+            setTimeout(() => dom.quizSettingsOverlay.classList.add('visible'), 10);
+        }
+    }
+}
+
+export function toggleProfileSettings(forceClose = false) {
+    if (forceClose) {
+        dom.profileSettingsOverlay.classList.remove('visible');
+        setTimeout(() => dom.profileSettingsOverlay.style.display = 'none', 300);
+    } else {
+        const isVisible = dom.profileSettingsOverlay.classList.contains('visible');
+        if (isVisible) {
+            dom.profileSettingsOverlay.classList.remove('visible');
+            setTimeout(() => dom.profileSettingsOverlay.style.display = 'none', 300);
+        } else {
+            dom.profileSettingsOverlay.style.display = 'flex';
+            setTimeout(() => dom.profileSettingsOverlay.classList.add('visible'), 10);
         }
     }
 }

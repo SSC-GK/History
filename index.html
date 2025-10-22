@@ -90,10 +90,10 @@
             </div>
             <nav class="side-menu-nav">
                 <ul>
-                    <li><a href="#" id="side-menu-settings-link"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a href="#" id="side-menu-settings-link"><i class="fas fa-user-cog"></i> Profile Settings</a></li>
                     <li><a href="#" id="side-menu-quizlm-link"><i class="fas fa-list-check"></i> QuizLM</a></li>
                     <li>
-                        <a href="#" id="side-menu-paid-course-link"><i class="fas fa-file-powerpoint"></i> Create: PP, PDF, JSON</a>
+                        <a href="#" id="side-menu-paid-course-link"><i class="fas fa-dollar-sign"></i> Paid Services</a>
                     </li>
                     <li><a href="#" id="side-menu-user-guide-link"><i class="fas fa-book"></i> USER guide</a></li>
                     <li><a href="#" id="side-menu-about-us-link"><i class="fas fa-users"></i> About us</a></li>
@@ -161,6 +161,7 @@
                     <p>Use powerful filters to create targeted quizzes based on subject, topic, difficulty, and more.</p>
                 </div>
                 <div class="feature-card" id="home-content-creation-card">
+                    <div class="paid-tag">Paid Services</div>
                     <div class="card-icon"><i class="fas fa-file-export"></i></div>
                     <h3>Content Creation Tools</h3>
                     <p>Generate downloadable PPT, PDF, or JSON files from your selected questions for offline study.</p>
@@ -408,7 +409,7 @@
                           <button id="zoom-in-btn" title="Zoom In"><i class="fas fa-search-plus"></i></button>
                           <button id="ai-explainer-btn" title="Get AI Explanation (Available after answering)"><i class="fas fa-wand-magic-sparkles"></i></button>
                           <button id="lifeline-btn">50:50</button>
-                          <button id="settings-btn" title="Settings"><i class="fas fa-cog"></i></button>
+                          <button id="quiz-settings-btn" title="Quiz Settings"><i class="fas fa-cog"></i></button>
                      </div>
                 </div>
                 <div id="timer-bar-container"> <div id="timer-bar"></div> </div>
@@ -541,12 +542,12 @@
     <audio id="correct-sound" src="https://www.fesliyanstudios.com/play-mp3/5744" preload="auto"></audio>
     <audio id="wrong-sound" src="https://www.fesliyanstudios.com/play-mp3/7002" preload="auto"></audio>
 
-    <!-- === SETTINGS MODAL === -->
-    <div id="settings-overlay" style="display: none;">
-        <div id="settings-panel">
+    <!-- === QUIZ SETTINGS MODAL (for in-quiz options) === -->
+    <div id="quiz-settings-overlay" style="display: none;">
+        <div id="quiz-settings-panel">
             <div class="settings-header">
-                <h2>Settings</h2>
-                <button id="settings-close-btn" title="Close">×</button>
+                <h2>Quiz Settings</h2>
+                <button id="quiz-settings-close-btn" title="Close">×</button>
             </div>
             <div class="settings-body">
                 <div class="setting-row">
@@ -584,7 +585,19 @@
                         <span class="slider"></span>
                     </label>
                 </div>
-
+            </div>
+        </div>
+    </div>
+    <!-- === END OF QUIZ SETTINGS MODAL === -->
+    
+    <!-- === PROFILE SETTINGS MODAL (for account management) === -->
+    <div id="profile-settings-overlay" style="display: none;">
+        <div id="profile-settings-panel">
+            <div class="settings-header">
+                <h2>Profile Settings</h2>
+                <button id="profile-settings-close-btn" title="Close">×</button>
+            </div>
+            <div class="settings-body">
                 <div class="settings-section-divider">Account Information</div>
                 <div class="setting-row info-row">
                     <label for="user-email-display"><i class="fas fa-envelope"></i> Email</label>
@@ -603,8 +616,8 @@
             </div>
         </div>
     </div>
-    <!-- === END OF SETTINGS MODAL === -->
-    
+    <!-- === END OF PROFILE SETTINGS MODAL === -->
+
     <!-- === PRIVACY POLICY MODAL === -->
     <div id="privacy-policy-overlay" style="display: none;">
         <div id="privacy-policy-panel">

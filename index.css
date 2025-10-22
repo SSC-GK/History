@@ -1,3 +1,4 @@
+
 /* ======================================================= */
 /* === MASTER STYLESHEET FOR ALL SCHOOL QUIZZES (V2.0) === */
 /* ======================================================= */
@@ -239,6 +240,8 @@ body::before {
     transition: all 0.3s ease;
     cursor: pointer;
     box-shadow: 0 4px 10px var(--shadow-color);
+    position: relative;
+    overflow: hidden;
 }
 .feature-card:hover {
     transform: translateY(-5px);
@@ -260,6 +263,24 @@ body::before {
     font-size: 0.95em;
     color: var(--text-color-medium);
     margin: 0;
+}
+
+.paid-tag {
+    position: absolute;
+    top: 12px;
+    right: -45px;
+    background-color: var(--accent-color);
+    color: var(--text-color-dark);
+    padding: 5px 40px;
+    font-size: 0.8em;
+    font-weight: 700;
+    transform: rotate(45deg);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    white-space: nowrap;
+    z-index: 1;
+}
+body[data-theme='dark'] .paid-tag {
+    color: #111827;
 }
 
 .homepage-footer {
@@ -603,7 +624,7 @@ NEW: FILTER SECTION STYLES
     text-align: left;
 }
 
-.home-link-container a {
+#back-to-home-link {
     text-decoration: none;
     color: var(--primary-dark);
     font-weight: 600;
@@ -611,12 +632,12 @@ NEW: FILTER SECTION STYLES
     transition: color 0.3s ease;
 }
 
-.home-link-container a:hover {
+#back-to-home-link:hover {
     color: var(--accent-dark);
     text-decoration: underline;
 }
 
-.home-link-container a i {
+#back-to-home-link i {
     margin-right: 8px;
 }
 
@@ -1905,7 +1926,7 @@ button:disabled {
     opacity: 0.7;
 }
 
-#settings-btn,
+#quiz-settings-btn,
 #mute-btn,
 #mute-btn-review,
 #zoom-in-btn,
@@ -1926,7 +1947,7 @@ button:disabled {
     text-align: center;
 }
 
-#settings-btn:hover,
+#quiz-settings-btn:hover,
 #mute-btn:hover,
 #mute-btn-review:hover,
 #zoom-in-btn:hover,
@@ -1937,7 +1958,7 @@ button:disabled {
     background-color: var(--text-color-medium);
 }
 
-#settings-btn:active,
+#quiz-settings-btn:active,
 #mute-btn:active,
 #mute-btn-review:active,
 #zoom-in-btn:active,
@@ -1948,7 +1969,7 @@ button:disabled {
     transform: translateY(1px);
 }
 
-#settings-btn i,
+#quiz-settings-btn i,
 #mute-btn i,
 #mute-btn-review i,
 #zoom-in-btn i,
@@ -2961,7 +2982,7 @@ body[data-theme='dark'] #review-explanation {
 /* =======================================================
 10. SETTINGS & CONTENT MODAL STYLES
 ======================================================= */
-#settings-overlay, .content-modal-overlay {
+#quiz-settings-overlay, #profile-settings-overlay, #privacy-policy-overlay, .content-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -2975,10 +2996,10 @@ body[data-theme='dark'] #review-explanation {
     opacity: 0;
     transition: opacity 0.3s ease;
 }
-#settings-overlay.visible, .content-modal-overlay.visible {
+#quiz-settings-overlay.visible, #profile-settings-overlay.visible, #privacy-policy-overlay.visible, .content-modal-overlay.visible {
     opacity: 1;
 }
-#settings-panel, .content-modal-panel {
+#quiz-settings-panel, #profile-settings-panel, #privacy-policy-panel, .content-modal-panel {
     background-color: var(--settings-panel-bg);
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
@@ -2990,12 +3011,17 @@ body[data-theme='dark'] #review-explanation {
     display: flex;
     flex-direction: column;
 }
-#settings-overlay.visible #settings-panel,
+#quiz-settings-overlay.visible #quiz-settings-panel,
+#profile-settings-overlay.visible #profile-settings-panel,
+#privacy-policy-overlay.visible #privacy-policy-panel,
 .content-modal-overlay.visible .content-modal-panel {
     transform: scale(1);
 }
+#privacy-policy-panel {
+    max-width: 700px; /* Wider for more text content */
+}
 
-.settings-header, .content-modal-header {
+.settings-header, .privacy-policy-header, .content-modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -3005,7 +3031,7 @@ body[data-theme='dark'] #review-explanation {
     border-radius: 12px 12px 0 0;
     flex-shrink: 0;
 }
-.settings-header h2, .content-modal-header h2 {
+.settings-header h2, .privacy-policy-header h2, .content-modal-header h2 {
     margin: 0;
     font-size: 1.2em;
     color: var(--text-color-dark);
@@ -3016,14 +3042,14 @@ body[data-theme='dark'] #review-explanation {
 .settings-header h2 i, .content-modal-header h2 i {
     color: var(--primary-color);
 }
-#settings-close-btn, .content-modal-close-btn {
+#quiz-settings-close-btn, #profile-settings-close-btn, #privacy-policy-close-btn, .content-modal-close-btn {
     background: none;
     border: none;
     font-size: 1.8em;
     color: var(--text-color-light);
     cursor: pointer;
 }
-.settings-body, .content-modal-body {
+.settings-body, .privacy-policy-body, .content-modal-body {
     padding: 25px;
     overflow-y: auto;
 }
@@ -3163,14 +3189,17 @@ button.button-danger:hover {
     font-size: 1em;
     font-weight: 600;
     cursor: pointer;
+    border: 1px solid transparent;
     border-radius: 8px;
-    border: none;
-    color: white;
+    color: var(--button-text-color);
+    transition: all 0.2s ease;
+    text-align: left;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    gap: 12px;
+}
+.content-creation-actions button i {
+    font-size: 1.2em;
 }
 .content-creation-actions button:hover {
     transform: translateY(-2px);
@@ -3180,193 +3209,150 @@ button.button-danger:hover {
 #modal-create-pdf-btn { background-color: #d32f2f; }
 #modal-download-json-btn { background-color: #1976d2; }
 
-/* =======================================================
-11. RESPONSIVE DESIGN & PDF RENDERER
-======================================================= */
-
-#privacy-policy-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    z-index: 3000;
-    display: none; justify-content: center; align-items: center;
-    padding: 15px;
-}
-#privacy-policy-panel {
-    background-color: var(--settings-panel-bg);
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-    width: 100%;
-    max-width: 600px;
-    max-height: 90vh;
-    display: flex;
-    flex-direction: column;
-}
-.privacy-policy-header {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 15px 20px;
-    border-bottom: 1px solid var(--border-color);
-    background-color: var(--settings-header-bg);
-    border-radius: 12px 12px 0 0;
-    flex-shrink: 0;
-}
-.privacy-policy-header h2 {
-    margin: 0; font-size: 1.2em; color: var(--text-color-dark);
-}
-#privacy-policy-close-btn {
-    background: none; border: none; font-size: 1.8em; color: var(--text-color-light); cursor: pointer;
-}
+/* Privacy Policy Modal */
 .privacy-policy-body {
-    padding: 10px 25px 25px 25px;
-    overflow-y: auto;
+    line-height: 1.7;
+    font-size: 0.95em;
 }
 .privacy-policy-body h3 {
+    font-size: 1.1em;
     color: var(--primary-dark);
     margin-top: 20px;
     margin-bottom: 10px;
 }
+.privacy-policy-body h3:first-child {
+    margin-top: 0;
+}
 .privacy-policy-body ul {
-    padding-left: 20px;
+    list-style: disc;
+    padding-left: 25px;
 }
 .privacy-policy-body li {
     margin-bottom: 8px;
 }
 
+/* Hidden container for rendering PDFs */
 #pdf-render-container {
     position: absolute;
     left: -9999px;
-    top: 0;
-    background: white;
-    padding: 20px;
-    font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
-    color: var(--text-color-dark);
+    top: -9999px;
+    width: 595px; /* A4 width in points */
+    background: #fff;
+    color: #000;
+    font-family: Arial, sans-serif;
 }
 
-@media (max-width: 768px) {
-    body { padding: 0; }
-    body::before { display: none; }
-    
-    .hero-section h1 { font-size: 2.5em; }
-
+/* =======================================================
+11. RESPONSIVE DESIGN
+======================================================= */
+@media (max-width: 900px) {
     .container {
+        width: 100%;
+        border-radius: 0;
+        min-height: 100vh;
+        border: none;
+    }
+    #quiz-main-container {
         padding: 20px;
     }
-    h1 {
-        font-size: 1.3em;
-    }
-    h2 {
-        font-size: 1em;
-        min-height: 50px;
-    }
-    .options button,
-    #review-options button {
-        padding: 12px 15px;
-        font-size: 0.95em;
-    }
-    #timer {
-        font-size: 1em;
-        padding: 6px 14px;
-        min-width: 100px;
-    }
-    #status-tracker,
-    #review-status-tracker {
-        font-size: 0.85em;
-        padding: 4px;
-    }
-    
     #quiz-nav-bar {
         width: calc(100% + 40px);
         margin-left: -20px;
         padding: 10px 20px;
     }
+    #navigation-panel {
+        width: 260px;
+    }
 }
 
-
-@media (max-width: 480px) {
-    .hero-section h1 { font-size: 2.0em; }
-    .hero-section p { font-size: 1em; }
-    .cta-button { font-size: 1em; padding: 12px 25px; }
-
-    h1 {
-        font-size: 1.2em;
+@media (max-width: 768px) {
+    body {
+        padding: 0;
     }
-    h2 {
-        font-size: 0.95em;
+    .container {
+        padding: 20px 15px;
     }
-    .options button,
-    #review-options button {
-        font-size: 0.9em;
+    #homepage-section {
+        padding: 15px;
     }
-    
-    #status-tracker,
-    #review-status-tracker {
-        font-size: 0.85em;
-        padding: 4px;
+    .hero-section h1 {
+        font-size: 2.5em;
     }
-
-    .quiz-nav-btn {
-        padding: 8px 12px;
-        font-size: 0.9em;
+    .page-content {
+        grid-template-columns: 1fr;
     }
-
+    .filter-grid {
+        grid-template-columns: 1fr;
+    }
     .filter-actions {
         flex-direction: column;
         align-items: stretch;
     }
-
-    #reset-filters-btn-quiz,
-    #reset-filters-btn-ppt,
-    #reset-filters-btn-json {
-        width: 100%;
+    #score-visuals-container {
+        flex-direction: column;
+    }
+    .stat-item {
+        grid-template-columns: 100px 1fr 50px;
+    }
+    .stat-label {
+        text-align: left;
     }
 }
 
-/* =======================================================
-12. FULL SCREEN MODE STYLES (ENGINEERED SOLUTION)
-======================================================= */
-
-/* RULE 1: THE FULLSCREEN HOST */
-/* Establishes the fullscreen environment. It acts as a neutral backdrop
-and a positioning context for its children. */
-#quiz-main-container:fullscreen,
-#quiz-main-container:-webkit-full-screen {
-    background-color: var(--background-gradient-end);
-    overflow-y: auto; /* Allow scrolling if a child view is too tall */
-    padding: 20px 15px; /* Provides space around the content card */
-    position: relative; /* Essential for containing absolutely positioned children */
-}
-
-/* RULE 2: FIX FOR "CLEAN SLATE" VIEWS (THE REVIEW PAGE) */
-/* This rule targets the direct content holder of the review page and
-re-applies the necessary "card" styling ONLY when in fullscreen. */
-#quiz-main-container:fullscreen #review-container {
-    max-width: 850px;
-    margin: 0 auto; /* Center the card horizontally */
-    background: var(--container-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 25px 30px;
-    box-shadow: 0 8px 25px var(--shadow-color);
-}
-
-/* RULE 3: FIX FOR "OVERLAY" VIEWS (THE AI EXPLAINER) */
-/* This forces the AI panel into a true modal overlay, on top of all other content
-(including the still-visible quiz section). */
-#quiz-main-container:fullscreen #ai-explanation-overlay {
-    position: absolute; /* Anchors to the fullscreen container */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* Use the maximum possible 32-bit signed integer value for z-index
-    to guarantee it wins any stacking context conflict. */
-    z-index: 2147483647;
-}
-
-#quiz-main-container:fullscreen {
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    border-radius: 0;
-    overflow-y: auto;
-    background: var(--background-gradient-end);
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.2em;
+    }
+    h2 {
+        font-size: 1.0em;
+    }
+    .options button {
+        padding: 10px 12px;
+        font-size: 0.9em;
+    }
+    #quiz-nav-bar {
+        gap: 5px;
+    }
+    .quiz-nav-btn {
+        padding: 8px 10px;
+        font-size: 0.9em;
+    }
+    .timer-lifeline-area {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+    .controls-right {
+        margin-left: 0;
+        justify-content: space-around;
+    }
+    #fullscreen-btn {
+        right: 70px;
+        width: 44px;
+        height: 44px;
+    }
+    #nav-menu-icon {
+        width: 44px;
+        height: 44px;
+    }
+    .hero-section h1 {
+        font-size: 2em;
+    }
+    .cta-button {
+        padding: 12px 24px;
+        font-size: 1em;
+    }
+    .filter-btn-group {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .filter-btn {
+        flex-basis: 45%;
+    }
+    .nav-question-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .side-menu-panel {
+        width: 280px;
+    }
 }

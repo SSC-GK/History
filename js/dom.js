@@ -160,10 +160,14 @@ export function cacheDomElements() {
     dom.collapsibleHeaderContent = document.getElementById('collapsible-header-content');
     
     // Settings & Bookmarks
-    dom.settingsBtn = document.getElementById('settings-btn');
-    dom.settingsOverlay = document.getElementById('settings-overlay');
-    dom.settingsPanel = document.getElementById('settings-panel');
-    dom.settingsCloseBtn = document.getElementById('settings-close-btn');
+    dom.quizSettingsBtn = document.getElementById('quiz-settings-btn');
+    dom.quizSettingsOverlay = document.getElementById('quiz-settings-overlay');
+    dom.quizSettingsPanel = document.getElementById('quiz-settings-panel');
+    dom.quizSettingsCloseBtn = document.getElementById('quiz-settings-close-btn');
+    dom.profileSettingsOverlay = document.getElementById('profile-settings-overlay');
+    dom.profileSettingsPanel = document.getElementById('profile-settings-panel');
+    dom.profileSettingsCloseBtn = document.getElementById('profile-settings-close-btn');
+
     dom.darkModeToggle = document.getElementById('dark-mode-toggle');
     dom.soundToggle = document.getElementById('sound-toggle');
     dom.shuffleToggle = document.getElementById('shuffle-toggle');

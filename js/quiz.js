@@ -52,11 +52,12 @@ function reorderQuizQuestions() {
 
 export function initQuizModule(callbacks) {
     appCallbacks = callbacks;
-    state.callbacks.nextQuestionHandler = nextQuestionHandler;
-    state.callbacks.previousQuestionHandler = previousQuestionHandler;
-    state.callbacks.quizKeyPressHandler = handleKeyPress;
-    state.callbacks.toggleQuizInternalNavigation = toggleQuizInternalNavigation;
-    state.callbacks.reorderQuizQuestions = reorderQuizQuestions;
+    // Register this module's functions as callbacks for the main controller
+    callbacks.nextQuestionHandler = nextQuestionHandler;
+    callbacks.previousQuestionHandler = previousQuestionHandler;
+    callbacks.quizKeyPressHandler = handleKeyPress;
+    callbacks.toggleQuizInternalNavigation = toggleQuizInternalNavigation;
+    callbacks.reorderQuizQuestions = reorderQuizQuestions;
     
     bindQuizEventListeners();
     initializeGemini();
@@ -96,7 +97,6 @@ export function resumeLoadedQuiz() {
 }
 
 function bindQuizEventListeners() {
-    dom.navMenuIcon.addEventListener('click', () => toggleQuizInternalNavigation());
     dom.navOverlay.addEventListener('click', () => toggleQuizInternalNavigation());
     dom.prevQuestionBtn.onclick = () => previousQuestionHandler();
     dom.nextQuestionBtn.onclick = () => nextQuestionHandler();
