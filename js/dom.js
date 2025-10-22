@@ -4,6 +4,30 @@ export let dom = {
 };
 
 export function cacheDomElements() {
+    // App Structure
+    dom.appHeader = document.getElementById('app-header');
+    dom.appContent = document.getElementById('app-content');
+    dom.appFooter = document.getElementById('app-footer');
+    
+    // Homepage
+    dom.homepage = document.getElementById('homepage');
+    dom.homeCardQuizLM = document.getElementById('home-card-quizlm');
+    dom.homeCardPaidCourse = document.getElementById('home-card-paid-course');
+
+    // Side Navigation
+    dom.hamburgerMenuBtn = document.getElementById('hamburger-menu-btn');
+    dom.sideNavPanel = document.getElementById('side-nav-panel');
+    dom.sideNavOverlay = document.getElementById('side-nav-overlay');
+    dom.sideNavProfileImg = document.getElementById('side-nav-profile-img');
+    dom.sideNavProfileName = document.getElementById('side-nav-profile-name');
+    dom.navLinkHome = document.getElementById('nav-link-home');
+    dom.navLinkQuizLM = document.getElementById('nav-link-quizlm');
+    dom.navLinkPaidCourse = document.getElementById('nav-link-paid-course');
+    dom.navLinkSettings = document.getElementById('nav-link-settings');
+    dom.navLinkUserGuide = document.getElementById('nav-link-user-guide');
+    dom.navLinkAboutUs = document.getElementById('nav-link-about-us');
+    dom.navLinkPrivacyPolicy = document.getElementById('nav-link-privacy-policy');
+    
     // Auth & Consent
     dom.loginGate = document.getElementById('login-gate');
     dom.signInBtn = document.getElementById('sign-in-btn');
@@ -12,9 +36,13 @@ export function cacheDomElements() {
     dom.privacyConsentCheckbox = document.getElementById('privacy-consent-checkbox');
     dom.privacyPolicyLink = document.getElementById('privacy-policy-link');
 
-    // Privacy Policy Modal
+    // Modals
     dom.privacyPolicyOverlay = document.getElementById('privacy-policy-overlay');
     dom.privacyPolicyCloseBtn = document.getElementById('privacy-policy-close-btn');
+    dom.aboutUsOverlay = document.getElementById('about-us-overlay');
+    dom.aboutUsCloseBtn = document.getElementById('about-us-close-btn');
+    dom.userGuideOverlay = document.getElementById('user-guide-overlay');
+    dom.userGuideCloseBtn = document.getElementById('user-guide-close-btn');
 
     // Loading Overlay
     dom.loadingOverlay = document.getElementById('loading-overlay');

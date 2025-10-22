@@ -104,364 +104,427 @@
     </section>
 
     <!-- ==================================================================== -->
-    <!-- ==== FILTER SECTION - HIDDEN BY DEFAULT ==== -->
+    <!-- ==== NEW APP STRUCTURE (HEADER, NAV, MAIN CONTENT) ==== -->
     <!-- ==================================================================== -->
-    <section id="filter-section" class="container" style="display: none;">
-        <div class="app-version">v11.3</div>
-        <div class="home-link-container">
-            <a href="https://cglhustle.free.nf/side_menu/quiz_lm/"><i class="fas fa-home"></i> HOME</a>
+    <header id="app-header" style="display: none;">
+        <div class="logo">
+            <i class="fas fa-brain"></i> QuizLM
         </div>
-        <h1>Customize Your Session</h1>
-        <p class="filter-subtitle">Select your criteria to build a targeted practice quiz or generate a custom PPT or PDF.</p>
-        
-        <div class="tab-nav">
-            <button class="tab-btn active" data-tab="quiz-panel"><i class="fas fa-list-check"></i> Build a Quiz</button>
-            <button class="tab-btn" data-tab="ppt-panel"><i class="fas fa-file-powerpoint"></i> Create PPT or PDF</button>
-            <button class="tab-btn" data-tab="json-panel"><i class="fas fa-file-code"></i> Download JSON</button>
-        </div>
-
-        <div id="tab-taglines">
-            <p class="tagline active" data-tab="quiz-panel">Select Filters Prepare desired QUIZ SET. Answer questions and master your subjects.</p>
-            <p class="tagline" data-tab="ppt-panel">Generate bilingual (EN+HI) PPT or English-only PDFs from your selected questions.</p>
-            <div class="tagline" data-tab="json-panel">
-  <p>Create Bilingual PDF by Downloading JSON file.</p>
-  <p>Step1. set filter and Download Json</p>
-  <p>Step2. Click button "Create Bilingual PDF" at bottom</p>
- </div>
- </div>
-        <div class="quick-start-section">
-            <h3>🚀 Quick Start</h3>
-            <div class="quick-start-buttons">
-                <button class="quick-start-btn" data-preset="quick_25_easy">Quick 25 Easy</button>
-                <button class="quick-start-btn" data-preset="quick_25_moderate">Quick 25 Moderate</button>
-                <button class="quick-start-btn" data-preset="quick_25_hard">Quick 25 Hard</button>
-                <button class="quick-start-btn" data-preset="quick_25_mix">Quick 25 Mix Level</button>
-            </div>
-        </div>
-        
-        <div class="filter-grid">
-            <!-- Classification Filters -->
-            <div class="filter-group">
-                <h3><i class="fas fa-sitemap"></i> By Classification</h3>
-                <div class="filter-control">
-                    <label for="subject-toggle-btn">Subject</label>
-                    <div class="custom-multiselect" id="subject-multiselect-container">
-                        <button id="subject-toggle-btn" class="multiselect-toggle-btn">Select Subjects</button>
-                        <div id="subject-dropdown" class="multiselect-dropdown-panel" style="display: none;">
-                            <input type="text" id="subject-search-input" class="multiselect-search-input" placeholder="Search subjects...">
-                            <div id="subject-list" class="multiselect-list-container"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="filter-control">
-                    <label for="topic-toggle-btn">Topic</label>
-                     <div class="custom-multiselect" id="topic-multiselect-container">
-                        <button id="topic-toggle-btn" class="multiselect-toggle-btn">Select Topics</button>
-                        <div id="topic-dropdown" class="multiselect-dropdown-panel" style="display: none;">
-                            <input type="text" id="topic-search-input" class="multiselect-search-input" placeholder="Search topics...">
-                            <div id="topic-list" class="multiselect-list-container"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="filter-control">
-                    <label for="subTopic-toggle-btn">Sub-Topic</label>
-                     <div class="custom-multiselect" id="subTopic-multiselect-container">
-                        <button id="subTopic-toggle-btn" class="multiselect-toggle-btn">Select Sub-Topics</button>
-                        <div id="subTopic-dropdown" class="multiselect-dropdown-panel" style="display: none;">
-                            <input type="text" id="subTopic-search-input" class="multiselect-search-input" placeholder="Search sub-topics...">
-                            <div id="subTopic-list" class="multiselect-list-container"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Difficulty & Type Filters -->
-            <div class="filter-group">
-                <h3><i class="fas fa-layer-group"></i> By Properties</h3>
-                <div class="filter-control">
-                    <label>Difficulty</label>
-                    <div id="difficulty-segmented-control" class="segmented-control">
-                        <!-- JS will populate -->
-                    </div>
-                </div>
-                <div class="filter-control">
-                    <label>Question Type</label>
-                     <div id="questionType-segmented-control" class="segmented-control">
-                        <!-- JS will populate -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Source Filters -->
-            <div class="filter-group">
-                <h3><i class="fas fa-file-alt"></i> By Source</h3>
-                <div class="filter-control">
-                    <label for="examName-toggle-btn">Exam Name</label>
-                    <div class="custom-multiselect" id="examName-multiselect-container">
-                        <button id="examName-toggle-btn" class="multiselect-toggle-btn">Select Exam Names</button>
-                        <div id="examName-dropdown" class="multiselect-dropdown-panel" style="display: none;">
-                             <input type="text" id="examName-search-input" class="multiselect-search-input" placeholder="Search exam names...">
-                            <div id="examName-list" class="multiselect-list-container"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="filter-control">
-                    <label for="examYear-toggle-btn">Exam Year</label>
-                    <div class="custom-multiselect" id="examYear-multiselect-container">
-                        <button id="examYear-toggle-btn" class="multiselect-toggle-btn">Select Exam Years</button>
-                        <div id="examYear-dropdown" class="multiselect-dropdown-panel" style="display: none;">
-                            <input type="text" id="examYear-search-input" class="multiselect-search-input" placeholder="Search years...">
-                            <div id="examYear-list" class="multiselect-list-container"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-             <!-- Tags Filter -->
-            <div class="filter-group">
-                <h3><i class="fas fa-tags"></i> By Tags</h3>
-                <div class="filter-control">
-                    <label for="tags-toggle-btn">Tag</label>
-                    <div class="custom-multiselect" id="tags-multiselect-container">
-                        <button id="tags-toggle-btn" class="multiselect-toggle-btn">Select Tags</button>
-                        <div id="tags-dropdown" class="multiselect-dropdown-panel" style="display: none;">
-                            <input type="text" id="tags-search-input" class="multiselect-search-input" placeholder="Search tags...">
-                            <div id="tags-list" class="multiselect-list-container">
-                                <!-- JS will populate this -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="active-filters-summary-bar-container" style="display: none;">
-            <h3>Active Filters</h3>
-            <div id="active-filters-summary-bar"></div>
-        </div>
-        
-        <div class="tab-panels-container">
-            <!-- Quiz Tab Panel -->
-            <div id="quiz-panel" class="tab-panel active">
-                <div class="filter-actions">
-                    <button id="reset-filters-btn-quiz"><i class="fas fa-undo"></i> Reset Filters</button>
-                    <button id="start-quiz-btn" disabled>
-                        <span id="start-quiz-text">Start Quiz</span> 
-                        (<span id="question-count">0</span> Questions)
-                    </button>
-                </div>
-            </div>
-            <!-- PPT Tab Panel -->
-            <div id="ppt-panel" class="tab-panel">
-                 <div class="filter-actions">
-                    <button id="reset-filters-btn-ppt"><i class="fas fa-undo"></i> Reset Filters</button>
-                    <button id="create-pdf-btn" disabled>
-                        <i class="fas fa-file-pdf"></i> Create PDF 
-                        (<span id="pdf-question-count">0</span> Questions)
-                    </button>
-                    <button id="create-ppt-btn" disabled>
-                        <i class="fas fa-file-powerpoint"></i> Create PPT 
-                        (<span id="ppt-question-count">0</span> Questions)
-                    </button>
-                </div>
-            </div>
-            <!-- JSON Tab Panel -->
-            <div id="json-panel" class="tab-panel">
-                 <div class="filter-actions">
-                    <button id="reset-filters-btn-json"><i class="fas fa-undo"></i> Reset Filters</button>
-                    <button id="download-json-btn" disabled>
-                        <i class="fas fa-download"></i> Download JSON 
-                        (<span id="json-question-count">0</span> Questions)
-                    </button>
-                </div>
-                <div class="extra-actions">
-                    <a href="https://cglhustle.free.nf/side_menu/useful_tools/pdf-tools/index.html" class="hyperlink-btn" target="_blank">Create Bilingual PDF</a>
-                </div>
-            </div>
-        </div>
-
-    </section>
-
-   <!-- ==================================================================== -->
-    <!-- ==== THIS IS YOUR MAIN QUIZ CONTAINER - HIDDEN BY DEFAULT ==== -->
-    <!-- ==================================================================== -->
-    <div class="quiz-breadcrumb-container" style="display: none;">
-        <div class="container" style="max-width: 850px; padding: 0 10px; margin: 0 auto;"> 
-            <div id="dynamic-breadcrumb" class="quiz-breadcrumb">
-                <!-- DYNAMICALLY POPULATED BREADCRUMB -->
-            </div>
-        </div>
-    </div>
-    <div id="quiz-main-container" class="container" style="display: none;"> 
-        <button id="nav-menu-icon" aria-label="Open Navigation Menu" aria-controls="navigation-panel" aria-expanded="false">
+        <button id="hamburger-menu-btn" aria-label="Open Navigation Menu">
             <div class="hamburger-icon">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
         </button>
-    
-        <button id="fullscreen-btn" aria-label="Toggle Full Screen Mode">
-            <i class="fas fa-expand"></i>
-        </button>
-        <div id="navigation-panel">
-            <div class="nav-panel-content"><!-- Populated by JS --></div>
-            <div class="nav-panel-actions">
-            </div>
-            <div class="nav-panel-footer">
-                <button id="submit-quiz-btn" class="button-primary">
-                    <i class="fas fa-check-double"></i>Submit this group
-                </button>
-            </div>
+    </header>
+
+    <div id="side-nav-overlay"></div>
+    <div id="side-nav-panel">
+        <div id="side-nav-profile">
+            <img id="side-nav-profile-img" src="https://sb.kaleidousercontent.com/67418/1672x1018/6463a5af0d/individuals-orgs-placeholder-avatar.png" alt="User profile picture">
+            <span id="side-nav-profile-name">Loading User...</span>
         </div>
-        <div id="nav-overlay"></div>
+        <nav id="side-nav-links">
+            <ul>
+                <li><a href="#" id="nav-link-home"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#" id="nav-link-quizlm"><i class="fas fa-list-check"></i> QuizLM</a></li>
+                <li><a href="#" id="nav-link-paid-course"><i class="fas fa-file-powerpoint"></i> Paid Course: Create PPT, PDF</a></li>
+                <li><a href="#" id="nav-link-settings"><i class="fas fa-cog"></i> Settings</a></li>
+                <li class="nav-divider"></li>
+                <li><a href="#" id="nav-link-user-guide"><i class="fas fa-book-open"></i> User Guide</a></li>
+                <li><a href="#" id="nav-link-about-us"><i class="fas fa-info-circle"></i> About Us</a></li>
+                <li><a href="#" id="nav-link-privacy-policy"><i class="fas fa-shield-halved"></i> Privacy Policy</a></li>
+            </ul>
+        </nav>
+    </div>
 
-        <div id="quiz-section">
-            <div class="quiz-header-bar">
-                <h1 id="quiz-title">ANCIENT HISTORY NTPC UG 2025 57 SHIFTS <span class="icon"><i class="fas fa-question-circle"></i></span></h1>
-                <button id="toggle-header-btn" title="Toggle Details Panel" aria-expanded="true" aria-controls="collapsible-header-content"><i class="fas fa-chevron-up"></i></button>
+    <main id="app-content" style="display: none;">
+        <!-- ==================================================================== -->
+        <!-- ==== NEW HOMEPAGE SECTION - SHOWN BY DEFAULT TO LOGGED IN USERS ==== -->
+        <!-- ==================================================================== -->
+        <section id="homepage">
+            <div class="hero-section">
+                <h1>Welcome to QuizLM</h1>
+                <p>Your ultimate tool for creating customized quizzes, presentations, and study materials from a vast question bank.</p>
+            </div>
+            <div class="home-content">
+                <div class="feature-card" id="home-card-quizlm">
+                    <i class="fas fa-list-check"></i>
+                    <h2>QuizLM</h2>
+                    <p>Dive into a custom quiz session. Use powerful filters to target specific subjects, topics, and difficulty levels.</p>
+                    <button class="card-button">Start a Custom Quiz</button>
+                </div>
+                 <div class="feature-card" id="home-card-paid-course">
+                    <i class="fas fa-file-powerpoint"></i>
+                    <h2>Paid Course Content</h2>
+                    <p>Generate professional PPT, PDF, or JSON files from your selected questions for offline study or presentations.</p>
+                    <button class="card-button">Create Materials</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================================================================== -->
+        <!-- ==== FILTER SECTION - NOW HIDDEN BY DEFAULT ==== -->
+        <!-- ==================================================================== -->
+        <section id="filter-section" class="container" style="display: none;">
+            <div class="app-version">v12.0</div>
+            <h1>Customize Your Session</h1>
+            <p class="filter-subtitle">Select your criteria to build a targeted practice quiz or generate a custom PPT or PDF.</p>
+            
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab="quiz-panel"><i class="fas fa-list-check"></i> Build a Quiz</button>
+                <button class="tab-btn" data-tab="ppt-panel"><i class="fas fa-file-powerpoint"></i> Create PPT or PDF</button>
+                <button class="tab-btn" data-tab="json-panel"><i class="fas fa-file-code"></i> Download JSON</button>
             </div>
 
-            <div id="collapsible-header-content">
-                <div id="quiz-progress-bar-container"><div id="quiz-progress-bar"></div></div>
-                <div id="status-tracker"></div>
-                <div class="timer-lifeline-area">
-                     <div class="controls-left">
-                         <div id="timer">Time Left: <span id="time-left">60</span>s</div>
-                     </div>
-                     <div class="controls-right">
-                          <button id="zoom-out-btn" title="Zoom Out"><i class="fas fa-search-minus"></i></button>
-                          <button id="zoom-in-btn" title="Zoom In"><i class="fas fa-search-plus"></i></button>
-                          <button id="ai-explainer-btn" title="Get AI Explanation (Available after answering)"><i class="fas fa-wand-magic-sparkles"></i></button>
-                          <button id="lifeline-btn">50:50</button>
-                          <button id="settings-btn" title="Settings"><i class="fas fa-cog"></i></button>
-                     </div>
+            <div id="tab-taglines">
+                <p class="tagline active" data-tab="quiz-panel">Select Filters Prepare desired QUIZ SET. Answer questions and master your subjects.</p>
+                <p class="tagline" data-tab="ppt-panel">Generate bilingual (EN+HI) PPT or English-only PDFs from your selected questions.</p>
+                <div class="tagline" data-tab="json-panel">
+      <p>Create Bilingual PDF by Downloading JSON file.</p>
+      <p>Step1. set filter and Download Json</p>
+      <p>Step2. Click button "Create Bilingual PDF" at bottom</p>
+     </div>
+     </div>
+            <div class="quick-start-section">
+                <h3>🚀 Quick Start</h3>
+                <div class="quick-start-buttons">
+                    <button class="quick-start-btn" data-preset="quick_25_easy">Quick 25 Easy</button>
+                    <button class="quick-start-btn" data-preset="quick_25_moderate">Quick 25 Moderate</button>
+                    <button class="quick-start-btn" data-preset="quick_25_hard">Quick 25 Hard</button>
+                    <button class="quick-start-btn" data-preset="quick_25_mix">Quick 25 Mix Level</button>
                 </div>
-                <div id="timer-bar-container"> <div id="timer-bar"></div> </div>
             </div>
             
-             <div id="quiz-container" class="quiz-container">
-                 <div class="question-numbering-area">
-                    <div class="q-area-left-group">
-                        <span id="sequential-question-number"></span>
-                        <button id="bookmark-btn" title="Bookmark Question"><i class="far fa-star"></i></button>
-                    </div>
-                    <div class="q-area-center-group">
-                        <span id="exam-name-tag" class="context-tag"></span>
-                        <span id="exam-date-shift-tag" class="context-tag"></span>
-                    </div>
-                    <span id="actual-question-number"></span>
-                 </div>
-                 <h2 id="question-text"></h2> 
-                 <div id="options" class="options"></div> 
-                 <div id="explanation"></div>
-             </div>
-             <div class="button-group">
-                <button id="next-btn" style="display: none;">Next Question</button>
-            </div>
-            <div id="quiz-nav-bar">
-                <button id="prev-question-btn" class="quiz-nav-btn">
-                    <i class="fas fa-arrow-left"></i> Previous
-                </button>
-                <button id="mark-review-btn" class="quiz-nav-btn">
-                        <i class="far fa-flag"></i> Mark for Review
-                </button>
-                <button id="next-question-btn" class="quiz-nav-btn">
-                    Next <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-        </div>
-
-        <div id="final-score-section" style="display: none;">
-             <div class="final-score-container">
-                 <!-- DYNAMICALLY UPDATED TITLE -->
-                 <h1 id="score-title">Quiz Result - ANCIENT HISTORY NTPC UG 2025 57 SHIFTS</h1>
-                 <div id="score-remark"></div>
-                 <div id="score-visuals-container">
-                    <div id="score-donut-chart-container">
-                        <!-- SVG donut chart will be injected here by JS -->
-                    </div>
-                    <div id="score-stats-container">
-                        <div class="stat-item">
-                            <span class="stat-label">Accuracy Rate</span>
-                            <div class="progress-bar-container">
-                                <div id="accuracy-progress-bar" class="progress-bar-fill"></div>
+            <div class="filter-grid">
+                <!-- Classification Filters -->
+                <div class="filter-group">
+                    <h3><i class="fas fa-sitemap"></i> By Classification</h3>
+                    <div class="filter-control">
+                        <label for="subject-toggle-btn">Subject</label>
+                        <div class="custom-multiselect" id="subject-multiselect-container">
+                            <button id="subject-toggle-btn" class="multiselect-toggle-btn">Select Subjects</button>
+                            <div id="subject-dropdown" class="multiselect-dropdown-panel" style="display: none;">
+                                <input type="text" id="subject-search-input" class="multiselect-search-input" placeholder="Search subjects...">
+                                <div id="subject-list" class="multiselect-list-container"></div>
                             </div>
-                            <span id="accuracy-percentage" class="stat-value">0%</span>
                         </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Completion Rate</span>
-                            <div class="progress-bar-container">
-                                <div id="completion-progress-bar" class="progress-bar-fill"></div>
+                    </div>
+                    <div class="filter-control">
+                        <label for="topic-toggle-btn">Topic</label>
+                         <div class="custom-multiselect" id="topic-multiselect-container">
+                            <button id="topic-toggle-btn" class="multiselect-toggle-btn">Select Topics</button>
+                            <div id="topic-dropdown" class="multiselect-dropdown-panel" style="display: none;">
+                                <input type="text" id="topic-search-input" class="multiselect-search-input" placeholder="Search topics...">
+                                <div id="topic-list" class="multiselect-list-container"></div>
                             </div>
-                            <span id="completion-percentage" class="stat-value">0%</span>
+                        </div>
+                    </div>
+                    <div class="filter-control">
+                        <label for="subTopic-toggle-btn">Sub-Topic</label>
+                         <div class="custom-multiselect" id="subTopic-multiselect-container">
+                            <button id="subTopic-toggle-btn" class="multiselect-toggle-btn">Select Sub-Topics</button>
+                            <div id="subTopic-dropdown" class="multiselect-dropdown-panel" style="display: none;">
+                                <input type="text" id="subTopic-search-input" class="multiselect-search-input" placeholder="Search sub-topics...">
+                                <div id="subTopic-list" class="multiselect-list-container"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                 <div id="score-summary-list"></div>
+
+                <!-- Difficulty & Type Filters -->
+                <div class="filter-group">
+                    <h3><i class="fas fa-layer-group"></i> By Properties</h3>
+                    <div class="filter-control">
+                        <label>Difficulty</label>
+                        <div id="difficulty-segmented-control" class="segmented-control">
+                            <!-- JS will populate -->
+                        </div>
+                    </div>
+                    <div class="filter-control">
+                        <label>Question Type</label>
+                         <div id="questionType-segmented-control" class="segmented-control">
+                            <!-- JS will populate -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Source Filters -->
+                <div class="filter-group">
+                    <h3><i class="fas fa-file-alt"></i> By Source</h3>
+                    <div class="filter-control">
+                        <label for="examName-toggle-btn">Exam Name</label>
+                        <div class="custom-multiselect" id="examName-multiselect-container">
+                            <button id="examName-toggle-btn" class="multiselect-toggle-btn">Select Exam Names</button>
+                            <div id="examName-dropdown" class="multiselect-dropdown-panel" style="display: none;">
+                                 <input type="text" id="examName-search-input" class="multiselect-search-input" placeholder="Search exam names...">
+                                <div id="examName-list" class="multiselect-list-container"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-control">
+                        <label for="examYear-toggle-btn">Exam Year</label>
+                        <div class="custom-multiselect" id="examYear-multiselect-container">
+                            <button id="examYear-toggle-btn" class="multiselect-toggle-btn">Select Exam Years</button>
+                            <div id="examYear-dropdown" class="multiselect-dropdown-panel" style="display: none;">
+                                <input type="text" id="examYear-search-input" class="multiselect-search-input" placeholder="Search years...">
+                                <div id="examYear-list" class="multiselect-list-container"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Tags Filter -->
+                <div class="filter-group">
+                    <h3><i class="fas fa-tags"></i> By Tags</h3>
+                    <div class="filter-control">
+                        <label for="tags-toggle-btn">Tag</label>
+                        <div class="custom-multiselect" id="tags-multiselect-container">
+                            <button id="tags-toggle-btn" class="multiselect-toggle-btn">Select Tags</button>
+                            <div id="tags-dropdown" class="multiselect-dropdown-panel" style="display: none;">
+                                <input type="text" id="tags-search-input" class="multiselect-search-input" placeholder="Search tags...">
+                                <div id="tags-list" class="multiselect-list-container">
+                                    <!-- JS will populate this -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="active-filters-summary-bar-container" style="display: none;">
+                <h3>Active Filters</h3>
+                <div id="active-filters-summary-bar"></div>
+            </div>
+            
+            <div class="tab-panels-container">
+                <!-- Quiz Tab Panel -->
+                <div id="quiz-panel" class="tab-panel active">
+                    <div class="filter-actions">
+                        <button id="reset-filters-btn-quiz"><i class="fas fa-undo"></i> Reset Filters</button>
+                        <button id="start-quiz-btn" disabled>
+                            <span id="start-quiz-text">Start Quiz</span> 
+                            (<span id="question-count">0</span> Questions)
+                        </button>
+                    </div>
+                </div>
+                <!-- PPT Tab Panel -->
+                <div id="ppt-panel" class="tab-panel">
+                     <div class="filter-actions">
+                        <button id="reset-filters-btn-ppt"><i class="fas fa-undo"></i> Reset Filters</button>
+                        <button id="create-pdf-btn" disabled>
+                            <i class="fas fa-file-pdf"></i> Create PDF 
+                            (<span id="pdf-question-count">0</span> Questions)
+                        </button>
+                        <button id="create-ppt-btn" disabled>
+                            <i class="fas fa-file-powerpoint"></i> Create PPT 
+                            (<span id="ppt-question-count">0</span> Questions)
+                        </button>
+                    </div>
+                </div>
+                <!-- JSON Tab Panel -->
+                <div id="json-panel" class="tab-panel">
+                     <div class="filter-actions">
+                        <button id="reset-filters-btn-json"><i class="fas fa-undo"></i> Reset Filters</button>
+                        <button id="download-json-btn" disabled>
+                            <i class="fas fa-download"></i> Download JSON 
+                            (<span id="json-question-count">0</span> Questions)
+                        </button>
+                    </div>
+                    <div class="extra-actions">
+                        <a href="https://cglhustle.free.nf/side_menu/useful_tools/pdf-tools/index.html" class="hyperlink-btn" target="_blank">Create Bilingual PDF</a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+       <!-- ==================================================================== -->
+        <!-- ==== THIS IS YOUR MAIN QUIZ CONTAINER - HIDDEN BY DEFAULT ==== -->
+        <!-- ==================================================================== -->
+        <div class="quiz-breadcrumb-container" style="display: none;">
+            <div class="container" style="max-width: 850px; padding: 0 10px; margin: 0 auto;"> 
+                <div id="dynamic-breadcrumb" class="quiz-breadcrumb">
+                    <!-- DYNAMICALLY POPULATED BREADCRUMB -->
+                </div>
+            </div>
+        </div>
+        <div id="quiz-main-container" class="container" style="display: none;"> 
+            <button id="nav-menu-icon" aria-label="Open Navigation Menu" aria-controls="navigation-panel" aria-expanded="false">
+                <div class="hamburger-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+        
+            <button id="fullscreen-btn" aria-label="Toggle Full Screen Mode">
+                <i class="fas fa-expand"></i>
+            </button>
+            <div id="navigation-panel">
+                <div class="nav-panel-content"><!-- Populated by JS --></div>
+                <div class="nav-panel-actions">
+                </div>
+                <div class="nav-panel-footer">
+                    <button id="submit-quiz-btn" class="button-primary">
+                        <i class="fas fa-check-double"></i>Submit this group
+                    </button>
+                </div>
+            </div>
+            <div id="nav-overlay"></div>
+
+            <div id="quiz-section">
+                <div class="quiz-header-bar">
+                    <h1 id="quiz-title">ANCIENT HISTORY NTPC UG 2025 57 SHIFTS <span class="icon"><i class="fas fa-question-circle"></i></span></h1>
+                    <button id="toggle-header-btn" title="Toggle Details Panel" aria-expanded="true" aria-controls="collapsible-header-content"><i class="fas fa-chevron-up"></i></button>
+                </div>
+
+                <div id="collapsible-header-content">
+                    <div id="quiz-progress-bar-container"><div id="quiz-progress-bar"></div></div>
+                    <div id="status-tracker"></div>
+                    <div class="timer-lifeline-area">
+                         <div class="controls-left">
+                             <div id="timer">Time Left: <span id="time-left">60</span>s</div>
+                         </div>
+                         <div class="controls-right">
+                              <button id="zoom-out-btn" title="Zoom Out"><i class="fas fa-search-minus"></i></button>
+                              <button id="zoom-in-btn" title="Zoom In"><i class="fas fa-search-plus"></i></button>
+                              <button id="ai-explainer-btn" title="Get AI Explanation (Available after answering)"><i class="fas fa-wand-magic-sparkles"></i></button>
+                              <button id="lifeline-btn">50:50</button>
+                              <button id="settings-btn" title="Settings"><i class="fas fa-cog"></i></button>
+                         </div>
+                    </div>
+                    <div id="timer-bar-container"> <div id="timer-bar"></div> </div>
+                </div>
+                
+                 <div id="quiz-container" class="quiz-container">
+                     <div class="question-numbering-area">
+                        <div class="q-area-left-group">
+                            <span id="sequential-question-number"></span>
+                            <button id="bookmark-btn" title="Bookmark Question"><i class="far fa-star"></i></button>
+                        </div>
+                        <div class="q-area-center-group">
+                            <span id="exam-name-tag" class="context-tag"></span>
+                            <span id="exam-date-shift-tag" class="context-tag"></span>
+                        </div>
+                        <span id="actual-question-number"></span>
+                     </div>
+                     <h2 id="question-text"></h2> 
+                     <div id="options" class="options"></div> 
+                     <div id="explanation"></div>
+                 </div>
                  <div class="button-group">
-                     <button id="review-btn">Review Answers</button>
-                     <button id="restart-btn">Restart Current Group</button>
-                     <button id="share-results-btn">Share Results <i class="fas fa-share-alt"></i></button>
-                     <button id="restart-full-quiz-btn">Restart Full Quiz</button>
+                    <button id="next-btn" style="display: none;">Next Question</button>
+                </div>
+                <div id="quiz-nav-bar">
+                    <button id="prev-question-btn" class="quiz-nav-btn">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <button id="mark-review-btn" class="quiz-nav-btn">
+                            <i class="far fa-flag"></i> Mark for Review
+                    </button>
+                    <button id="next-question-btn" class="quiz-nav-btn">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="final-score-section" style="display: none;">
+                 <div class="final-score-container">
+                     <!-- DYNAMICALLY UPDATED TITLE -->
+                     <h1 id="score-title">Quiz Result - ANCIENT HISTORY NTPC UG 2025 57 SHIFTS</h1>
+                     <div id="score-remark"></div>
+                     <div id="score-visuals-container">
+                        <div id="score-donut-chart-container">
+                            <!-- SVG donut chart will be injected here by JS -->
+                        </div>
+                        <div id="score-stats-container">
+                            <div class="stat-item">
+                                <span class="stat-label">Accuracy Rate</span>
+                                <div class="progress-bar-container">
+                                    <div id="accuracy-progress-bar" class="progress-bar-fill"></div>
+                                </div>
+                                <span id="accuracy-percentage" class="stat-value">0%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Completion Rate</span>
+                                <div class="progress-bar-container">
+                                    <div id="completion-progress-bar" class="progress-bar-fill"></div>
+                                </div>
+                                <span id="completion-percentage" class="stat-value">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                     <div id="score-summary-list"></div>
+                     <div class="button-group">
+                         <button id="review-btn">Review Answers</button>
+                         <button id="restart-btn">Restart Current Group</button>
+                         <button id="share-results-btn">Share Results <i class="fas fa-share-alt"></i></button>
+                         <button id="restart-full-quiz-btn">Start New Quiz</button>
+                         </div>
                      </div>
                  </div>
+            </div>
+
+             <div id="review-section" style="display: none;">
+
+                  <!-- DYNAMICALLY UPDATED TITLE -->
+                  <h1 id="review-title">Review Answer - ANCIENT HISTORY NTPC UG 2025 57 SHIFTS</h1>
+                <div class="quiz-container">
+                  <div class="controls-area"> 
+
+                    <div class="filter-controls">
+                        <span>Filter by:</span>
+                        <div class="filter-btn-group">
+                            <button id="filter-all" class="filter-btn active" data-filter="all">All</button>
+                            <button id="filter-correct" class="filter-btn" data-filter="correct">Correct</button>
+                            <button id="filter-wrong" class="filter-btn" data-filter="wrong">Incorrect</button>
+                            <button id="filter-skipped" class="filter-btn" data-filter="skipped">Skipped</button>
+                            <button id="filter-bookmarked" class="filter-btn" data-filter="bookmarked">Bookmarked</button>
+                        </div>
+                    </div>
+                       <div class="controls-right">
+                            <button id="zoom-out-btn-review" title="Zoom Out"><i class="fas fa-search-minus"></i></button>
+                            <button id="zoom-in-btn-review" title="Zoom In"><i class="fas fa-search-plus"></i></button>
+                            <button id="mute-btn-review"> <i class="fas fa-volume-up"></i> </button>
+                       </div>
+                  </div>
+                   <div id="review-status-tracker"></div>
+                  <div id="review-container" class="review-container">
+                      <div id="review-question-number"></div>
+                      <div id="review-time-taken"></div>
+                      <h2 id="review-question-text"></h2>
+                      <div id="review-options" class="options"></div>
+                      <div id="review-explanation"></div>
+                  </div>
+                  <div class="button-group">
+                      <button id="prev-review-btn">Previous</button>
+                      <button id="next-review-btn">Next</button>
+                      <button id="back-to-summary-btn">Back to Summary</button>
+                  </div>
              </div>
-        </div>
-
-         <div id="review-section" style="display: none;">
-
-              <!-- DYNAMICALLY UPDATED TITLE -->
-              <h1 id="review-title">Review Answer - ANCIENT HISTORY NTPC UG 2025 57 SHIFTS</h1>
-            <div class="quiz-container">
-              <div class="controls-area"> 
-
-                <div class="filter-controls">
-                    <span>Filter by:</span>
-                    <div class="filter-btn-group">
-                        <button id="filter-all" class="filter-btn active" data-filter="all">All</button>
-                        <button id="filter-correct" class="filter-btn" data-filter="correct">Correct</button>
-                        <button id="filter-wrong" class="filter-btn" data-filter="wrong">Incorrect</button>
-                        <button id="filter-skipped" class="filter-btn" data-filter="skipped">Skipped</button>
-                        <button id="filter-bookmarked" class="filter-btn" data-filter="bookmarked">Bookmarked</button>
+            </div>
+        
+           <!-- === AI EXPLANATION OVERLAY PANEL === -->
+            <div id="ai-explanation-overlay" class="ai-explanation-overlay" style="display: none;">
+                <div class="ai-explanation-modal">
+                    <div class="ai-explanation-header">
+                        <h2>AI Powered Explanation</h2>
+                        <button id="ai-explanation-close-btn" title="Close (Esc)">×</button>
+                    </div>
+                    <div id="ai-explanation-body" class="ai-explanation-body">
+                        <!-- AI Explanation will be loaded here -->
                     </div>
                 </div>
-                   <div class="controls-right">
-                        <button id="zoom-out-btn-review" title="Zoom Out"><i class="fas fa-search-minus"></i></button>
-                        <button id="zoom-in-btn-review" title="Zoom In"><i class="fas fa-search-plus"></i></button>
-                        <button id="mute-btn-review"> <i class="fas fa-volume-up"></i> </button>
-                   </div>
-              </div>
-               <div id="review-status-tracker"></div>
-              <div id="review-container" class="review-container">
-                  <div id="review-question-number"></div>
-                  <div id="review-time-taken"></div>
-                  <h2 id="review-question-text"></h2>
-                  <div id="review-options" class="options"></div>
-                  <div id="review-explanation"></div>
-              </div>
-              <div class="button-group">
-                  <button id="prev-review-btn">Previous</button>
-                  <button id="next-review-btn">Next</button>
-                  <button id="back-to-summary-btn">Back to Summary</button>
-              </div>
-         </div>
-        </div>
-    
-       <!-- === AI EXPLANATION OVERLAY PANEL === -->
-        <div id="ai-explanation-overlay" class="ai-explanation-overlay" style="display: none;">
-            <div class="ai-explanation-modal">
-                <div class="ai-explanation-header">
-                    <h2>AI Powered Explanation</h2>
-                    <button id="ai-explanation-close-btn" title="Close (Esc)">×</button>
-                </div>
-                <div id="ai-explanation-body" class="ai-explanation-body">
-                    <!-- AI Explanation will be loaded here -->
-                </div>
             </div>
-        </div>
-        <!-- === END OF PANEL === -->
-    </div> 
-      
+            <!-- === END OF PANEL === -->
+        </div> 
+    </main>
+
+    <footer id="app-footer" style="display: none;">
+        <p>&copy; 2024 QuizLM by Aalok Kumar Sharma. All Rights Reserved.</p>
+    </footer>
+
     <div id="timeout-overlay">Time's Up!</div>
     <audio id="correct-sound" src="https://www.fesliyanstudios.com/play-mp3/5744" preload="auto"></audio>
     <audio id="wrong-sound" src="https://www.fesliyanstudios.com/play-mp3/7002" preload="auto"></audio>
@@ -576,6 +639,43 @@
         </div>
     </div>
     <!-- === END OF PRIVACY POLICY MODAL === -->
+
+    <!-- === ABOUT US MODAL === -->
+    <div id="about-us-overlay" style="display: none;">
+        <div id="about-us-panel" class="generic-modal-panel">
+            <div class="generic-modal-header">
+                <h2>About Us</h2>
+                <button id="about-us-close-btn" title="Close">×</button>
+            </div>
+            <div class="generic-modal-body">
+                <h3>Owner and Creator</h3>
+                <p><strong>Aalok Kumar Sharma</strong></p>
+                <p>QuizLM was designed and developed by Aalok Kumar Sharma as a comprehensive tool for competitive exam aspirants. Our mission is to provide high-quality, filterable content to make studying more efficient and effective.</p>
+            </div>
+        </div>
+    </div>
+    <!-- === END OF ABOUT US MODAL === -->
+
+    <!-- === USER GUIDE MODAL === -->
+    <div id="user-guide-overlay" style="display: none;">
+        <div id="user-guide-panel" class="generic-modal-panel">
+            <div class="generic-modal-header">
+                <h2>User Guide</h2>
+                <button id="user-guide-close-btn" title="Close">×</button>
+            </div>
+            <div class="generic-modal-body">
+                <h3>Key Features of QuizLM</h3>
+                <ul>
+                    <li><strong>Homepage:</strong> Your central hub for accessing all major features of the app.</li>
+                    <li><strong>QuizLM:</strong> The core quiz engine where you can use detailed filters (Subject, Topic, Difficulty, etc.) to create a practice session tailored to your needs.</li>
+                    <li><strong>Paid Course Content:</strong> Generate downloadable materials from your filtered questions, including bilingual PowerPoint presentations (PPT), English-only PDFs, and raw JSON data.</li>
+                    <li><strong>Side Navigation:</strong> Access all app sections, your settings, and this guide from the hamburger menu in the top-right corner.</li>
+                    <li><strong>Settings:</strong> Customize your experience with Dark Mode, sound controls, and manage your account.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- === END OF USER GUIDE MODAL === -->
 
     <!-- PDF Render Container -->
     <div id="pdf-render-container"></div>

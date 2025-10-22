@@ -92,9 +92,11 @@ function bindFilterEventListeners() {
 
      if (dom.dynamicBreadcrumb) {
         dom.dynamicBreadcrumb.addEventListener('click', (e) => {
-            if (e.target && e.target.id === 'breadcrumb-filters-link') {
-                e.preventDefault();
-                appCallbacks.confirmGoBackToFilters();
+            e.preventDefault();
+            if (e.target && e.target.id === 'breadcrumb-home-link') {
+                appCallbacks.confirmGoBackToFilters(); // This now goes back to homepage
+            } else if (e.target && e.target.id === 'breadcrumb-filters-link') {
+                appCallbacks.confirmGoBackToFilters(); // This can also go back to homepage and then user can re-enter filters
             }
         });
     }
@@ -102,6 +104,13 @@ function bindFilterEventListeners() {
 
 async function loadQuestionsForFiltering() {
     try {
+        if (state.allQuestionsMasterList.length > 0) {
+            // Data already loaded, just populate controls
+            populateFilterControls();
+            onFilterStateChange(true);
+            return;
+        }
+
         dom.loadingText.textContent = 'Connecting to database...';
 
         // OPTIMIZATION: Only select columns needed for filtering to speed up initial load.
@@ -531,7 +540,6 @@ async function generateDocument(format) {
             text: `A critical error occurred in the document generation process. Please check the console for details.`,
             icon: 'error'
         });
-        overlay.style.display = 'none';
         if (docWorker) {
             docWorker.terminate();
             docWorker = null;

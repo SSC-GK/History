@@ -38,22 +38,26 @@ document.addEventListener('DOMContentLoaded', () => {
             // Centralized auth state listener
             auth.onAuthStateChange((user) => {
                 if (user) {
-                    this.showApp();
+                    this.showApp(user);
                 } else {
                     this.showLoginGate();
                 }
             });
         },
 
-        showApp: async function() {
+        showApp: async function(user) {
+            this.populateUserProfile(user);
             dom.loginGate.style.display = 'none';
-            // The loading overlay is intentionally left visible here, as
-            // the `initFilterModule` will fetch data and hide it upon success.
-            dom.filterSection.style.display = 'block';
-            
-            const wasResumed = await this.promptToResumeQuiz();
-            if (wasResumed) return; // Resume logic handles the rest, skip normal init
+            dom.appHeader.style.display = 'flex';
+            dom.appContent.style.display = 'block';
+            dom.appFooter.style.display = 'block';
 
+            const wasResumed = await this.promptToResumeQuiz();
+            if (wasResumed) return;
+
+            // Default to showing the homepage
+            this.showHomepage();
+            
             // Initialize modules with necessary callbacks to handle transitions
             const callbacks = {
                 startQuiz: this.startQuiz.bind(this),
@@ -62,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 restartFullQuiz: this.restartFullQuiz.bind(this),
                 confirmGoBackToFilters: this.confirmGoBackToFilters.bind(this),
                 updateDynamicHeaders: this.updateDynamicHeaders.bind(this),
+                goBackToHomepage: this.showHomepage.bind(this)
             };
 
             initFilterModule(callbacks);
@@ -70,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         
         showLoginGate: function() {
-            // FIX: Hide the loading overlay for unauthenticated users.
             if (dom.loadingOverlay.style.display !== 'none') {
                 dom.loadingOverlay.classList.add('fade-out');
                 dom.loadingOverlay.addEventListener('transitionend', () => {
@@ -79,20 +83,67 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             dom.loginGate.style.display = 'flex';
-            dom.filterSection.style.display = 'none';
-            dom.quizMainContainer.style.display = 'none';
-            dom.quizBreadcrumbContainer.style.display = 'none';
-            dom.finalScoreSection.style.display = 'none';
-            dom.reviewSection.style.display = 'none';
+            dom.appHeader.style.display = 'none';
+            dom.appContent.style.display = 'none';
+            dom.appFooter.style.display = 'none';
+
+            // Hide all app sections
+            this.hideAllSections();
             clearQuizState();
 
-            // DPDP Compliance: Consent checkbox logic
             const updateSignInButtonState = () => {
                 dom.signInBtn.disabled = !(dom.ageConsentCheckbox.checked && dom.privacyConsentCheckbox.checked);
             };
             dom.ageConsentCheckbox.onchange = updateSignInButtonState;
             dom.privacyConsentCheckbox.onchange = updateSignInButtonState;
             updateSignInButtonState(); // Set initial state
+        },
+
+        hideAllSections: function() {
+            const sections = [
+                dom.homepage, dom.filterSection, dom.quizMainContainer, 
+                dom.quizBreadcrumbContainer, dom.finalScoreSection, dom.reviewSection
+            ];
+            sections.forEach(sec => {
+                if (sec) sec.style.display = 'none';
+            });
+        },
+
+        showHomepage: function() {
+            this.hideAllSections();
+            dom.homepage.style.display = 'block';
+            
+            // If the filter module hasn't loaded its questions yet, this is the time.
+            if (state.allQuestionsMasterList.length === 0) {
+                 if (dom.loadingOverlay.style.display !== 'none') {
+                    // It's already showing, just wait.
+                }
+            } else {
+                 if (dom.loadingOverlay.style.display !== 'none') {
+                    dom.loadingOverlay.classList.add('fade-out');
+                    dom.loadingOverlay.addEventListener('transitionend', () => {
+                        dom.loadingOverlay.style.display = 'none';
+                    }, { once: true });
+                }
+            }
+        },
+
+        showFilterPage: function(defaultTabId = 'quiz-panel') {
+            this.hideAllSections();
+            dom.filterSection.style.display = 'block';
+
+            // Programmatically click the correct tab
+            const targetTabBtn = document.querySelector(`.tab-btn[data-tab="${defaultTabId}"]`);
+            if (targetTabBtn) {
+                targetTabBtn.click();
+            }
+        },
+        
+        populateUserProfile: function(user) {
+            if (user?.user_metadata) {
+                dom.sideNavProfileName.textContent = user.user_metadata.full_name || user.email;
+                dom.sideNavProfileImg.src = user.user_metadata.avatar_url || 'https://sb.kaleidousercontent.com/67418/1672x1018/6463a5af0d/individuals-orgs-placeholder-avatar.png';
+            }
         },
         
         promptToResumeQuiz: async function() {
@@ -139,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- SCREEN TRANSITION HANDLERS ---
         startQuiz: function() {
             state.isQuizActive = true;
-            dom.filterSection.style.display = 'none';
+            this.hideAllSections();
             dom.quizMainContainer.style.display = 'block';
             dom.quizBreadcrumbContainer.style.display = 'block';
             loadQuiz();
@@ -148,11 +199,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
         resumeQuiz: function() {
             state.isQuizActive = true;
-            dom.filterSection.style.display = 'none';
+            this.hideAllSections();
             dom.quizMainContainer.style.display = 'block';
             dom.quizBreadcrumbContainer.style.display = 'block';
 
-            // Initialize modules with callbacks for the resumed session
             const callbacks = {
                 startQuiz: this.startQuiz.bind(this),
                 endQuiz: this.endQuiz.bind(this),
@@ -160,10 +210,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 restartFullQuiz: this.restartFullQuiz.bind(this),
                 confirmGoBackToFilters: this.confirmGoBackToFilters.bind(this),
                 updateDynamicHeaders: this.updateDynamicHeaders.bind(this),
+                goBackToHomepage: this.showHomepage.bind(this)
             };
             initQuizModule(callbacks);
             initReviewModule(callbacks);
-            // Re-bind listeners in case they were lost
             this.bindGlobalEventListeners();
             
             resumeLoadedQuiz();
@@ -193,12 +243,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.style.overflow = 'auto';
             clearQuizState();
             state.isQuizActive = false;
-        
-            dom.filterSection.style.display = 'block';
-            dom.quizMainContainer.style.display = 'none';
-            dom.finalScoreSection.style.display = 'none';
-            dom.reviewSection.style.display = 'none';
-            dom.quizBreadcrumbContainer.style.display = 'none';
+
+            this.showHomepage(); // Go back to homepage instead of filters
         
             state.questionGroups = [];
             state.currentGroupIndex = 0;
@@ -209,13 +255,13 @@ document.addEventListener('DOMContentLoaded', () => {
             Swal.fire({
                 target: dom.quizMainContainer,
                 position: 'top',
-                title: 'Return to Filters?',
-                text: "Your current quiz progress will be lost. This will start a new quiz session.",
+                title: 'Exit Quiz?',
+                text: "Your current quiz progress will be lost. You will return to the homepage.",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: 'var(--primary-color)',
                 cancelButtonColor: 'var(--wrong-color)',
-                confirmButtonText: 'Yes, Go Back!'
+                confirmButtonText: 'Yes, Exit!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     app.restartFullQuiz();
@@ -226,28 +272,20 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDynamicHeaders: function() {
             const groupName = state.currentQuizData?.groupName || "Quiz";
 
-            // Get all active filters from the state
-            const activeFilters = [];
-            for (const key in state.selectedFilters) {
-                if (state.selectedFilters[key] && state.selectedFilters[key].length > 0) {
-                    activeFilters.push(...state.selectedFilters[key]);
-                }
-            }
-            
-            let filterText = '';
-            if (activeFilters.length > 0) {
-                // Create the non-clickable, comma-separated list in brackets
-                filterText = ` &gt; <span class="breadcrumb-filters">[${activeFilters.join(', ')}]</span>`;
-            }
-
             if (dom.dynamicBreadcrumb) {
-                const breadcrumbHtml = `<a href="#" id="breadcrumb-filters-link">Filters</a> &gt; <span class="current-topic">${groupName}</span>${filterText}`;
+                const breadcrumbHtml = `<a href="#" id="breadcrumb-home-link">Home</a> &gt; <a href="#" id="breadcrumb-filters-link">Filters</a> &gt; <span class="current-topic">${groupName}</span>`;
                 dom.dynamicBreadcrumb.innerHTML = breadcrumbHtml;
             }
             
             if (dom.quizTitle) dom.quizTitle.textContent = groupName;
             if (dom.scoreTitle) dom.scoreTitle.textContent = `Quiz Result - ${groupName}`;
             if (dom.reviewTitle) dom.reviewTitle.textContent = `Review Answer - ${groupName}`;
+        },
+
+        toggleSideNav: function() {
+            const isOpen = dom.sideNavPanel.classList.toggle('open');
+            dom.sideNavOverlay.classList.toggle('active', isOpen);
+            dom.hamburgerMenuBtn.classList.toggle('is-active', isOpen);
         },
 
         // --- GLOBAL EVENT BINDING ---
@@ -257,18 +295,33 @@ document.addEventListener('DOMContentLoaded', () => {
             dom.logoutBtn.onclick = () => auth.signOut();
             dom.deleteAccountBtn.onclick = () => auth.deleteAccount();
 
-            // Privacy Policy Modal
-            dom.privacyPolicyLink.onclick = (e) => {
+            // Modals
+            this.bindModalEvents('privacy-policy', dom.privacyPolicyLink, dom.navLinkPrivacyPolicy);
+            this.bindModalEvents('about-us', dom.navLinkAboutUs);
+            this.bindModalEvents('user-guide', dom.navLinkUserGuide);
+
+            // Side Navigation
+            dom.hamburgerMenuBtn.onclick = () => this.toggleSideNav();
+            dom.sideNavOverlay.onclick = () => this.toggleSideNav();
+            
+            // Homepage card clicks
+            dom.homeCardQuizLM.onclick = () => this.showFilterPage('quiz-panel');
+            dom.homeCardPaidCourse.onclick = () => this.showFilterPage('ppt-panel');
+
+            // Side Nav link clicks
+            dom.navLinkHome.onclick = (e) => { e.preventDefault(); this.showHomepage(); this.toggleSideNav(); };
+            dom.navLinkQuizLM.onclick = (e) => { e.preventDefault(); this.showFilterPage('quiz-panel'); this.toggleSideNav(); };
+            dom.navLinkPaidCourse.onclick = (e) => { e.preventDefault(); this.showFilterPage('ppt-panel'); this.toggleSideNav(); };
+            dom.navLinkSettings.onclick = async (e) => {
                 e.preventDefault();
-                dom.privacyPolicyOverlay.style.display = 'flex';
-            };
-            dom.privacyPolicyCloseBtn.onclick = () => {
-                dom.privacyPolicyOverlay.style.display = 'none';
-            };
-            dom.privacyPolicyOverlay.onclick = (e) => {
-                if (e.target === dom.privacyPolicyOverlay) {
-                    dom.privacyPolicyOverlay.style.display = 'none';
+                this.toggleSideNav();
+                const user = await auth.getCurrentUser();
+                if (user && user.email) {
+                    dom.userEmailDisplay.textContent = user.email;
+                } else {
+                    dom.userEmailDisplay.textContent = 'Not available';
                 }
+                toggleSettings(false);
             };
 
             // Settings Panel
@@ -316,6 +369,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
             this.addKeyboardListeners();
             this.addSwipeListeners();
+        },
+        
+        bindModalEvents: function(modalName, ...triggerElements) {
+            const overlay = document.getElementById(`${modalName}-overlay`);
+            const closeBtn = document.getElementById(`${modalName}-close-btn`);
+            if (!overlay || !closeBtn) return;
+
+            const openModal = (e) => {
+                e.preventDefault();
+                overlay.style.display = 'flex';
+            };
+            const closeModal = () => {
+                overlay.style.display = 'none';
+            };
+
+            triggerElements.forEach(el => {
+                if (el) el.onclick = openModal;
+            });
+            closeBtn.onclick = closeModal;
+            overlay.onclick = (e) => {
+                if (e.target === overlay) closeModal();
+            };
         },
 
         // --- INPUT HANDLERS (KEYBOARD & SWIPE) ---
