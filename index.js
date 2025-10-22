@@ -320,17 +320,26 @@ document.addEventListener('DOMContentLoaded', () => {
             if (dom.reviewTitle) dom.reviewTitle.textContent = `Review Answer - ${groupName}`;
         },
 
-        // --- SIDE MENU ---
-        toggleSideMenu: function(forceClose = false) {
+        // --- SIDE MENU (REFACTORED FOR BUG FIX) ---
+        toggleSideMenu: function() {
             const isVisible = dom.sideMenuOverlay.classList.contains('visible');
-            if (forceClose || isVisible) {
-                dom.sideMenuOverlay.classList.remove('visible');
-                dom.hamburgerMenuBtn.classList.remove('is-active');
+            if (isVisible) {
+                this.closeSideMenu();
             } else {
-                dom.sideMenuOverlay.classList.add('visible');
-                dom.hamburgerMenuBtn.classList.add('is-active');
+                this.openSideMenu();
             }
         },
+
+        openSideMenu: function() {
+            dom.sideMenuOverlay.classList.add('visible');
+            dom.hamburgerMenuBtn.classList.add('is-active');
+        },
+
+        closeSideMenu: function() {
+            dom.sideMenuOverlay.classList.remove('visible');
+            dom.hamburgerMenuBtn.classList.remove('is-active');
+        },
+
 
         // --- GLOBAL EVENT BINDING ---
         bindGlobalEventListeners: function() {
@@ -360,11 +369,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 showView('homepage-section');
             };
 
-            // Side Menu
+            // Side Menu (Using Refactored Functions)
             dom.hamburgerMenuBtn.onclick = () => this.toggleSideMenu();
-            dom.sideMenuCloseBtn.onclick = () => this.toggleSideMenu(true); // Bug Fix 2
+            dom.sideMenuCloseBtn.onclick = () => this.closeSideMenu();
             dom.sideMenuOverlay.onclick = (e) => {
-                if (e.target === dom.sideMenuOverlay) this.toggleSideMenu();
+                if (e.target === dom.sideMenuOverlay) this.closeSideMenu();
             };
 
             // Side Menu Links
@@ -372,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (link) {
                     link.onclick = (e) => {
                         e.preventDefault();
-                        this.toggleSideMenu(true);
+                        this.closeSideMenu();
                         action();
                     };
                 }
@@ -417,7 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (overlay) {
                     overlay.onclick = (e) => {
                         if (e.target === overlay) {
-                            if (modalKey === 'sideMenuOverlay') this.toggleSideMenu(true);
+                            if (modalKey === 'sideMenuOverlay') this.closeSideMenu();
                             else if (modalKey === 'quizSettingsOverlay') toggleQuizSettings(true);
                             else if (modalKey === 'profileSettingsOverlay') toggleProfileSettings(true);
                             else toggleModal(modalKey, true);
@@ -481,7 +490,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (isAnyModalOpen) {
                     modalOverlays.forEach(key => {
                         if (dom[key] && dom[key].classList.contains('visible')) {
-                             if (key === 'sideMenuOverlay') this.toggleSideMenu(true);
+                             if (key === 'sideMenuOverlay') this.closeSideMenu();
                              else if (key === 'quizSettingsOverlay') toggleQuizSettings(true);
                              else if (key === 'profileSettingsOverlay') toggleProfileSettings(true);
                              else toggleModal(key, true);
