@@ -47,6 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         showApp: async function() {
             dom.loginGate.style.display = 'none';
+            // The loading overlay is intentionally left visible here, as
+            // the `initFilterModule` will fetch data and hide it upon success.
             dom.filterSection.style.display = 'block';
             
             const wasResumed = await this.promptToResumeQuiz();
@@ -68,6 +70,14 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         
         showLoginGate: function() {
+            // FIX: Hide the loading overlay for unauthenticated users.
+            if (dom.loadingOverlay.style.display !== 'none') {
+                dom.loadingOverlay.classList.add('fade-out');
+                dom.loadingOverlay.addEventListener('transitionend', () => {
+                    dom.loadingOverlay.style.display = 'none';
+                }, { once: true });
+            }
+
             dom.loginGate.style.display = 'flex';
             dom.filterSection.style.display = 'none';
             dom.quizMainContainer.style.display = 'none';
