@@ -20,7 +20,8 @@
 <script type="importmap">
 {
   "imports": {
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.23.0"
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.23.0",
+    "@supabase/supabase-js": "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"
   }
 }
 </script>
@@ -31,11 +32,7 @@
     <div id="loading-overlay">
         <div class="loader-content">
             <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_HX0isy.json" background="transparent" speed="1" style="width: 200px; height: 200px;" loop autoplay></lottie-player>
-            <p id="loading-text">Wait calmly, your questions are getting loaded.</p>
-            <div class="loading-progress-container">
-                <div id="loading-progress-bar"></div>
-            </div>
-            <span id="loading-percentage">0%</span>
+            <p id="loading-text">Loading Questions from Database...</p>
         </div>
     </div>
     <!-- END: Loading Overlay -->

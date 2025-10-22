@@ -201,7 +201,7 @@ function displayReviewQuestion(index) {
     const attempt = state.filteredAttempts[index];
     state.originalFontSizes.clear();
 
-    dom.reviewQuestionNumberEl.innerText = `Reviewing ${state.currentReviewFilter} (${index + 1}/${state.filteredAttempts.length}) | ID: ${attempt.questionId}`;
+    dom.reviewQuestionNumberEl.innerText = `Reviewing ${state.currentReviewFilter} (${index + 1}/${state.filteredAttempts.length}) | ID: ${attempt.v1_id || attempt.questionId}`;
 
     if (attempt.status === 'Skipped') {
         dom.reviewTimeTakenEl.innerText = `(Not Attempted)`;

@@ -490,6 +490,30 @@ body[data-theme='dark'] .quick-start-section h3 {
     border-radius: 8px;
     color: var(--button-text-color);
     transition: all 0.2s ease;
+    position: relative;
+}
+
+/* Loading Spinner for action buttons */
+.filter-actions button.loading {
+    cursor: wait;
+    opacity: 0.8;
+}
+.filter-actions button.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin-top: -10px;
+    margin-left: -10px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+.filter-actions button.loading > * {
+    visibility: hidden;
 }
 
 #start-quiz-btn {
@@ -2452,6 +2476,12 @@ body[data-theme='dark'] #review-explanation {
 /* =======================================================
 9. ANIMATIONS & SPECIAL EFFECTS
 ======================================================= */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 @keyframes fade-in-slide-up {
     from {
         opacity: 0;

@@ -34,10 +34,10 @@ function reorderQuizQuestions() {
     if (state.isShuffleActive) {
         shuffleArray(futureQuestions);
     } else {
-        // Sort remaining questions back to their original order (by ID)
+        // Sort remaining questions back to their original order (by v1_id)
         futureQuestions.sort((a, b) => {
-            const idA = parseCodedId(a.id);
-            const idB = parseCodedId(b.id);
+            const idA = parseCodedId(a.v1_id);
+            const idB = parseCodedId(b.v1_id);
             if (idA.prefix < idB.prefix) return -1;
             if (idA.prefix > idB.prefix) return 1;
             return idA.num - idB.num;
@@ -73,8 +73,8 @@ export function loadQuiz() {
         } else {
             // Default sort by coded ID (prefix then number)
             group.shuffledQuestions = [...group.questions].sort((a, b) => {
-                const idA = parseCodedId(a.id);
-                const idB = parseCodedId(b.id);
+                const idA = parseCodedId(a.v1_id);
+                const idB = parseCodedId(b.v1_id);
                 if (idA.prefix < idB.prefix) return -1;
                 if (idA.prefix > idB.prefix) return 1;
                 return idA.num - idB.num;
@@ -220,6 +220,7 @@ function checkAnswer(selectedEnglishOption, button) {
 
     state.currentQuizData.attempts.push({
         questionId: q.id,
+        v1_id: q.v1_id,
         question: q.question, question_hi: q.question_hi || null,
         optionsDisplayedBilingual: displayedOptionsData,
         status: attemptStatus,
@@ -309,7 +310,9 @@ function submitAndReviewAll() {
             cd.shuffledQuestions.forEach(q => {
                 if (!attemptedIds.has(q.id)) {
                     cd.attempts.push({
-                        questionId: q.id, question: q.question, question_hi: q.question_hi || null,
+                        questionId: q.id, 
+                        v1_id: q.v1_id,
+                        question: q.question, question_hi: q.question_hi || null,
                         optionsDisplayedBilingual: q.options.map((eng, i) => ({ eng, hin: q.options_hi?.[i] || "" })),
                         status: 'Skipped', selected: 'Skipped', correct: q.correct, explanation: q.explanation, timeTaken: 0 
                     });
@@ -434,18 +437,18 @@ function renderQuestionContent() {
 
     const sequentialDisplayNumber = state.currentQuizData.currentQuestionIndex + 1;
     dom.sequentialQuestionNumberEl.innerText = `Q.${sequentialDisplayNumber} / ${state.currentQuizData.shuffledQuestions.length}`;
-    dom.actualQuestionNumberEl.innerText = `ID: ${q.id}`;
+    dom.actualQuestionNumberEl.innerText = `ID: ${q.v1_id}`;
     
     // Populate Exam Name and Date/Shift Tags
-    if (dom.examNameTag && q.sourceInfo?.examName) {
-        dom.examNameTag.innerHTML = `<i class="fas fa-file-alt"></i> ${q.sourceInfo.examName}`;
+    if (dom.examNameTag && q.examName) {
+        dom.examNameTag.innerHTML = `<i class="fas fa-file-alt"></i> ${q.examName}`;
         dom.examNameTag.style.display = 'inline-flex';
     } else {
         dom.examNameTag.style.display = 'none';
     }
     
-    if (dom.examDateShiftTag && q.sourceInfo?.examDateShift) {
-        dom.examDateShiftTag.innerHTML = `<i class="fas fa-calendar-day"></i> ${q.sourceInfo.examDateShift}`;
+    if (dom.examDateShiftTag && q.examDateShift) {
+        dom.examDateShiftTag.innerHTML = `<i class="fas fa-calendar-day"></i> ${q.examDateShift}`;
         dom.examDateShiftTag.style.display = 'inline-flex';
     } else {
         dom.examDateShiftTag.style.display = 'none';
@@ -569,7 +572,9 @@ function handleTimeout() {
     }));
 
     state.currentQuizData.attempts.push({
-        questionId: q.id, question: q.question, question_hi: q.question_hi || null,
+        questionId: q.id,
+        v1_id: q.v1_id,
+        question: q.question, question_hi: q.question_hi || null,
         optionsDisplayedBilingual: displayedOptionsData,
         status: "Timeout", selected: "Timed Out", correct: q.correct, explanation: q.explanation, timeTaken: config.timePerQuestion
     });

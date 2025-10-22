@@ -6,8 +6,7 @@ export let dom = {
 export function cacheDomElements() {
     // Loading Overlay
     dom.loadingOverlay = document.getElementById('loading-overlay');
-    dom.loadingProgressBar = document.getElementById('loading-progress-bar');
-    dom.loadingPercentage = document.getElementById('loading-percentage');
+    dom.loadingText = document.getElementById('loading-text');
 
     // PPT Loading Overlay
     dom.pptLoadingOverlay = document.getElementById('ppt-loading-overlay');

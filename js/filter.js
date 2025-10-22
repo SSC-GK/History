@@ -1,8 +1,7 @@
-
-
 import { config, state } from './state.js';
 import { dom } from './dom.js';
-import { shuffleArray } from './utils.js';
+import { debounce, shuffleArray } from './utils.js';
+import { supabase } from './supabaseClient.js';
 
 let appCallbacks = {};
 
@@ -45,6 +44,8 @@ function initializeTabs() {
         });
     });
 }
+
+const debouncedFetch = debounce(fetchAndApplyFilters, 500);
 
 function bindFilterEventListeners() {
     dom.startQuizBtn.onclick = () => startFilteredQuiz();
@@ -90,53 +91,24 @@ function bindFilterEventListeners() {
 
 async function loadQuestionsForFiltering() {
     try {
-        const response = await fetch('./questions.json');
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        dom.loadingText.textContent = 'Connecting to database...';
 
-        const contentLength = response.headers.get('Content-Length');
-        const total = parseInt(contentLength, 10);
-        let loaded = 0;
+        // OPTIMIZATION: Only select columns needed for filtering to speed up initial load.
+        const { data, error } = await supabase
+            .from('questions')
+            .select('id, subject, topic, subTopic, difficulty, questionType, examName, examYear, tags');
 
-        // Fallback for servers that don't provide Content-Length or browsers that don't support streams
-        if (!total || !response.body) {
-            console.warn("Progress bar not supported by this server/browser. Loading questions...");
-            if (dom.loadingPercentage) dom.loadingPercentage.textContent = 'Loading...';
-            state.allQuestionsMasterList = await response.json();
-        } else {
-            const reader = response.body.getReader();
-            const chunks = [];
-            
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-
-                chunks.push(value);
-                loaded += value.length;
-                const progress = Math.round((loaded / total) * 100);
-                
-                // Update UI
-                if (dom.loadingProgressBar) dom.loadingProgressBar.style.width = `${progress}%`;
-                if (dom.loadingPercentage) dom.loadingPercentage.textContent = `${progress}%`;
-            }
-
-            // Combine chunks into a single Uint8Array
-            const allChunks = new Uint8Array(loaded);
-            let position = 0;
-            for (const chunk of chunks) {
-                allChunks.set(chunk, position);
-                position += chunk.length;
-            }
-
-            // Decode and parse JSON
-            const resultText = new TextDecoder("utf-8").decode(allChunks);
-            state.allQuestionsMasterList = JSON.parse(resultText);
-        }
-        
-        if (!state.allQuestionsMasterList || state.allQuestionsMasterList.length === 0) {
-            throw new Error(`No questions were found or the file is empty.`);
+        if (error) {
+            throw new Error(`Supabase error: ${error.message}`);
         }
 
-        // Smoothly hide the loader
+        if (!data || data.length === 0) {
+            throw new Error('No questions were found in the database.');
+        }
+
+        // This master list only contains filterable data, not full question text.
+        state.allQuestionsMasterList = data;
+
         if (dom.loadingOverlay) {
             dom.loadingOverlay.classList.add('fade-out');
             dom.loadingOverlay.addEventListener('transitionend', () => {
@@ -145,11 +117,11 @@ async function loadQuestionsForFiltering() {
         }
         
         populateFilterControls();
-        onFilterStateChange();
+        onFilterStateChange(true); // Initial fetch, skip debounce
     } catch (error) {
         console.error(`Could not load quiz questions:`, error);
         if (dom.loadingOverlay) {
-            dom.loadingOverlay.innerHTML = `<div class="loader-content"><h1>Error Loading Quiz</h1><p>Could not fetch the questions. Please check your connection and refresh the page.</p><p style="font-size:0.8em; color: var(--text-color-light)">${error.message}</p></div>`;
+            dom.loadingOverlay.innerHTML = `<div class="loader-content"><h1>Error Loading Quiz</h1><p>Could not fetch questions from the database. Please check your connection and refresh the page.</p><p style="font-size:0.8em; color: var(--text-color-light)">${error.message}</p></div>`;
         }
     }
 }
@@ -163,11 +135,11 @@ function populateFilterControls() {
     };
 
     questions.forEach(q => {
-        if (q.classification?.subject) unique.subject.add(q.classification.subject);
-        if (q.properties?.difficulty) unique.difficulty.add(q.properties.difficulty);
-        if (q.properties?.questionType) unique.questionType.add(q.properties.questionType);
-        if (q.sourceInfo?.examName) unique.examName.add(q.sourceInfo.examName);
-        if (q.sourceInfo?.examYear) unique.examYear.add(q.sourceInfo.examYear);
+        if (q.subject) unique.subject.add(q.subject);
+        if (q.difficulty) unique.difficulty.add(q.difficulty);
+        if (q.questionType) unique.questionType.add(q.questionType);
+        if (q.examName) unique.examName.add(q.examName);
+        if (q.examYear) unique.examYear.add(q.examYear);
         if (q.tags && Array.isArray(q.tags)) q.tags.forEach(tag => unique.tags.add(tag));
     });
 
@@ -257,11 +229,16 @@ function handleSelectionChange(filterKey, value) {
     onFilterStateChange();
 }
 
-function onFilterStateChange() {
+function onFilterStateChange(immediate = false) {
     updateDependentFilters();
-    applyFilters();
-    updateAllFilterCountsAndAvailability();
+    updateAllFilterCountsAndAvailability(); // This remains client-side for speed
     updateActiveFiltersSummaryBar();
+
+    if (immediate) {
+        fetchAndApplyFilters();
+    } else {
+        debouncedFetch(); 
+    }
 }
 
 function updateDependentFilters() {
@@ -276,9 +253,9 @@ function updateDependentFilters() {
         topicElements.toggleBtn.disabled = false;
         const relevantTopics = new Set();
         state.allQuestionsMasterList.forEach(q => {
-            if (q.classification?.subject && selectedSubjects.includes(q.classification.subject)) {
-                if (q.classification?.topic) {
-                    relevantTopics.add(q.classification.topic);
+            if (q.subject && selectedSubjects.includes(q.subject)) {
+                if (q.topic) {
+                    relevantTopics.add(q.topic);
                 }
             }
         });
@@ -293,10 +270,10 @@ function updateDependentFilters() {
         subTopicElements.toggleBtn.disabled = false;
         const relevantSubTopics = new Set();
         state.allQuestionsMasterList.forEach(q => {
-            if (q.classification?.subject && selectedSubjects.includes(q.classification.subject) &&
-                q.classification?.topic && selectedTopics.includes(q.classification.topic)) {
-                if (q.classification?.subTopic) {
-                    relevantSubTopics.add(q.classification.subTopic);
+            if (q.subject && selectedSubjects.includes(q.subject) &&
+                q.topic && selectedTopics.includes(q.topic)) {
+                if (q.subTopic) {
+                    relevantSubTopics.add(q.subTopic);
                 }
             }
         });
@@ -304,39 +281,64 @@ function updateDependentFilters() {
     }
 }
 
-function applyFilters(questionList = state.allQuestionsMasterList, filters = state.selectedFilters) {
-    const checkCategory = (questionValue, selectedValues) => {
-        if (selectedValues.length === 0) return true;
-        if (questionValue === null || questionValue === undefined) return false; 
-        if (Array.isArray(questionValue)) {
-            return questionValue.some(val => selectedValues.includes(val));
-        }
-        return selectedValues.includes(questionValue);
-    };
+async function fetchAndApplyFilters() {
+    setButtonsLoading(true);
+    const filters = state.selectedFilters;
 
-    const filtered = questionList.filter(q => 
-        checkCategory(q.classification?.subject, filters.subject) &&
-        checkCategory(q.classification?.topic, filters.topic) &&
-        checkCategory(q.classification?.subTopic, filters.subTopic) &&
-        checkCategory(q.properties?.difficulty, filters.difficulty) &&
-        checkCategory(q.properties?.questionType, filters.questionType) &&
-        checkCategory(q.sourceInfo?.examName, filters.examName) &&
-        checkCategory(q.sourceInfo?.examYear, filters.examYear) &&
-        checkCategory(q.tags, filters.tags)
-    );
+    let query = supabase
+        .from('questions')
+        .select('*, v1_id', { count: 'exact' });
 
-    if (filters === state.selectedFilters) {
-        state.filteredQuestionsMasterList = filtered;
-        updateQuestionCount();
+    if (filters.subject.length > 0) query = query.in('subject', filters.subject);
+    if (filters.topic.length > 0) query = query.in('topic', filters.topic);
+    if (filters.subTopic.length > 0) query = query.in('subTopic', filters.subTopic);
+    if (filters.difficulty.length > 0) query = query.in('difficulty', filters.difficulty);
+    if (filters.questionType.length > 0) query = query.in('questionType', filters.questionType);
+    if (filters.examName.length > 0) query = query.in('examName', filters.examName);
+    if (filters.examYear.length > 0) query = query.in('examYear', filters.examYear);
+    if (filters.tags.length > 0) query = query.contains('tags', filters.tags);
+    
+    const { data, error, count } = await query;
+
+    if (error) {
+        console.error('Error fetching filtered questions:', error);
+        state.filteredQuestionsMasterList = [];
+        updateQuestionCount(0);
+    } else {
+        state.filteredQuestionsMasterList = data;
+        updateQuestionCount(count);
     }
-    return filtered;
+    setButtonsLoading(false);
 }
 
+
 function updateAllFilterCountsAndAvailability() {
+    // This function still runs client-side for UI responsiveness.
+    const clientSideFilter = (list, filters) => {
+        const checkCategory = (questionValue, selectedValues) => {
+            if (selectedValues.length === 0) return true;
+            if (questionValue === null || questionValue === undefined) return false;
+            if (Array.isArray(questionValue)) {
+                return questionValue.some(val => selectedValues.includes(val));
+            }
+            return selectedValues.includes(questionValue);
+        };
+        return list.filter(q =>
+            checkCategory(q.subject, filters.subject) &&
+            checkCategory(q.topic, filters.topic) &&
+            checkCategory(q.subTopic, filters.subTopic) &&
+            checkCategory(q.difficulty, filters.difficulty) &&
+            checkCategory(q.questionType, filters.questionType) &&
+            checkCategory(q.examName, filters.examName) &&
+            checkCategory(q.examYear, filters.examYear) &&
+            checkCategory(q.tags, filters.tags)
+        );
+    };
+
     config.filterKeys.forEach(filterKey => {
         const tempFilters = JSON.parse(JSON.stringify(state.selectedFilters));
         tempFilters[filterKey] = [];
-        const contextualList = applyFilters(state.allQuestionsMasterList, tempFilters);
+        const contextualList = clientSideFilter(state.allQuestionsMasterList, tempFilters);
 
         const counts = {};
         contextualList.forEach(q => {
@@ -376,29 +378,26 @@ function updateFilterUI(filterKey, counts) {
 }
 
 function getQuestionValue(q, filterKey) {
-    switch(filterKey) {
-        case 'subject': return q.classification?.subject;
-        case 'topic': return q.classification?.topic;
-        case 'subTopic': return q.classification?.subTopic;
-        case 'difficulty': return q.properties?.difficulty;
-        case 'questionType': return q.properties?.questionType;
-        case 'examName': return q.sourceInfo?.examName;
-        case 'examYear': return q.sourceInfo?.examYear;
-        case 'tags': return q.tags;
-        default: return null;
-    }
+    return q[filterKey];
 }
 
-function updateQuestionCount() {
-    const count = state.filteredQuestionsMasterList.length;
+function updateQuestionCount(count) {
     dom.questionCount.textContent = count;
     dom.pptQuestionCount.textContent = count;
     dom.pdfQuestionCount.textContent = count;
     dom.jsonQuestionCount.textContent = count;
-    dom.startQuizBtn.disabled = count === 0;
-    dom.createPptBtn.disabled = count === 0;
-    dom.createPdfBtn.disabled = count === 0;
-    dom.downloadJsonBtn.disabled = count === 0;
+    const hasQuestions = count > 0;
+    dom.startQuizBtn.disabled = !hasQuestions;
+    dom.createPptBtn.disabled = !hasQuestions;
+    dom.createPdfBtn.disabled = !hasQuestions;
+    dom.downloadJsonBtn.disabled = !hasQuestions;
+}
+
+function setButtonsLoading(isLoading) {
+    dom.startQuizBtn.classList.toggle('loading', isLoading);
+    dom.createPptBtn.classList.toggle('loading', isLoading);
+    dom.createPdfBtn.classList.toggle('loading', isLoading);
+    dom.downloadJsonBtn.classList.toggle('loading', isLoading);
 }
 
 function resetFilters() {
@@ -417,7 +416,7 @@ function resetFilters() {
          if(elements.searchInput) elements.searchInput.value = '';
          filterMultiSelectList(key);
     });
-    onFilterStateChange();
+    onFilterStateChange(true);
 }
 
 function startFilteredQuiz() {
@@ -587,7 +586,7 @@ async function generatePowerPoint() {
                     let q_slide = pptx.addSlide();
                     q_slide.background = { color: QUESTION_SLIDE_BG };
                     let question_text = cleanQuestionText(question_item.question);
-                    const examInfoText = ` (${question_item.sourceInfo.examName}, ${question_item.sourceInfo.examDateShift})`;
+                    const examInfoText = ` (${question_item.examName}, ${question_item.examDateShift})`;
                     const englishQuestionArray = [
                         ...parseMarkdownForPptx(`Q.${slide_question_number}) ${question_text}`),
                         { text: examInfoText, options: { fontSize: 12, color: 'C62828', italic: true } }
@@ -661,7 +660,7 @@ async function generatePowerPoint() {
         const subjects = [...subject].sort();
         const exams = [...examName].sort();
         
-        const uniqueShifts = [...new Set(questions.map(q => q.sourceInfo?.examDateShift).filter(Boolean))];
+        const uniqueShifts = [...new Set(questions.map(q => q.examDateShift).filter(Boolean))];
         const shifts = uniqueShifts.sort();
 
         if (subjects.length > 0) filenameParts.push(subjects.join('_'));
@@ -974,7 +973,7 @@ async function generatePDF() {
         const subjects = [...subject].sort();
         const exams = [...examName].sort();
         
-        const uniqueShifts = [...new Set(questions.map(q => q.sourceInfo?.examDateShift).filter(Boolean))];
+        const uniqueShifts = [...new Set(questions.map(q => q.examDateShift).filter(Boolean))];
         const shifts = uniqueShifts.sort();
 
         if (subjects.length > 0) filenameParts.push(subjects.join('_'));
@@ -1088,23 +1087,25 @@ function handleQuickStart(preset) {
             // No filter applied, will use all questions
             break;
     }
-    applyFilters();
     
-    shuffleArray(state.filteredQuestionsMasterList);
-    state.filteredQuestionsMasterList = state.filteredQuestionsMasterList.slice(0, 25);
-
-    if (state.filteredQuestionsMasterList.length === 0) {
-        Swal.fire({
-            target: dom.filterSection,
-            title: 'No Questions Found', 
-            text: 'This quick start preset yielded no questions. Please try another or use the custom filters.', 
-            icon: 'warning'
-        });
-        resetFilters();
-        return;
-    }
-
-    startFilteredQuiz();
+    // We now fetch from Supabase instead of filtering client-side
+    fetchAndApplyFilters().then(() => {
+        if (state.filteredQuestionsMasterList.length > 0) {
+            shuffleArray(state.filteredQuestionsMasterList);
+            state.filteredQuestionsMasterList = state.filteredQuestionsMasterList.slice(0, 25);
+            // After slicing, update the count for the quiz start button
+            updateQuestionCount(state.filteredQuestionsMasterList.length);
+            startFilteredQuiz();
+        } else {
+            Swal.fire({
+                target: dom.filterSection,
+                title: 'No Questions Found', 
+                text: 'This quick start preset yielded no questions. Please try another or use the custom filters.', 
+                icon: 'warning'
+            });
+            resetFilters();
+        }
+    });
 }
 
 async function downloadJSON() {
