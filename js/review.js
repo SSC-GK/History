@@ -328,7 +328,7 @@ function confirmRestartFullQuiz() {
         target: dom.quizMainContainer,
         position: 'top',
         title: 'Start a new quiz?',
-        text: "You'll be taken back to the homepage.",
+        text: "You'll be taken back to the filter screen.",
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: 'var(--primary-color)',
