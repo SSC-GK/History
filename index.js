@@ -3,7 +3,7 @@
 /* ======================================================= */
 
 // Import all modules
-import { config, state, loadState, saveState } from './js/state.js';
+import { config, state, loadSettings, saveSettings, loadQuizState, clearQuizState } from './js/state.js';
 import { dom, cacheDomElements } from './js/dom.js';
 import { Toast } from './js/utils.js';
 import { initializeAllFireballs_anim, animateFireballs_anim } from './js/animations.js';
@@ -21,7 +21,7 @@ import {
     hideAIExplanation
 } from './js/settings.js';
 import { initFilterModule } from './js/filter.js';
-import { initQuizModule, loadQuiz } from './js/quiz.js';
+import { initQuizModule, loadQuiz, resumeLoadedQuiz } from './js/quiz.js';
 import { initReviewModule, showFinalScoreScreen } from './js/review.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -30,8 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- CORE INITIALIZATION ---
         init: async function() {
             cacheDomElements();
-            this.loadAndApplyState();
+            this.loadAndApplySettings();
             
+            const wasResumed = await this.promptToResumeQuiz();
+            if (wasResumed) return; // Resume logic handles the rest, skip normal init
+
             // Initialize modules with necessary callbacks to handle transitions
             const callbacks = {
                 startQuiz: this.startQuiz.bind(this),
@@ -49,9 +52,36 @@ document.addEventListener('DOMContentLoaded', () => {
             this.bindGlobalEventListeners();
             this.startBackgroundAnimations();
         },
+        
+        promptToResumeQuiz: async function() {
+            loadQuizState();
+            if (state.isQuizActive && state.questionGroups && state.questionGroups.length > 0) {
+                const result = await Swal.fire({
+                    title: 'Resume Session?',
+                    text: "It looks like you have an unfinished quiz. Would you like to resume where you left off?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: 'var(--primary-color)',
+                    cancelButtonColor: 'var(--wrong-color)',
+                    confirmButtonText: 'Yes, Resume!',
+                    cancelButtonText: 'No, Start New'
+                });
 
-        loadAndApplyState: function() {
-            loadState();
+                if (result.isConfirmed) {
+                    this.resumeQuiz();
+                    return true;
+                } else {
+                    clearQuizState();
+                    state.isQuizActive = false;
+                    state.questionGroups = [];
+                    return false;
+                }
+            }
+            return false;
+        },
+
+        loadAndApplySettings: function() {
+            loadSettings();
             applyInitialSettings();
         },
 
@@ -71,6 +101,30 @@ document.addEventListener('DOMContentLoaded', () => {
             dom.quizMainContainer.style.display = 'block';
             dom.quizBreadcrumbContainer.style.display = 'block';
             loadQuiz();
+            this.updateDynamicHeaders();
+        },
+        
+        resumeQuiz: function() {
+            state.isQuizActive = true;
+            dom.filterSection.style.display = 'none';
+            dom.quizMainContainer.style.display = 'block';
+            dom.quizBreadcrumbContainer.style.display = 'block';
+
+            // Initialize modules with callbacks for the resumed session
+            const callbacks = {
+                startQuiz: this.startQuiz.bind(this),
+                endQuiz: this.endQuiz.bind(this),
+                restartCurrentGroup: this.restartCurrentGroup.bind(this),
+                restartFullQuiz: this.restartFullQuiz.bind(this),
+                confirmGoBackToFilters: this.confirmGoBackToFilters.bind(this),
+                updateDynamicHeaders: this.updateDynamicHeaders.bind(this),
+            };
+            initQuizModule(callbacks);
+            initReviewModule(callbacks);
+            this.bindGlobalEventListeners();
+            this.startBackgroundAnimations();
+            
+            resumeLoadedQuiz();
             this.updateDynamicHeaders();
         },
 
@@ -95,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         
             document.body.style.overflow = 'auto';
+            clearQuizState();
             state.isQuizActive = false;
         
             dom.filterSection.style.display = 'block';

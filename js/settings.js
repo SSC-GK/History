@@ -1,4 +1,4 @@
-import { config, state, saveState } from './state.js';
+import { config, state, saveSettings } from './state.js';
 import { dom } from './dom.js';
 import { initializeAllFireballs_anim, animateFireballs_anim } from './animations.js';
 import { Toast } from './utils.js';
@@ -30,7 +30,7 @@ export function toggleSettings(forceClose = false) {
 export function toggleDarkMode() {
     state.isDarkMode = !state.isDarkMode;
     applyTheme();
-    saveState();
+    saveSettings();
 }
 
 function applyTheme() {
@@ -41,7 +41,7 @@ function applyTheme() {
 export function toggleAnimations() {
     state.animationsDisabled = !state.animationsDisabled;
     applyAnimationSetting();
-    saveState();
+    saveSettings();
 }
 
 function applyAnimationSetting() {
@@ -61,7 +61,7 @@ function applyAnimationSetting() {
 export function toggleMute() {
     state.isMuted = !state.isMuted;
     updateSoundToggleUI();
-    saveState();
+    saveSettings();
 }
 
 function updateSoundToggleUI() {
@@ -94,7 +94,7 @@ export function toggleShuffle() {
     }).then((result) => {
         if (result.isConfirmed) {
             state.isShuffleActive = willBeShuffled;
-            saveState();
+            saveSettings();
 
             if (state.isQuizActive && state.callbacks.reorderQuizQuestions) {
                 state.callbacks.reorderQuizQuestions();
@@ -123,7 +123,7 @@ export function updateShuffleToggleUI() {
 export function toggleHapticFeedback() {
     state.isHapticEnabled = !state.isHapticEnabled;
     updateHapticToggleUI();
-    saveState();
+    saveSettings();
 }
 
 function updateHapticToggleUI() {

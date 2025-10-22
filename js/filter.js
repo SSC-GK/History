@@ -4,6 +4,7 @@ import { debounce, shuffleArray } from './utils.js';
 import { supabase } from './supabaseClient.js';
 
 let appCallbacks = {};
+let docWorker = null;
 
 /**
  * Triggers a "pop" animation on a given element to provide visual feedback.
@@ -26,11 +27,6 @@ export function initFilterModule(callbacks) {
     bindFilterEventListeners();
     loadQuestionsForFiltering();
     state.callbacks.confirmGoBackToFilters = callbacks.confirmGoBackToFilters;
-}
-
-// Helper to remove old question number formats
-function cleanQuestionText(text) {
-    return (text || "").replace(/^(Q\.\d+\)|प्रश्न \d+\))\s*/, '');
 }
 
 function initializeTabs() {
@@ -64,8 +60,8 @@ const debouncedFetch = debounce(fetchAndApplyFilters, 500);
 
 function bindFilterEventListeners() {
     dom.startQuizBtn.onclick = () => startFilteredQuiz();
-    dom.createPptBtn.onclick = () => generatePowerPoint();
-    dom.createPdfBtn.onclick = () => generatePDF();
+    dom.createPptBtn.onclick = () => generateDocument('ppt');
+    dom.createPdfBtn.onclick = () => generateDocument('pdf');
     dom.downloadJsonBtn.onclick = () => downloadJSON();
     dom.resetFiltersBtnQuiz.onclick = () => resetFilters();
     dom.resetFiltersBtnPpt.onclick = () => resetFilters();
@@ -302,7 +298,7 @@ async function fetchAndApplyFilters() {
 
     let query = supabase
         .from('questions')
-        .select('*, v1_id', { count: 'exact' });
+        .select('*', { count: 'exact' });
 
     if (filters.subject.length > 0) query = query.in('subject', filters.subject);
     if (filters.topic.length > 0) query = query.in('topic', filters.topic);
@@ -458,581 +454,89 @@ function startFilteredQuiz() {
     appCallbacks.startQuiz();
 }
 
-/**
- * Parses a markdown-like string and converts it into an array of PptxGenJS rich text objects.
- * Handles:
- * - Newlines (\n) and <br> tags.
- * - Bold text enclosed in **...**.
- * - List items starting with - or *.
- * - Strips <pre> tags.
- * @param {string} markdown The string to parse.
- * @returns {Array<object>} An array of PptxGenJS rich text objects.
- */
-function parseMarkdownForPptx(markdown) {
-    if (!markdown) return [];
-
-    const richTextArray = [];
-    // Replace <br> tags with newlines and then split the whole text into lines
-    const lines = markdown.replace(/<br\s*\/?>/gi, '\n').replace(/<\/?pre>/g, '').split('\n');
-
-    lines.forEach((line, index) => {
-        // Handle list markers
-        const processedLine = line.replace(/^[-*]\s*/, '• ');
-
-        // Regex to split by **bold** tags, keeping the bolded parts
-        const parts = processedLine.split(/(\*\*.*?\*\*)/g).filter(Boolean);
-
-        if (parts.length === 0 && line.trim() === '') {
-            // This is an empty line for spacing
-            richTextArray.push({ text: '\n' });
-            return;
-        }
-
-        parts.forEach(part => {
-            if (part.startsWith('**') && part.endsWith('**')) {
-                richTextArray.push({
-                    text: part.substring(2, part.length - 2),
-                    options: { bold: true }
-                });
-            } else if (part) { // Ensure part is not an empty string
-                richTextArray.push({ text: part });
-            }
+async function generateDocument(format) {
+    const questions = state.filteredQuestionsMasterList;
+    if (questions.length === 0) {
+        Swal.fire({
+            target: dom.filterSection,
+            title: 'No Questions Selected',
+            text: `Please apply filters to select questions before creating a ${format.toUpperCase()}.`,
+            icon: 'info'
         });
-        
-        // Add a line break after each line's content
-        if (index < lines.length - 1) {
-            richTextArray.push({ text: '\n' });
-        }
+        return;
+    }
+
+    const overlay = dom[`${format}LoadingOverlay`];
+    const textEl = dom[`${format}LoadingText`];
+    const detailsEl = dom[`${format}LoadingDetails`];
+    const progressBarEl = dom[`${format}LoadingProgressBar`];
+
+    overlay.style.display = 'flex';
+    textEl.textContent = `Generating Your ${format.toUpperCase()}...`;
+    detailsEl.textContent = 'Initializing worker...';
+    progressBarEl.style.width = '0%';
+
+    if (docWorker) {
+        docWorker.terminate();
+    }
+    docWorker = new Worker('./js/worker.js');
+    
+    docWorker.postMessage({
+        type: 'generate',
+        format: format,
+        questions: questions,
+        selectedFilters: state.selectedFilters
     });
-    return richTextArray;
-}
 
+    docWorker.onmessage = (e) => {
+        const { type, value, details, blob, filename, error } = e.data;
+        if (type === 'progress') {
+            progressBarEl.style.width = `${value}%`;
+            detailsEl.textContent = details;
+        } else if (type === 'result') {
+            textEl.textContent = 'Finalizing & Downloading...';
+            detailsEl.textContent = 'Please wait, this may take a moment.';
+            
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            overlay.style.display = 'none';
+            docWorker.terminate();
+            docWorker = null;
+        } else if (type === 'error') {
+            console.error(`Error from ${format} worker:`, error);
+            Swal.fire({
+                target: dom.filterSection,
+                title: 'Error',
+                text: `An unexpected error occurred while generating the ${format.toUpperCase()}: ${error}`,
+                icon: 'error'
+            });
+            overlay.style.display = 'none';
+            docWorker.terminate();
+            docWorker = null;
+        }
+    };
 
-async function generatePowerPoint() {
-    const questions = state.filteredQuestionsMasterList;
-    if (questions.length === 0) {
+    docWorker.onerror = (e) => {
+        console.error(`Unhandled error in ${format} worker:`, e);
         Swal.fire({
             target: dom.filterSection,
-            title: 'No Questions Selected',
-            text: 'Please apply filters to select questions before creating a PPT.',
-            icon: 'info'
-        });
-        return;
-    }
-
-    dom.pptLoadingOverlay.style.display = 'flex';
-    dom.pptLoadingText.textContent = 'Generating Your Presentation...';
-    dom.pptLoadingDetails.textContent = '';
-    dom.pptLoadingProgressBar.style.width = '0%';
-
-    try {
-        const pptx = new PptxGenJS();
-
-        pptx.layout = 'LAYOUT_16x9';
-        pptx.author = 'Quiz LM App';
-        pptx.company = 'AI-Powered Learning';
-        pptx.title = 'Customized Quiz Presentation';
-        
-        const TITLE_SLIDE_BG = 'F5F5F5'; // Grey
-        const QUESTION_SLIDE_BG = 'D6EAF8'; // Light Blue
-        const ANSWER_SLIDE_BG = 'E2F0D9'; // Light Green
-        
-        const TEXT_COLOR = '191919';
-        const CORRECT_ANSWER_COLOR = '006400';
-        const ENGLISH_FONT = 'Arial';
-        const HINDI_FONT = 'Nirmala UI';
-
-        // --- TITLE SLIDE (WITH DYNAMIC INFO) ---
-        let titleSlide = pptx.addSlide();
-        titleSlide.background = { color: TITLE_SLIDE_BG };
-        
-        titleSlide.addText("Quiz LM Presentation ✨", {
-            x: 0.5, y: 0.8, w: '90%', h: 1,
-            fontSize: 44, color: '303f9f', bold: true, align: 'center'
-        });
-        titleSlide.addText(`Generated with ${questions.length} questions.`, {
-            x: 0, y: 2.0, w: '100%', align: 'center', color: TEXT_COLOR, fontSize: 18
-        });
-
-        const indianTimestamp = new Date().toLocaleString('en-IN', {
-            timeZone: 'Asia/Kolkata',
-            year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
-        });
-        titleSlide.addText(`Created on: ${indianTimestamp} (IST)`, {
-            x: 0, y: 2.4, w: '100%', align: 'center', color: '757575', fontSize: 11, italic: true
-        });
-
-        const filterTextForPPT = [];
-        const filterHierarchy = {
-            'Classification': ['subject', 'topic', 'subTopic'],
-            'Properties': ['difficulty', 'questionType'],
-            'Source': ['examName', 'examYear'],
-            'Tags': ['tags']
-        };
-
-        let hasFilters = false;
-        for (const category in filterHierarchy) {
-            const filtersInCategory = [];
-            filterHierarchy[category].forEach(filterKey => {
-                const selected = state.selectedFilters[filterKey];
-                if (selected && selected.length > 0) {
-                    hasFilters = true;
-                    const displayName = filterKey.charAt(0).toUpperCase() + filterKey.slice(1).replace(/([A-Z])/g, ' $1').trim();
-                    filtersInCategory.push(`${displayName}: ${selected.join(', ')}`);
-                }
-            });
-
-            if (filtersInCategory.length > 0) {
-                filterTextForPPT.push({ text: category, options: { bold: true, breakLine: true, fontSize: 12, color: '303f9f', align: 'left'} });
-                filtersInCategory.forEach(filterText => {
-                    filterTextForPPT.push({ text: `  • ${filterText}`, options: { breakLine: true, fontSize: 11, color: TEXT_COLOR, align: 'left' }});
-                });
-                filterTextForPPT.push({ text: '', options: { breakLine: true } });
-            }
-        }
-        
-        if (hasFilters) {
-            titleSlide.addText(filterTextForPPT, {
-                x: 1.0, y: 3.0, w: '80%', h: 2.5,
-                lineSpacing: 22, valign: 'top'
-            });
-        }
-        
-        // --- ASYNCHRONOUS QUESTION & ANSWER SLIDE GENERATION ---
-        const totalQuestions = questions.length;
-        const processQuestionSlides = () => {
-            return new Promise(resolve => {
-                let i = 0;
-                function processNextQuestion() {
-                    if (i >= totalQuestions) {
-                        resolve();
-                        return;
-                    }
-                    
-                    const question_item = questions[i];
-                    const slide_question_number = i + 1;
-
-                    // SLIDE 1: QUESTION & OPTIONS
-                    let q_slide = pptx.addSlide();
-                    q_slide.background = { color: QUESTION_SLIDE_BG };
-                    let question_text = cleanQuestionText(question_item.question);
-                    const examInfoText = ` (${question_item.examName}, ${question_item.examDateShift})`;
-                    const englishQuestionArray = [
-                        ...parseMarkdownForPptx(`Q.${slide_question_number}) ${question_text}`),
-                        { text: examInfoText, options: { fontSize: 12, color: 'C62828', italic: true } }
-                    ];
-                    q_slide.addText(englishQuestionArray, { x: 0.5, y: 0.3, w: 9, h: 1.2, fontFace: ENGLISH_FONT, fontSize: 20, color: TEXT_COLOR, bold: true });
-                    const question_text_hi = cleanQuestionText(question_item.question_hi);
-                    q_slide.addText(parseMarkdownForPptx(question_text_hi || ''), { x: 0.5, y: 1.5, w: 9, h: 0.6, fontFace: HINDI_FONT, fontSize: 18, color: TEXT_COLOR, bold: true });
-                    let optionsY = 2.3;
-                    let optionsArray = [];
-                    (question_item.options || []).forEach((eng_option, index) => {
-                        const hin_option = (question_item.options_hi || [])[index] || '';
-                        const option_letter = String.fromCharCode(65 + index);
-                        const engParsed = parseMarkdownForPptx(`${option_letter}) ${eng_option}`);
-                        engParsed.forEach(p => { p.options = {...p.options, fontFace: ENGLISH_FONT, fontSize: 16, color: TEXT_COLOR }});
-                        optionsArray.push(...engParsed);
-                        const hinParsed = parseMarkdownForPptx(`    ${hin_option}\n`);
-                        hinParsed.forEach(p => { p.options = {...p.options, fontFace: HINDI_FONT, fontSize: 14, color: TEXT_COLOR }});
-                        optionsArray.push(...hinParsed);
-                    });
-                    q_slide.addText(optionsArray, { x: 0.6, y: optionsY, w: 9, h: 3.0, lineSpacing: 24 });
-
-                    // SLIDE 2 & 3: ANSWER & EXPLANATION
-                    const explanation = question_item.explanation || {};
-                    const slideParts = [
-                        { part: 1, title: `Answer & Explanation for Q.${slide_question_number} (Part 1)`, content: [ { text: `✅ Correct Answer: ${question_item.correct || 'N/A'}` }, explanation.analysis_correct, explanation.conclusion, ] },
-                        { part: 2, title: `Answer & Explanation for Q.${slide_question_number} (Part 2)`, content: [ explanation.analysis_incorrect, explanation.fact, ] }
-                    ];
-                    slideParts.forEach(partInfo => {
-                        const contentBlocks = partInfo.content.filter(Boolean);
-                        if (contentBlocks.length === 0) return;
-                        let aSlide = pptx.addSlide();
-                        aSlide.background = { color: ANSWER_SLIDE_BG };
-                        aSlide.addText(partInfo.title, { x: 0.5, y: 0.3, w: 9, h: 0.6, fontFace: ENGLISH_FONT, fontSize: 18, color: TEXT_COLOR, bold: true });
-                        let combinedExplanation = [];
-                        contentBlocks.forEach(block => {
-                            if (typeof block === 'string') {
-                                combinedExplanation.push(...parseMarkdownForPptx(block));
-                                combinedExplanation.push({ text: '\n\n' });
-                            } else if (block.text && block.text.includes('Correct Answer')) {
-                                combinedExplanation.push({ text: block.text, options: { bold: true, color: CORRECT_ANSWER_COLOR } });
-                                combinedExplanation.push({ text: '\n\n' });
-                            }
-                        });
-                        if (combinedExplanation.length > 0) {
-                            aSlide.addText(combinedExplanation, { x: 0.5, y: 1.1, w: 9, h: 4.2, fontFace: ENGLISH_FONT, fontSize: 14, color: TEXT_COLOR, lineSpacing: 22 });
-                        }
-                    });
-                    
-                    // Update UI
-                    const progress = Math.round(((i + 1) / totalQuestions) * 100);
-                    dom.pptLoadingProgressBar.style.width = `${progress}%`;
-                    dom.pptLoadingDetails.textContent = `Processing question ${slide_question_number} of ${totalQuestions}... (${progress}%)`;
-                    
-                    i++;
-                    
-                    // Yield to event loop to allow UI repaint
-                    setTimeout(processNextQuestion, 10);
-                }
-                processNextQuestion(); // Start the process
-            });
-        };
-        
-        await processQuestionSlides();
-
-        dom.pptLoadingText.textContent = 'Finalizing & Downloading...';
-        dom.pptLoadingDetails.textContent = 'Please wait, this may take a moment.';
-        
-        let filenameParts = [];
-        const { subject, examName } = state.selectedFilters;
-        
-        const subjects = [...subject].sort();
-        const exams = [...examName].sort();
-        
-        const uniqueShifts = [...new Set(questions.map(q => q.examDateShift).filter(Boolean))];
-        const shifts = uniqueShifts.sort();
-
-        if (subjects.length > 0) filenameParts.push(subjects.join('_'));
-        if (exams.length > 0) filenameParts.push(exams.join('_'));
-        if (shifts.length > 0) filenameParts.push(shifts.join('_'));
-        
-        filenameParts.push(`${questions.length}Qs`);
-
-        let filename = filenameParts.join('_');
-        
-        filename = filename.replace(/[^a-zA-Z0-9_\-]/g, '_').replace(/_+/g, '_');
-        if (!filename.trim() || filename.trim() === `${questions.length}Qs`) {
-            filename = `Quiz_LM_${questions.length}Qs`;
-        }
-
-        await pptx.writeFile({ fileName: `${filename}.pptx` });
-
-    } catch (error) {
-        console.error("Error generating PPT:", error);
-        Swal.fire({
-            target: dom.filterSection,
-            title: 'Error',
-            text: `An unexpected error occurred while generating the presentation: ${error.message}`,
+            title: 'Worker Error',
+            text: `A critical error occurred in the document generation process. Please check the console for details.`,
             icon: 'error'
         });
-    } finally {
-        dom.pptLoadingOverlay.style.display = 'none';
-    }
-}
-
-
-async function generatePDF() {
-    const questions = state.filteredQuestionsMasterList;
-    if (questions.length === 0) {
-        Swal.fire({
-            target: dom.filterSection,
-            title: 'No Questions Selected',
-            text: 'Please apply filters to select questions before creating a PDF.',
-            icon: 'info'
-        });
-        return;
-    }
-
-    dom.pdfLoadingOverlay.style.display = 'flex';
-    dom.pdfLoadingText.textContent = 'Generating Your PDF...';
-    dom.pdfLoadingDetails.textContent = '';
-    dom.pdfLoadingProgressBar.style.width = '0%';
-
-    try {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ unit: 'pt', format: 'a4' });
-        
-        const MARGIN = 40;
-        const PAGE_WIDTH = doc.internal.pageSize.getWidth();
-        const PAGE_HEIGHT = doc.internal.pageSize.getHeight();
-        const CONTENT_WIDTH = PAGE_WIDTH - (MARGIN * 2);
-        let y = MARGIN;
-
-        const addFooter = (doc, pageNum, totalPages) => {
-            doc.setFont('Helvetica', 'italic');
-            doc.setFontSize(9);
-            doc.setTextColor(150);
-            doc.text('Compiler: Aalok Kumar Sharma', MARGIN, PAGE_HEIGHT - 20);
-            doc.text(`Page ${pageNum} of ${totalPages}`, PAGE_WIDTH - MARGIN, PAGE_HEIGHT - 20, { align: 'right' });
-        };
-        
-        // --- Title Page ---
-        doc.setFont('Helvetica', 'bold');
-        doc.setFontSize(26);
-        const titleText = 'Quiz LM Question Bank';
-        const titleLines = doc.splitTextToSize(titleText, CONTENT_WIDTH);
-        doc.text(titleLines, PAGE_WIDTH / 2, y + 20, { align: 'center' });
-        y += (titleLines.length * 26) + 30;
-
-        doc.setFont('Helvetica', 'normal');
-        doc.setFontSize(16);
-        doc.text(`Generated with ${questions.length} questions.`, PAGE_WIDTH / 2, y, { align: 'center' });
-        y += 30;
-
-        const indianTimestamp = new Date().toLocaleString('en-IN', {
-            timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit',
-            hour: '2-digit', minute: '2-digit', hour12: true
-        });
-        doc.setFontSize(11);
-        doc.setTextColor(120);
-        doc.text(`Created on: ${indianTimestamp} (IST)`, PAGE_WIDTH / 2, y, { align: 'center' });
-        y += 40;
-        
-        // Add Hyperlink
-        const linkText = 'Attempt the quiz';
-        const linkUrl = 'https://cglhustle.free.nf/side_menu/quiz_lm/';
-        doc.setFontSize(12);
-        doc.setFont('Helvetica', 'normal');
-        const textWidth = doc.getTextWidth(linkText);
-        const xOffset = (PAGE_WIDTH - textWidth) / 2;
-        
-        doc.setTextColor(0, 0, 238); // Standard link blue
-        doc.textWithLink(linkText, xOffset, y, { url: linkUrl });
-        doc.setDrawColor(0, 0, 238);
-        doc.line(xOffset, y + 1, xOffset + textWidth, y + 1); // Draw underline
-        y += 40;
-        
-        // Reset text color for filters
-        doc.setTextColor(40);
-
-
-        const filterHierarchy = {
-            'Classification': ['subject', 'topic', 'subTopic'],
-            'Properties': ['difficulty', 'questionType'],
-            'Source': ['examName', 'examYear'],
-            'Tags': ['tags']
-        };
-
-        let hasFilters = false;
-        
-        for (const category in filterHierarchy) {
-            const filtersInCategory = [];
-            filterHierarchy[category].forEach(filterKey => {
-                const selected = state.selectedFilters[filterKey];
-                if (selected && selected.length > 0) {
-                    hasFilters = true;
-                    const displayName = filterKey.charAt(0).toUpperCase() + filterKey.slice(1).replace(/([A-Z])/g, ' $1').trim();
-                    filtersInCategory.push(`${displayName}: ${selected.join(', ')}`);
-                }
-            });
-
-            if (filtersInCategory.length > 0) {
-                if (y > PAGE_HEIGHT - MARGIN) { doc.addPage(); y = MARGIN; }
-                doc.setFont('Helvetica', 'bold');
-                doc.setFontSize(12);
-                doc.setTextColor(48, 63, 159);
-                doc.text(category, MARGIN, y);
-                y += 18;
-
-                filtersInCategory.forEach(filterText => {
-                    if (y > PAGE_HEIGHT - MARGIN) { doc.addPage(); y = MARGIN; }
-                    doc.setFont('Helvetica', 'normal');
-                    doc.setFontSize(10);
-                    doc.setTextColor(40);
-                    const filterLines = doc.splitTextToSize(`• ${filterText}`, CONTENT_WIDTH - 20);
-                    doc.text(filterLines, MARGIN + 20, y);
-                    y += (filterLines.length * 10 * 1.2);
-                });
-                y += 10;
-            }
+        overlay.style.display = 'none';
+        if (docWorker) {
+            docWorker.terminate();
+            docWorker = null;
         }
-
-        if (!hasFilters) {
-            doc.setFontSize(12);
-            doc.setTextColor(120);
-            doc.text('No filters applied.', MARGIN, y);
-        }
-
-        const answers = [];
-        
-        // --- Questions Loop ---
-        doc.addPage();
-        let pageNum = 2;
-        y = MARGIN;
-        
-        for (let i = 0; i < questions.length; i++) {
-            const question_item = questions[i];
-            const questionNum = i + 1;
-
-            const progress = Math.round((i / questions.length) * 50); // 0-50% for questions
-            dom.pdfLoadingProgressBar.style.width = `${progress}%`;
-            dom.pdfLoadingDetails.textContent = `Processing question ${questionNum} of ${questions.length}...`;
-            
-            // --- Robust Answer Key Generation ---
-            let letteredCorrect = '?';
-            let correctTextToPush = 'Answer not found';
-
-            const summary = question_item.explanation?.summary || "";
-            const summaryMatch = summary.match(/Correct Answer: ([A-D])\)/);
-            const correctOptIndexFromText = question_item.options.indexOf(question_item.correct);
-
-            if (summaryMatch) {
-                // Source of truth is the letter in the explanation summary
-                letteredCorrect = summaryMatch[1];
-                const correctIndexFromLetter = letteredCorrect.charCodeAt(0) - 65;
-                if (question_item.options[correctIndexFromLetter]) {
-                    correctTextToPush = question_item.options[correctIndexFromLetter];
-                } else {
-                    // Fallback if index from summary letter is out of bounds
-                    correctTextToPush = "Text mismatch in data";
-                }
-            } else if (correctOptIndexFromText !== -1) {
-                // Fallback to using the 'correct' field if summary is malformed
-                letteredCorrect = String.fromCharCode(65 + correctOptIndexFromText);
-                correctTextToPush = question_item.correct;
-            }
-            
-            answers.push(`${questionNum}. ${letteredCorrect}) ${correctTextToPush}`);
-
-
-            // --- Calculate block height before rendering ---
-            const cleanQ = cleanQuestionText(question_item.question);
-            const questionText = `Q.${questionNum}) ${cleanQ}`;
-            
-            doc.setFont('Helvetica', 'bold');
-            doc.setFontSize(12);
-            const questionLines = doc.splitTextToSize(questionText, CONTENT_WIDTH);
-            const questionHeight = (questionLines.length * 12 * 1.2) + 10;
-
-            let optionsHeight = 0;
-            doc.setFont('Helvetica', 'normal');
-            doc.setFontSize(10);
-            question_item.options.forEach((opt, idx) => {
-                const optionText = `(${String.fromCharCode(65 + idx)}) ${opt}`;
-                const optionLines = doc.splitTextToSize(optionText, CONTENT_WIDTH - 20);
-                optionsHeight += (optionLines.length * 10 * 1.2) + 5;
-            });
-
-            const totalQuestionBlockHeight = questionHeight + optionsHeight + 20; // 20 for separator
-            
-            if (y + totalQuestionBlockHeight > PAGE_HEIGHT - MARGIN) {
-                doc.addPage();
-                pageNum++;
-                y = MARGIN;
-            }
-
-            // --- Render the block ---
-            doc.setFont('Helvetica', 'bold');
-            doc.setFontSize(12);
-            doc.text(questionLines, MARGIN, y);
-            y += (questionLines.length * 12 * 1.2) + 10;
-
-            doc.setFont('Helvetica', 'normal');
-            doc.setFontSize(10);
-            question_item.options.forEach((opt, idx) => {
-                const optionText = `(${String.fromCharCode(65 + idx)}) ${opt}`;
-                const optionLines = doc.splitTextToSize(optionText, CONTENT_WIDTH - 20);
-                doc.text(optionLines, MARGIN + 20, y);
-                y += (optionLines.length * 10 * 1.2) + 5;
-            });
-            
-            y += 15;
-            doc.setDrawColor(220);
-            doc.line(MARGIN, y, PAGE_WIDTH - MARGIN, y);
-            y += 20;
-
-            await new Promise(resolve => setTimeout(resolve, 1));
-        }
-
-        // --- Answer Key Page ---
-        dom.pdfLoadingDetails.textContent = `Generating Answer Key...`;
-        doc.addPage();
-        pageNum++;
-        y = MARGIN;
-        doc.setFont('Helvetica', 'bold');
-        doc.setFontSize(20);
-        doc.text('Answer Key', PAGE_WIDTH / 2, y, { align: 'center' });
-        y += 40;
-
-        doc.setFont('Helvetica', 'normal');
-        doc.setFontSize(10);
-        
-        const answerKeyGutter = 30;
-        const answerKeyColWidth = (CONTENT_WIDTH - answerKeyGutter) / 2;
-        const col1X = MARGIN;
-        const col2X = MARGIN + answerKeyColWidth + answerKeyGutter;
-        let currentY = y;
-        const midPoint = Math.ceil(answers.length / 2);
-
-        for (let i = 0; i < midPoint; i++) {
-            const progress = 50 + Math.round((i / midPoint) * 50); // 50-100% for answer key
-            dom.pdfLoadingProgressBar.style.width = `${progress}%`;
-
-            const text1 = answers[i];
-            const lines1 = doc.splitTextToSize(text1, answerKeyColWidth);
-            const height1 = doc.getTextDimensions(lines1).h;
-            
-            const text2 = (i + midPoint < answers.length) ? answers[i + midPoint] : null;
-            let lines2 = [];
-            let height2 = 0;
-            if (text2) {
-                lines2 = doc.splitTextToSize(text2, answerKeyColWidth);
-                height2 = doc.getTextDimensions(lines2).h;
-            }
-
-            const blockHeight = Math.max(height1, height2);
-
-
-            if (currentY + blockHeight > PAGE_HEIGHT - MARGIN - 20) { // Extra buffer for footer
-                doc.addPage();
-                pageNum++;
-                currentY = MARGIN;
-            }
-
-            doc.text(lines1, col1X, currentY);
-            if (text2) {
-                doc.text(lines2, col2X, currentY);
-            }
-            
-            currentY += blockHeight + 5; // Add some space between rows
-        }
-        
-        const totalPages = doc.internal.getNumberOfPages();
-        for (let i = 1; i <= totalPages; i++) {
-            doc.setPage(i);
-            addFooter(doc, i, totalPages);
-        }
-
-        dom.pdfLoadingText.textContent = 'Finalizing & Downloading...';
-        dom.pdfLoadingDetails.textContent = 'Please wait, this may take a moment.';
-        
-        let filenameParts = [];
-        const { subject, examName } = state.selectedFilters;
-        
-        const subjects = [...subject].sort();
-        const exams = [...examName].sort();
-        
-        const uniqueShifts = [...new Set(questions.map(q => q.examDateShift).filter(Boolean))];
-        const shifts = uniqueShifts.sort();
-
-        if (subjects.length > 0) filenameParts.push(subjects.join('_'));
-        if (exams.length > 0) filenameParts.push(exams.join('_'));
-        if (shifts.length > 0) filenameParts.push(shifts.join('_'));
-        
-        filenameParts.push(`${questions.length}Qs`);
-
-        let filename = filenameParts.join('_');
-        
-        filename = filename.replace(/[^a-zA-Z0-9_\-]/g, '_').replace(/_+/g, '_');
-        if (!filename.trim() || filename.trim() === `${questions.length}Qs`) {
-            filename = `Quiz_LM_${questions.length}Qs`;
-        }
-
-        await doc.save(`${filename}.pdf`);
-
-    } catch (error) {
-        console.error("Error generating PDF:", error);
-        Swal.fire({
-            target: dom.filterSection,
-            title: 'Error',
-            text: `An unexpected error occurred while generating the PDF: ${error.message}`,
-            icon: 'error'
-        });
-    } finally {
-        dom.pdfLoadingOverlay.style.display = 'none';
-    }
+    };
 }
 
 
@@ -1101,42 +605,64 @@ function updateActiveFiltersSummaryBar() {
     dom.activeFiltersSummaryBarContainer.style.display = totalSelected > 0 ? 'block' : 'none';
 }
 
-function handleQuickStart(preset) {
+async function handleQuickStart(preset) {
     resetFilters();
-    
-    switch(preset) {
-        case 'quick_25_easy':
-            state.selectedFilters.difficulty = ['Easy'];
-            break;
-        case 'quick_25_moderate':
-            state.selectedFilters.difficulty = ['Medium'];
-            break;
-        case 'quick_25_hard':
-            state.selectedFilters.difficulty = ['Hard'];
-            break;
-        case 'quick_25_mix':
-            // No filter applied, will use all questions
-            break;
+    let difficultyFilter = [];
+    switch (preset) {
+        case 'quick_25_easy': difficultyFilter = ['Easy']; break;
+        case 'quick_25_moderate': difficultyFilter = ['Medium']; break;
+        case 'quick_25_hard': difficultyFilter = ['Hard']; break;
+        case 'quick_25_mix': /* No filter */ break;
     }
     
-    // We now fetch from Supabase instead of filtering client-side
-    fetchAndApplyFilters().then(() => {
-        if (state.filteredQuestionsMasterList.length > 0) {
-            shuffleArray(state.filteredQuestionsMasterList);
-            state.filteredQuestionsMasterList = state.filteredQuestionsMasterList.slice(0, 25);
-            // After slicing, update the count for the quiz start button
-            updateQuestionCount(state.filteredQuestionsMasterList.length);
-            startFilteredQuiz();
-        } else {
+    setButtonsLoading(true);
+
+    try {
+        let countQuery = supabase.from('questions').select('*', { count: 'exact', head: true });
+        if (difficultyFilter.length > 0) {
+            countQuery = countQuery.in('difficulty', difficultyFilter);
+        }
+        const { count, error: countError } = await countQuery;
+        
+        if (countError) throw countError;
+
+        if (count === 0) {
             Swal.fire({
                 target: dom.filterSection,
-                title: 'No Questions Found', 
-                text: 'This quick start preset yielded no questions. Please try another or use the custom filters.', 
+                title: 'No Questions Found',
+                text: 'This quick start preset yielded no questions. Please try another or use the custom filters.',
                 icon: 'warning'
             });
             resetFilters();
+            return;
         }
-    });
+
+        const limit = Math.min(25, count);
+        const randomOffset = count > limit ? Math.floor(Math.random() * (count - limit + 1)) : 0;
+
+        let dataQuery = supabase.from('questions').select('*');
+        if (difficultyFilter.length > 0) {
+            dataQuery = dataQuery.in('difficulty', difficultyFilter);
+        }
+        const { data, error: dataError } = await dataQuery.range(randomOffset, randomOffset + limit - 1);
+
+        if (dataError) throw dataError;
+
+        state.filteredQuestionsMasterList = data;
+        updateQuestionCount(data.length);
+        startFilteredQuiz();
+
+    } catch (error) {
+        console.error('Quick Start failed:', error);
+        Swal.fire({
+            target: dom.filterSection,
+            title: 'Error',
+            text: `Could not fetch questions for Quick Start: ${error.message}`,
+            icon: 'error'
+        });
+    } finally {
+        setButtonsLoading(false);
+    }
 }
 
 async function downloadJSON() {

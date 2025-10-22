@@ -1,4 +1,4 @@
-import { config, state, saveState } from './state.js';
+import { config, state, saveQuizState, clearQuizState } from './state.js';
 import { dom } from './dom.js';
 import { playSound, triggerHapticFeedback, shuffleArray, buildExplanationHtml, Toast } from './utils.js';
 import { typewriterAnimate } from './animations.js';
@@ -88,6 +88,13 @@ export function loadQuiz() {
     applyHeaderCollapsedState();
 }
 
+export function resumeLoadedQuiz() {
+    // Assumes state.questionGroups and state.currentGroupIndex are already populated from localStorage
+    loadQuestionGroup(state.currentGroupIndex);
+    startQuizLogicForGroup();
+    applyHeaderCollapsedState();
+}
+
 function bindQuizEventListeners() {
     dom.navMenuIcon.addEventListener('click', () => toggleQuizInternalNavigation());
     dom.navOverlay.addEventListener('click', () => toggleQuizInternalNavigation());
@@ -148,10 +155,11 @@ function loadQuestionGroup(newGroupIndex) {
         const answeredIds = new Set(state.currentQuizData.attempts.map(a => a.questionId));
         let firstUnansweredIndex = state.currentQuizData.shuffledQuestions.findIndex(q => !answeredIds.has(q.id));
         if (firstUnansweredIndex === -1) { 
-            endQuiz();
-            return;
+            // This case occurs when resuming a completed group. Go to the last question.
+            state.currentQuizData.currentQuestionIndex = state.currentQuizData.shuffledQuestions.length -1;
+        } else {
+            state.currentQuizData.currentQuestionIndex = firstUnansweredIndex;
         }
-        state.currentQuizData.currentQuestionIndex = firstUnansweredIndex;
     } else {
         state.currentQuizData.currentQuestionIndex = 0;
     }
@@ -162,7 +170,7 @@ function loadQuestionGroup(newGroupIndex) {
     displayQuestion();
     updateStatusTracker();
     populateQuizInternalNavigation();
-    saveState();
+    saveQuizState();
 }
 
 function startQuizLogicForGroup() {
@@ -236,11 +244,12 @@ function checkAnswer(selectedEnglishOption, button) {
     updateStatusTracker();
     applyTextZoom();
     populateQuizInternalNavigation();
-    saveState();
+    saveQuizState();
 }
 
 function endQuiz() {
     stopTimer();
+    clearQuizState();
     if (!state.currentQuizData) {
         console.warn("endQuiz called without active quiz data. Restarting.");
         appCallbacks.restartFullQuiz();
@@ -279,14 +288,14 @@ function nextQuestionHandler() {
             }
         }
     }
-    saveState();
+    saveQuizState();
 }
 
 function previousQuestionHandler() {
     if (!state.currentQuizData || state.currentQuizData.currentQuestionIndex <= 0 || state.isTransitioningQuestion) return;
     state.currentQuizData.currentQuestionIndex--;
     displayQuestion();
-    saveState();
+    saveQuizState();
 }
 
 function submitAndReviewAll() {
@@ -318,6 +327,7 @@ function submitAndReviewAll() {
                     });
                 }
             });
+            saveQuizState(); // Save the final state with skipped questions
             endQuiz();
         }
     });
@@ -599,7 +609,7 @@ function handleTimeout() {
         if (dom.timeoutOverlay) dom.timeoutOverlay.classList.remove('visible');
     }, 1500);
     populateQuizInternalNavigation();
-    saveState();
+    saveQuizState();
 }
 
 function useLifeline() {
@@ -763,7 +773,7 @@ function goToQuestionInAnyGroup(targetGroupIndex, targetQuestionId) {
     if (foundIndex !== -1) {
         state.currentQuizData.currentQuestionIndex = foundIndex;
         displayQuestion();
-        saveState();
+        saveQuizState();
     } else {
         Toast.fire({ icon: 'error', title: `Question ID ${targetQuestionId} not found.` });
     }
@@ -798,7 +808,7 @@ function toggleBookmark() {
         state.bookmarkedQuestions.push(questionId);
     }
     updateBookmarkButton();
-    saveState();
+    saveSettings();
 }
 
 function updateBookmarkButton() {
@@ -822,7 +832,7 @@ function toggleMarkForReview() {
     }
     updateMarkForReviewButton();
     populateQuizInternalNavigation();
-    saveState();
+    saveQuizState();
 }
 
 function updateMarkForReviewButton() {
@@ -845,7 +855,7 @@ function updateQuizProgressBar() {
 function toggleHeader() {
     state.isHeaderCollapsed = !state.isHeaderCollapsed;
     applyHeaderCollapsedState();
-    saveState();
+    saveSettings();
 }
 
 function applyHeaderCollapsedState() {

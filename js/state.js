@@ -52,9 +52,9 @@ export let state = {
     callbacks: {}, // To store callbacks for inter-module communication
 };
 
-export function saveState() {
+export function saveSettings() {
     try {
-        const stateToSave = {
+        const settingsToSave = {
             isShuffleActive: state.isShuffleActive,
             isMuted: state.isMuted,
             isDarkMode: state.isDarkMode,
@@ -63,28 +63,66 @@ export function saveState() {
             bookmarkedQuestions: state.bookmarkedQuestions,
             isHeaderCollapsed: state.isHeaderCollapsed,
         };
-        localStorage.setItem('ancientHistoryQuizProgress', JSON.stringify(stateToSave));
+        localStorage.setItem('quizAppSettings', JSON.stringify(settingsToSave));
     } catch (e) {
-        console.error("Could not save state to localStorage", e);
+        console.error("Could not save settings to localStorage", e);
     }
 }
 
-export function loadState() {
+export function loadSettings() {
     try {
-        const savedStateJSON = localStorage.getItem('ancientHistoryQuizProgress');
-        if (savedStateJSON) {
-            const savedState = JSON.parse(savedStateJSON);
+        const savedSettingsJSON = localStorage.getItem('quizAppSettings');
+        if (savedSettingsJSON) {
+            const savedSettings = JSON.parse(savedSettingsJSON);
             
-            state.isShuffleActive = savedState.isShuffleActive || false;
-            state.isMuted = savedState.isMuted || false;
-            state.isDarkMode = savedState.isDarkMode || false;
-            state.animationsDisabled = savedState.animationsDisabled || false;
-            state.isHapticEnabled = savedState.isHapticEnabled !== false; // Default to true
-            state.bookmarkedQuestions = savedState.bookmarkedQuestions || [];
-            state.isHeaderCollapsed = savedState.isHeaderCollapsed || false;
+            state.isShuffleActive = savedSettings.isShuffleActive || false;
+            state.isMuted = savedSettings.isMuted || false;
+            state.isDarkMode = savedSettings.isDarkMode || false;
+            state.animationsDisabled = savedSettings.animationsDisabled || false;
+            state.isHapticEnabled = savedSettings.isHapticEnabled !== false; // Default to true
+            state.bookmarkedQuestions = savedSettings.bookmarkedQuestions || [];
+            state.isHeaderCollapsed = savedSettings.isHeaderCollapsed || false;
         }
     } catch (e) {
-        console.error("Could not load state from localStorage", e);
-        localStorage.removeItem('ancientHistoryQuizProgress');
+        console.error("Could not load settings from localStorage", e);
+        localStorage.removeItem('quizAppSettings');
     }
+}
+
+export function saveQuizState() {
+    if (!state.isQuizActive) return;
+    try {
+        const sessionState = {
+            isQuizActive: state.isQuizActive,
+            questionGroups: state.questionGroups,
+            currentGroupIndex: state.currentGroupIndex,
+            selectedFilters: state.selectedFilters, // Save filters to reconstruct headers
+        };
+        localStorage.setItem('quizActiveSession', JSON.stringify(sessionState));
+    } catch (e) {
+        console.error("Could not save quiz session to localStorage", e);
+    }
+}
+
+export function loadQuizState() {
+    try {
+        const savedSessionJSON = localStorage.getItem('quizActiveSession');
+        if (savedSessionJSON) {
+            const savedSession = JSON.parse(savedSessionJSON);
+            state.isQuizActive = savedSession.isQuizActive || false;
+            state.questionGroups = savedSession.questionGroups || [];
+            state.currentGroupIndex = savedSession.currentGroupIndex || 0;
+            state.selectedFilters = savedSession.selectedFilters || state.selectedFilters;
+            if(state.questionGroups.length > 0) {
+                 state.currentQuizData = state.questionGroups[state.currentGroupIndex];
+            }
+        }
+    } catch (e) {
+        console.error("Could not load quiz session from localStorage", e);
+        clearQuizState();
+    }
+}
+
+export function clearQuizState() {
+    localStorage.removeItem('quizActiveSession');
 }
