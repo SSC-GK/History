@@ -197,7 +197,29 @@ async function generatePDF(questions, selectedFilters) {
     const PAGE_WIDTH = doc.internal.pageSize.getWidth();
     const PAGE_HEIGHT = doc.internal.pageSize.getHeight();
     const CONTENT_WIDTH = PAGE_WIDTH - (MARGIN * 2);
+
+    // Define background colors
+    const COLOR_BG_TITLE_ANSWER = '#f0fff0'; // Honeydew (Light Green)
+    const COLOR_BG_QUESTION = '#f0f8ff';   // AliceBlue (Light Blue)
+
     let y = MARGIN;
+    let pageNum = 1;
+
+    const addPageBreakIfNeeded = (requiredHeight, context = 'question') => {
+        if (y + requiredHeight > PAGE_HEIGHT - MARGIN) {
+            doc.addPage();
+            pageNum++;
+            y = MARGIN;
+
+            // Apply background color to the new page based on context
+            const bgColor = context === 'answer' ? COLOR_BG_TITLE_ANSWER : COLOR_BG_QUESTION;
+            doc.setFillColor(bgColor);
+            doc.rect(0, 0, PAGE_WIDTH, PAGE_HEIGHT, 'F');
+            
+            return true;
+        }
+        return false;
+    };
     
     const addFooter = (doc, pageNum, totalPages) => {
         doc.setFont('Helvetica', 'italic');
@@ -208,6 +230,9 @@ async function generatePDF(questions, selectedFilters) {
     };
 
     // --- Title Page ---
+    doc.setFillColor(COLOR_BG_TITLE_ANSWER);
+    doc.rect(0, 0, PAGE_WIDTH, PAGE_HEIGHT, 'F'); // Fill the background
+
     doc.setFont('Helvetica', 'bold');
     doc.setFontSize(24);
     doc.text('Quiz LM - Custom Question Set', PAGE_WIDTH / 2, y, { align: 'center' });
@@ -240,13 +265,15 @@ async function generatePDF(questions, selectedFilters) {
     doc.text(filterLines, MARGIN, y);
     
     const answers = [];
-    let pageNum = 1;
 
     // --- Questions Loop ---
     if (questions.length > 0) {
         doc.addPage();
         pageNum++;
         y = MARGIN;
+        // Apply background to the first question page
+        doc.setFillColor(COLOR_BG_QUESTION);
+        doc.rect(0, 0, PAGE_WIDTH, PAGE_HEIGHT, 'F');
     }
     
     for (let i = 0; i < questions.length; i++) {
@@ -256,9 +283,10 @@ async function generatePDF(questions, selectedFilters) {
         const progress = Math.round((i / questions.length) * 50);
         self.postMessage({ type: 'progress', value: progress, details: `Processing question ${questionNum} of ${questions.length}...` });
 
+        // Prepare answer key entry
         let letteredCorrect = '?';
         let correctTextToPush = 'Answer not found';
-        const correctOptIndexFromText = question_item.options.indexOf(question_item.correct);
+        const correctOptIndexFromText = (question_item.options || []).indexOf(question_item.correct);
         if (correctOptIndexFromText !== -1) {
             letteredCorrect = String.fromCharCode(65 + correctOptIndexFromText);
             correctTextToPush = question_item.correct;
@@ -267,42 +295,65 @@ async function generatePDF(questions, selectedFilters) {
 
         const cleanQ = cleanQuestionText(question_item.question);
         const questionText = `Q.${questionNum}) ${cleanQ}`;
-        
-        doc.setFont('Helvetica', 'bold');
-        doc.setFontSize(12);
-        const questionLines = doc.splitTextToSize(questionText, CONTENT_WIDTH);
-        const questionHeight = (questionLines.length * 12 * 1.2) + 10;
-        
-        let optionsHeight = 0;
-        doc.setFont('Helvetica', 'normal');
-        doc.setFontSize(10);
-        (question_item.options || []).forEach((opt, idx) => {
-            const optionText = `(${String.fromCharCode(65 + idx)}) ${opt}`;
-            const optionLines = doc.splitTextToSize(optionText, CONTENT_WIDTH - 20);
-            optionsHeight += (optionLines.length * 10 * 1.2) + 5;
-        });
-        
-        const totalQuestionBlockHeight = questionHeight + optionsHeight + 20;
-        if (y + totalQuestionBlockHeight > PAGE_HEIGHT - MARGIN) {
-            doc.addPage();
-            pageNum++;
-            y = MARGIN;
+
+        // HTML-aware rendering
+        if (questionText.includes('<pre>')) {
+            doc.setFont('Helvetica', 'bold');
+            doc.setFontSize(12);
+
+            const parts = questionText.split(/<\/?pre>/);
+            const beforePre = parts[0];
+            const preContent = parts[1];
+
+            const beforeLines = doc.splitTextToSize(beforePre.replace(/<br\s*\/?>/gi, '\n'), CONTENT_WIDTH);
+            addPageBreakIfNeeded(beforeLines.length * 12 * 1.2, 'question');
+            doc.text(beforeLines, MARGIN, y);
+            y += (beforeLines.length * 12 * 1.2);
+
+            if (preContent) {
+                doc.setFont('Courier', 'normal');
+                doc.setFontSize(10);
+                const preLines = preContent.trim().split('\n');
+                
+                addPageBreakIfNeeded(preLines.length * 12 + 10, 'question');
+                for (const line of preLines) {
+                    addPageBreakIfNeeded(12, 'question');
+                    const columns = line.trim().split(/\s{2,}/);
+                    if (columns.length === 2) {
+                        doc.text(columns[0], MARGIN + 20, y);
+                        doc.text(columns[1], MARGIN + (CONTENT_WIDTH / 2), y);
+                    } else {
+                        doc.text(line, MARGIN + 20, y);
+                    }
+                    y += 12;
+                }
+                y += 10;
+            }
+        } else {
+            doc.setFont('Helvetica', 'bold');
+            doc.setFontSize(12);
+            const processedQuestionText = questionText.replace(/<br\s*\/?>/gi, '\n');
+            const questionLines = doc.splitTextToSize(processedQuestionText, CONTENT_WIDTH);
+            
+            addPageBreakIfNeeded(questionLines.length * 12 * 1.2 + 10, 'question');
+            doc.text(questionLines, MARGIN, y);
+            y += (questionLines.length * 12 * 1.2) + 10;
         }
-        
-        doc.setFont('Helvetica', 'bold');
-        doc.setFontSize(12);
-        doc.text(questionLines, MARGIN, y);
-        y += (questionLines.length * 12 * 1.2) + 10;
-        
+
         doc.setFont('Helvetica', 'normal');
         doc.setFontSize(10);
         (question_item.options || []).forEach((opt, idx) => {
             const optionText = `(${String.fromCharCode(65 + idx)}) ${opt}`;
             const optionLines = doc.splitTextToSize(optionText, CONTENT_WIDTH - 20);
+            const optionHeight = (optionLines.length * 10 * 1.2) + 5;
+            
+            addPageBreakIfNeeded(optionHeight, 'question');
             doc.text(optionLines, MARGIN + 20, y);
-            y += (optionLines.length * 10 * 1.2) + 5;
+            y += optionHeight;
         });
+
         y += 15;
+        addPageBreakIfNeeded(20, 'question'); 
         doc.setDrawColor(220);
         doc.line(MARGIN, y, PAGE_WIDTH - MARGIN, y);
         y += 20;
@@ -313,6 +364,10 @@ async function generatePDF(questions, selectedFilters) {
         doc.addPage();
         pageNum++;
         y = MARGIN;
+        // Apply background to the first answer key page
+        doc.setFillColor(COLOR_BG_TITLE_ANSWER);
+        doc.rect(0, 0, PAGE_WIDTH, PAGE_HEIGHT, 'F');
+        
         doc.setFont('Helvetica', 'bold');
         doc.setFontSize(18);
         doc.text('Answer Key', PAGE_WIDTH / 2, y, { align: 'center' });
@@ -334,7 +389,7 @@ async function generatePDF(questions, selectedFilters) {
             const isCol1 = i < half;
             const x = isCol1 ? col1_x : col2_x;
             if (!isCol1 && i === half) {
-                current_y = y; // Reset y for the second column
+                current_y = y;
             }
 
             const answerLines = doc.splitTextToSize(answers[i], (PAGE_WIDTH / 2) - MARGIN - 20);
@@ -342,6 +397,9 @@ async function generatePDF(questions, selectedFilters) {
             if (current_y + (answerLines.length * 10 * 1.2) > PAGE_HEIGHT - MARGIN) {
                 doc.addPage();
                 pageNum++;
+                // Apply background to subsequent answer key pages
+                doc.setFillColor(COLOR_BG_TITLE_ANSWER);
+                doc.rect(0, 0, PAGE_WIDTH, PAGE_HEIGHT, 'F');
                 current_y = MARGIN;
                 y = MARGIN;
                 doc.setFont('Helvetica', 'bold');
@@ -364,7 +422,33 @@ async function generatePDF(questions, selectedFilters) {
         addFooter(doc, i, totalPages);
     }
     
-    let filename = `Quiz_LM_${questions.length}Qs.pdf`; // Simplified filename
+    // --- Dynamic Filename Generation ---
+    let filenameParts = [];
+
+    // Part 1: Subject
+    if (selectedFilters.subject && selectedFilters.subject.length > 0) {
+        if (selectedFilters.subject.length === 1) {
+            filenameParts.push(selectedFilters.subject[0].replace(/\s+/g, '_'));
+        } else {
+            filenameParts.push('Multiple_Subjects');
+        }
+    } else {
+        filenameParts.push('General_Quiz');
+    }
+
+    // Part 2: Exam Name
+    if (selectedFilters.examName && selectedFilters.examName.length > 0) {
+        if (selectedFilters.examName.length === 1) {
+            filenameParts.push(selectedFilters.examName[0].replace(/\s+/g, '_'));
+        } else {
+            filenameParts.push('Multiple_Exams');
+        }
+    }
+
+    // Part 3: Question Count
+    filenameParts.push(`${questions.length}Qs`);
+
+    const filename = filenameParts.join('_') + '.pdf';
 
     const blob = doc.output('blob');
     self.postMessage({ type: 'result', format: 'pdf', blob: blob, filename: filename });
