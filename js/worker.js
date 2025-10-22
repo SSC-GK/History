@@ -197,6 +197,8 @@ async function generatePDF(questions, selectedFilters) {
     const PAGE_WIDTH = doc.internal.pageSize.getWidth();
     const PAGE_HEIGHT = doc.internal.pageSize.getHeight();
     const CONTENT_WIDTH = PAGE_WIDTH - (MARGIN * 2);
+    const COLUMN_1_X = MARGIN + 20;
+    const COLUMN_2_X = MARGIN + (CONTENT_WIDTH / 2);
 
     // Define background colors
     const COLOR_BG_TITLE_ANSWER = '#f0fff0'; // Honeydew (Light Green)
@@ -297,14 +299,14 @@ async function generatePDF(questions, selectedFilters) {
         const questionText = `Q.${questionNum}) ${cleanQ}`;
 
         // HTML-aware rendering
-        if (questionText.includes('<pre>')) {
+        const preMatch = /<pre>([\s\S]*?)<\/pre>/i.exec(questionText);
+        if (preMatch) {
             doc.setFont('Helvetica', 'bold');
             doc.setFontSize(12);
 
-            const parts = questionText.split(/<\/?pre>/);
-            const beforePre = parts[0];
-            const preContent = parts[1];
-
+            const beforePre = questionText.substring(0, preMatch.index).trim();
+            const preContent = preMatch[1];
+            
             const beforeLines = doc.splitTextToSize(beforePre.replace(/<br\s*\/?>/gi, '\n'), CONTENT_WIDTH);
             addPageBreakIfNeeded(beforeLines.length * 12 * 1.2, 'question');
             doc.text(beforeLines, MARGIN, y);
@@ -316,17 +318,28 @@ async function generatePDF(questions, selectedFilters) {
                 const preLines = preContent.trim().split('\n');
                 
                 addPageBreakIfNeeded(preLines.length * 12 + 10, 'question');
-                for (const line of preLines) {
+                let startY = y;
+                let col1Height = 0;
+                let col2Height = 0;
+
+                preLines.forEach(line => {
                     addPageBreakIfNeeded(12, 'question');
-                    const columns = line.trim().split(/\s{2,}/);
+                    const columns = line.trim().split(/\s{2,}/); // Split by 2 or more spaces
+                    
                     if (columns.length === 2) {
-                        doc.text(columns[0], MARGIN + 20, y);
-                        doc.text(columns[1], MARGIN + (CONTENT_WIDTH / 2), y);
+                        const col1Lines = doc.splitTextToSize(columns[0], CONTENT_WIDTH / 2 - 20);
+                        const col2Lines = doc.splitTextToSize(columns[1], CONTENT_WIDTH / 2 - 20);
+                        
+                        doc.text(col1Lines, COLUMN_1_X, y);
+                        doc.text(col2Lines, COLUMN_2_X, y);
+
+                        const lineHeight = Math.max(col1Lines.length, col2Lines.length) * 12;
+                        y += lineHeight;
                     } else {
-                        doc.text(line, MARGIN + 20, y);
+                        doc.text(line, COLUMN_1_X, y);
+                        y += 12;
                     }
-                    y += 12;
-                }
+                });
                 y += 10;
             }
         } else {
