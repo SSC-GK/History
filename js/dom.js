@@ -51,13 +51,14 @@ export function cacheDomElements() {
     dom.sparkPlanCard = document.querySelector('.plan-card[data-plan="spark"]');
     dom.proPlanCard = document.querySelector('.plan-card[data-plan="pro"]');
     dom.freePlanButton = document.getElementById('free-plan-btn');
-    dom.sparkPlanButton = document.getElementById('upgrade-to-spark-btn');
-    dom.proPlanButton = document.getElementById('upgrade-to-pro-btn');
+    dom.sparkPlanButton = document.getElementById('spark-plan-btn');
+    dom.proPlanButton = document.getElementById('pro-plan-btn');
 
 
-    // Loading Overlay
+    // Loading Overlays
     dom.loadingOverlay = document.getElementById('loading-overlay');
     dom.loadingText = document.getElementById('loading-text');
+    dom.paymentProcessingOverlay = document.getElementById('payment-processing-overlay');
 
     // PPT Loading Overlay
     dom.pptLoadingOverlay = document.getElementById('ppt-loading-overlay');

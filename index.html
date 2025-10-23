@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="index.css">
     
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script src="https://unpkg.com/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -62,6 +63,17 @@
         </div>
     </div>
     <!-- END: PDF Loading Overlay -->
+
+    <!-- START: Payment Processing Overlay -->
+    <div id="payment-processing-overlay" style="display: none;">
+        <div class="loader-content">
+            <lottie-player src="https://assets8.lottiefiles.com/packages/lf20_c0stye3w.json" background="transparent" speed="1" style="width: 200px; height: 200px;" loop autoplay></lottie-player>
+            <p id="payment-processing-text">Processing Your Payment...</p>
+            <span id="payment-processing-details">Please do not close this window.</span>
+        </div>
+    </div>
+    <!-- END: Payment Processing Overlay -->
+
 
     <!-- START: Fireball HTML Elements (10 balls) -->
     <div id="fireball1" class="fireball"></div>
@@ -729,7 +741,6 @@
             <div class="content-modal-body plans-container">
                 <!-- Free Plan -->
                 <div class="plan-card" data-plan="free">
-                    <div class="plan-badge current-plan-badge">Your Current Plan</div>
                     <div class="plan-header">
                         <h3>Free Plan</h3>
                         <p class="plan-price">₹0 <span>/ month</span></p>
@@ -755,7 +766,7 @@
                         <li><i class="fas fa-times-circle"></i> Unlimited Access</li>
                         <li><i class="fas fa-times-circle"></i> Priority Support</li>
                     </ul>
-                    <button id="upgrade-to-spark-btn" class="plan-button">Upgrade Now</button>
+                    <button id="spark-plan-btn" class="plan-button" data-plan="spark" data-price="29">Upgrade Now</button>
                 </div>
                 <!-- Pro Plan -->
                 <div class="plan-card" data-plan="pro">
@@ -769,7 +780,7 @@
                         <li><i class="fas fa-check-circle"></i> Priority Support</li>
                         <li><i class="fas fa-check-circle"></i> Access All Future Features</li>
                     </ul>
-                    <button id="upgrade-to-pro-btn" class="plan-button">Upgrade Now</button>
+                    <button id="pro-plan-btn" class="plan-button" data-plan="pro" data-price="49">Upgrade Now</button>
                 </div>
             </div>
         </div>

@@ -25,6 +25,7 @@ import {
 import { initFilterModule } from './js/filter.js';
 import { initQuizModule, loadQuiz, resumeLoadedQuiz } from './js/quiz.js';
 import { initReviewModule, showFinalScoreScreen } from './js/review.js';
+import { supabase } from './js/supabaseClient.js';
 
 // --- VIEW MANAGER ---
 const mainSections = [
@@ -172,6 +173,47 @@ function updatePlansModal() {
     }
 }
 
+/**
+ * Updates the user's side menu profile information.
+ * @param {object} profile The user profile object from Supabase.
+ */
+function updateUserProfileUI(profile) {
+    if (!profile) return;
+    
+    dom.sideMenuProfileName.textContent = profile.full_name || 'Quiz User';
+    dom.sideMenuProfilePic.src = profile.avatar_url || 'https://via.placeholder.com/60';
+    
+    const statusBadge = dom.sideMenuSubscriptionStatus;
+    const expiryBadge = dom.sideMenuExpiryDate;
+    
+    statusBadge.classList.remove('pro-plan', 'spark-plan');
+    
+    let planText = 'Free Plan';
+    let hasExpiry = false;
+
+    if (profile.subscription_status === 'pro') {
+        planText = 'Pro Plan';
+        statusBadge.classList.add('pro-plan');
+        hasExpiry = true;
+    } else if (profile.subscription_status === 'spark') {
+        planText = 'Spark Plan';
+        statusBadge.classList.add('spark-plan');
+        hasExpiry = true;
+    }
+    
+    statusBadge.textContent = planText;
+    
+    if (hasExpiry && profile.plan_expiry_date) {
+        const expiry = new Date(profile.plan_expiry_date);
+        const userTimezoneOffset = expiry.getTimezoneOffset() * 60000;
+        const localDate = new Date(expiry.getTime() + userTimezoneOffset);
+        expiryBadge.textContent = `Expires on: ${localDate.toLocaleDateString()}`;
+        expiryBadge.style.display = 'block';
+    } else {
+        expiryBadge.style.display = 'none';
+    }
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -203,41 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
             state.userProfile = profile; // Set the potentially updated profile to state
 
             if (profile) {
-                dom.sideMenuProfileName.textContent = profile.full_name || 'Quiz User';
-                dom.sideMenuProfilePic.src = profile.avatar_url || 'https://via.placeholder.com/60';
-                
-                // NEW: Enhanced UI for subscription status
-                const statusBadge = dom.sideMenuSubscriptionStatus;
-                const expiryBadge = dom.sideMenuExpiryDate;
-                
-                statusBadge.classList.remove('pro-plan', 'spark-plan'); // Reset classes
-                
-                let planText = 'Free Plan';
-                let hasExpiry = false;
-
-                if (profile.subscription_status === 'pro') {
-                    planText = 'Pro Plan';
-                    statusBadge.classList.add('pro-plan');
-                    hasExpiry = true;
-                } else if (profile.subscription_status === 'spark') {
-                    planText = 'Spark Plan';
-                    statusBadge.classList.add('spark-plan');
-                    hasExpiry = true;
-                }
-                
-                statusBadge.textContent = planText;
-                
-                if (hasExpiry && profile.plan_expiry_date) {
-                    const expiry = new Date(profile.plan_expiry_date);
-                    // Adjust for timezone to show correct local date
-                    const userTimezoneOffset = expiry.getTimezoneOffset() * 60000;
-                    const localDate = new Date(expiry.getTime() + userTimezoneOffset);
-                    expiryBadge.textContent = `Expires on: ${localDate.toLocaleDateString()}`;
-                    expiryBadge.style.display = 'block';
-                } else {
-                    expiryBadge.style.display = 'none';
-                }
-                
+                updateUserProfileUI(profile);
                 // NEW: Check and reset daily limits if it's a new day
                 await this.checkAndResetDailyLimits(user.id, state.userProfile);
 
@@ -586,48 +594,86 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             setupSideMenuLink(dom.sideMenuPrivacyLink, () => toggleModal('privacyPolicyOverlay'));
 
-            // Manual Upgrade Flow
-            const showUpgradeModal = (planName, price) => {
-                const upiId = 'your-upi-id@okhdfcbank'; // Replace with your actual UPI ID
-                Swal.fire({
-                    title: `Upgrade to ${planName}`,
-                    html: `
-                        <p>To upgrade your account, please follow these steps:</p>
-                        <ol style="text-align: left; margin: 20px auto; max-width: 350px;">
-                            <li>Make a payment of <strong>₹${price}</strong> via UPI to the ID below.</li>
-                            <li>Email a screenshot of the transaction to <strong>support@quizlm.com</strong>.</li>
-                            <li>Your account will be manually upgraded within 24 hours.</li>
-                        </ol>
-                        <div class="upi-info">
-                            <strong>UPI ID:</strong> <span id="upi-id-text">${upiId}</span>
-                        </div>
-                    `,
-                    showCloseButton: true,
-                    confirmButtonText: '<i class="fas fa-copy"></i> Copy UPI ID',
-                    confirmButtonColor: 'var(--primary-color)',
-                    footer: 'Thank you for your support!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        navigator.clipboard.writeText(upiId).then(() => {
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'UPI ID copied to clipboard!'
-                            });
-                        }).catch(err => {
-                            Toast.fire({
-                                icon: 'error',
-                                title: 'Could not copy ID.'
-                            });
-                        });
-                    }
+            // Real Payment Flow with Razorpay
+            const handleUpgrade = async (plan, price) => {
+                const planName = plan.charAt(0).toUpperCase() + plan.slice(1);
+                
+                // 1. Show processing overlay and create a payment order on the backend
+                dom.paymentProcessingOverlay.querySelector('#payment-processing-text').textContent = 'Creating secure payment order...';
+                dom.paymentProcessingOverlay.style.display = 'flex';
+                
+                const { data: orderData, error: orderError } = await supabase.functions.invoke('create-razorpay-order', {
+                    body: { amount: price * 100, plan: plan }, // Send amount in paise
                 });
-            };
 
+                if (orderError) {
+                    dom.paymentProcessingOverlay.style.display = 'none';
+                    Swal.fire('Error', 'Could not create a payment order. Please try again.', 'error');
+                    console.error('Order creation error:', orderError);
+                    return;
+                }
+                
+                // 2. Configure and open Razorpay Checkout
+                const options = {
+                    key: orderData.key_id,
+                    amount: orderData.amount,
+                    currency: "INR",
+                    name: "Quiz LM Upgrade",
+                    description: `${planName} Plan - Monthly Subscription`,
+                    order_id: orderData.id,
+                    handler: async function (response) {
+                        // 3. Verification step
+                        dom.paymentProcessingOverlay.querySelector('#payment-processing-text').textContent = 'Verifying your payment...';
+                        dom.paymentProcessingOverlay.style.display = 'flex';
+
+                        const { data: verificationData, error: verificationError } = await supabase.functions.invoke('verify-razorpay-payment', {
+                            body: {
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature,
+                                plan: plan,
+                            },
+                        });
+
+                        dom.paymentProcessingOverlay.style.display = 'none';
+
+                        if (verificationError || !verificationData.success) {
+                             Swal.fire('Payment Failed', 'Your payment could not be verified. If the amount was debited, please contact support.', 'error');
+                        } else {
+                            // 4. Success - Update UI
+                            state.userProfile = await auth.fetchUserProfile(state.userProfile.id); // Refresh profile
+                            updateUserProfileUI(state.userProfile);
+                            updatePlansModal(); // Re-render the modal with new plan
+                            toggleModal('paidServicesOverlay', true); // Close the modal
+                            Swal.fire(
+                                'Upgrade Successful!',
+                                `You are now on the ${planName} Plan. Enjoy your new benefits!`,
+                                'success'
+                            );
+                        }
+                    },
+                    prefill: {
+                        name: state.userProfile?.full_name || "Quiz LM User",
+                        email: state.userProfile?.email || "",
+                    },
+                    theme: {
+                        color: "#3f51b5" // Matches app's primary color
+                    }
+                };
+
+                dom.paymentProcessingOverlay.style.display = 'none';
+                const rzp = new window.Razorpay(options);
+                rzp.on('payment.failed', function (response) {
+                    Swal.fire('Payment Failed', response.error.description, 'error');
+                });
+                rzp.open();
+            };
+            
             if (dom.sparkPlanButton) {
-                dom.sparkPlanButton.onclick = () => showUpgradeModal('Spark Plan', 29);
+                dom.sparkPlanButton.onclick = (e) => handleUpgrade(e.target.dataset.plan, e.target.dataset.price);
             }
             if (dom.proPlanButton) {
-                dom.proPlanButton.onclick = () => showUpgradeModal('Pro Plan', 49);
+                dom.proPlanButton.onclick = (e) => handleUpgrade(e.target.dataset.plan, e.target.dataset.price);
             }
 
 

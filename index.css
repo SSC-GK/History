@@ -2375,7 +2375,7 @@ body[data-theme='dark'] .remark-d { background-color: #b71c1c; color: #ffcdd2; }
 /* =======================================================
 7. OVERLAYS & MODALS
 ======================================================= */
-#loading-overlay, #ppt-loading-overlay, #pdf-loading-overlay {
+#loading-overlay, #ppt-loading-overlay, #pdf-loading-overlay, #payment-processing-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -2425,7 +2425,7 @@ body[data-theme='dark'] .remark-d { background-color: #b71c1c; color: #ffcdd2; }
     transition: width 0.2s ease-out;
 }
 
-#loading-percentage, #ppt-loading-details, #pdf-loading-details {
+#loading-percentage, #ppt-loading-details, #pdf-loading-details, #payment-processing-details {
     font-size: 1em;
     font-weight: 600;
     color: var(--primary-dark);
@@ -3281,9 +3281,6 @@ button.button-danger:hover {
     font-weight: 700;
     color: white;
 }
-.current-plan-badge {
-    background-color: var(--text-color-light);
-}
 .recommended-badge {
     background-color: var(--primary-color);
 }
@@ -3342,12 +3339,12 @@ button.button-danger:hover {
     cursor: pointer;
     transition: all 0.2s ease;
 }
-#upgrade-to-spark-btn, #upgrade-to-pro-btn {
+#spark-plan-btn, #pro-plan-btn {
     background-color: var(--primary-color);
     color: white;
     box-shadow: 0 4px 12px rgba(63, 81, 181, 0.4);
 }
-#upgrade-to-spark-btn:hover, #upgrade-to-pro-btn:hover {
+#spark-plan-btn:hover, #pro-plan-btn:hover {
     background-color: var(--primary-dark);
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(63, 81, 181, 0.5);
