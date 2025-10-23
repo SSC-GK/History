@@ -22,6 +22,66 @@ export async function signInWithGoogle() {
 }
 
 /**
+ * Signs up a new user with email and password.
+ * @param {string} fullName The user's full name.
+ * @param {string} email The user's email.
+ * @param {string} password The user's password.
+ * @returns {Promise<object|null>} The new user object or null.
+ */
+export async function signUpWithEmail(fullName, email, password) {
+    const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+            data: {
+                full_name: fullName,
+                avatar_url: `https://api.dicebear.com/8.x/initials/svg?seed=${encodeURIComponent(fullName)}`
+            },
+            emailRedirectTo: window.location.href,
+        }
+    });
+
+    if (error) {
+        console.error('Error signing up:', error);
+        Toast.fire({
+            icon: 'error',
+            title: 'Sign-up failed',
+            text: error.message
+        });
+        return null;
+    }
+
+    // Supabase sends a confirmation email. Inform the user.
+    Swal.fire({
+        title: 'Please check your email!',
+        html: `We have sent a confirmation link to <strong>${email}</strong>. Please click the link to complete your registration.`,
+        icon: 'info'
+    });
+    return data.user;
+}
+
+/**
+ * Signs a user in with their email and password.
+ * @param {string} email The user's email.
+ * @param {string} password The user's password.
+ */
+export async function signInWithEmail(email, password) {
+    const { error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+    });
+    if (error) {
+        console.error('Error signing in:', error);
+        Toast.fire({
+            icon: 'error',
+            title: 'Sign-in failed',
+            text: error.message
+        });
+    }
+    // onAuthStateChange will handle successful login
+}
+
+/**
  * Signs the current user out.
  */
 export async function signOut() {

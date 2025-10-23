@@ -125,22 +125,63 @@
         <div class="login-content">
             <h1>Welcome to Quiz LM</h1>
             <p class="login-subtitle">Your personalized quiz generation platform.</p>
-            <p>To continue, please confirm you are over 18 and agree to our Privacy Policy.</p>
             
-            <div class="consent-section">
+            <div class="auth-container">
+                <div class="auth-tabs">
+                    <button id="sign-in-tab" class="auth-tab-btn active" data-tab="sign-in-form">Sign In</button>
+                    <button id="sign-up-tab" class="auth-tab-btn" data-tab="sign-up-form">Sign Up</button>
+                </div>
+    
+                <div id="auth-form-content">
+                    <form id="sign-in-form" class="auth-form active" novalidate>
+                        <p class="form-intro">Sign in to access your quizzes.</p>
+                        <div class="form-control">
+                            <label for="signin-email">Email</label>
+                            <input type="email" id="signin-email" placeholder="you@example.com" required autocomplete="email">
+                        </div>
+                        <div class="form-control">
+                            <label for="signin-password">Password</label>
+                            <input type="password" id="signin-password" placeholder="••••••••" required autocomplete="current-password">
+                        </div>
+                        <button type="submit" id="sign-in-email-btn" class="auth-submit-btn">Sign In</button>
+                    </form>
+    
+                    <form id="sign-up-form" class="auth-form" novalidate>
+                        <p class="form-intro">Create a new account to get started.</p>
+                        <div class="form-control">
+                            <label for="signup-name">Full Name</label>
+                            <input type="text" id="signup-name" placeholder="Your Name" required autocomplete="name">
+                        </div>
+                        <div class="form-control">
+                            <label for="signup-email">Email</label>
+                            <input type="email" id="signup-email" placeholder="you@example.com" required autocomplete="email">
+                        </div>
+                        <div class="form-control">
+                            <label for="signup-password">Password</label>
+                            <input type="password" id="signup-password" placeholder="Create a password (min. 6 characters)" required autocomplete="new-password">
+                        </div>
+                        <button type="submit" id="sign-up-email-btn" class="auth-submit-btn" disabled>Create Account</button>
+                    </form>
+                </div>
+            </div>
+    
+            <div class="consent-section" style="display: none;">
+                <p>To create an account, please confirm the following:</p>
                 <div class="consent-item">
                     <input type="checkbox" id="age-consent-checkbox">
-                    <label for="age-consent-checkbox">I confirm that I am 18 years of age or older.</label>
+                    <label for="age-consent-checkbox">I am 18 years of age or older.</label>
                 </div>
                 <div class="consent-item">
                     <input type="checkbox" id="privacy-consent-checkbox">
-                    <label for="privacy-consent-checkbox">I have read and agree to the <a href="#" id="privacy-policy-link">Privacy Policy</a>.</label>
+                    <label for="privacy-consent-checkbox">I agree to the <a href="#" id="privacy-policy-link">Privacy Policy</a>.</label>
                 </div>
             </div>
-
-            <button id="sign-in-btn" class="google-sign-in-btn" disabled>
+            
+            <div class="auth-divider"><span>OR</span></div>
+    
+            <button id="sign-in-btn" class="google-sign-in-btn">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google icon">
-                <span>Sign in with Google</span>
+                <span id="google-btn-text">Sign in with Google</span>
             </button>
         </div>
     </section>

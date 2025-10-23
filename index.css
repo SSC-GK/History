@@ -566,6 +566,7 @@ NEW: LOGIN GATE STYLES
 
 .login-content {
     animation: fade-in-slide-up 0.5s ease-out;
+    width: 100%;
 }
 
 #login-gate h1 {
@@ -578,10 +579,6 @@ NEW: LOGIN GATE STYLES
     color: var(--text-color-medium);
     margin-top: -10px;
     margin-bottom: 25px;
-}
-
-#login-gate p {
-    color: var(--text-color-light);
 }
 
 .google-sign-in-btn {
@@ -599,7 +596,8 @@ NEW: LOGIN GATE STYLES
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 2px 5px var(--shadow-color);
-    margin-top: 20px;
+    width: 100%;
+    max-width: 400px;
 }
 
 .google-sign-in-btn:hover {
@@ -613,10 +611,153 @@ NEW: LOGIN GATE STYLES
     height: 24px;
 }
 
-.consent-section {
-    margin: 20px 0;
+.google-sign-in-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--button-hover-bg);
+    box-shadow: none;
+    transform: none;
+}
+
+
+/* Login Gate Auth Form */
+.auth-container {
+    background-color: var(--settings-header-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    margin-top: 25px;
+    overflow: hidden;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.auth-tabs {
+    display: flex;
+}
+
+.auth-tab-btn {
+    flex: 1;
+    padding: 15px;
+    font-size: 1.1em;
+    font-weight: 600;
+    border: none;
+    background-color: transparent;
+    color: var(--text-color-light);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+}
+
+.auth-tab-btn.active {
+    color: var(--primary-dark);
+    border-bottom-color: var(--primary-dark);
+    background-color: var(--container-bg);
+}
+
+#auth-form-content {
+    padding: 25px;
+}
+
+.auth-form {
+    display: none;
+}
+.auth-form.active {
+    display: block;
+    animation: fade-in-slide-up 0.4s ease-out;
+}
+
+.form-intro {
+    font-size: 1em;
+    color: var(--text-color-medium);
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.form-control {
+    margin-bottom: 15px;
     text-align: left;
+}
+
+.form-control label {
+    display: block;
+    font-weight: 500;
     font-size: 0.9em;
+    color: var(--text-color-medium);
+    margin-bottom: 5px;
+}
+
+.form-control input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1em;
+    border: 1px solid var(--button-border-color);
+    border-radius: 6px;
+    background-color: var(--button-bg);
+    color: var(--text-color-dark);
+}
+.form-control input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.auth-submit-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1em;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    background-color: var(--primary-color);
+    color: var(--button-text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.auth-submit-btn:hover:not(:disabled) {
+    background-color: var(--primary-dark);
+}
+.auth-submit-btn:disabled {
+    background-color: #9E9E9E;
+    cursor: not-allowed;
+}
+
+.auth-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--text-color-light);
+    margin: 25px 0;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border-color);
+}
+.auth-divider span {
+    padding: 0 15px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.login-content .consent-section {
+    max-width: 400px;
+    margin: 20px auto;
+    font-size: 0.85em;
+    background: var(--settings-header-bg);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    text-align: left;
+    animation: fade-in-slide-up 0.4s ease-out;
+}
+.login-content .consent-section p {
+    margin-top: 0;
+    font-weight: 500;
     color: var(--text-color-medium);
 }
 .consent-item {
@@ -632,13 +773,6 @@ NEW: LOGIN GATE STYLES
     color: var(--primary-dark);
     text-decoration: underline;
     font-weight: 600;
-}
-.google-sign-in-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    background-color: var(--button-hover-bg);
-    box-shadow: none;
-    transform: none;
 }
 
 /* =======================================================

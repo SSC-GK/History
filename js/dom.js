@@ -12,6 +12,21 @@ export function cacheDomElements() {
     dom.privacyConsentCheckbox = document.getElementById('privacy-consent-checkbox');
     dom.privacyPolicyLink = document.getElementById('privacy-policy-link');
 
+    // NEW Email/Password Auth elements
+    dom.signInTab = document.getElementById('sign-in-tab');
+    dom.signUpTab = document.getElementById('sign-up-tab');
+    dom.signInForm = document.getElementById('sign-in-form');
+    dom.signUpForm = document.getElementById('sign-up-form');
+    dom.signinEmail = document.getElementById('signin-email');
+    dom.signinPassword = document.getElementById('signin-password');
+    dom.signInEmailBtn = document.getElementById('sign-in-email-btn');
+    dom.signupName = document.getElementById('signup-name');
+    dom.signupEmail = document.getElementById('signup-email');
+    dom.signupPassword = document.getElementById('signup-password');
+    dom.signUpEmailBtn = document.getElementById('sign-up-email-btn');
+    dom.consentSection = document.querySelector('.consent-section');
+    dom.googleBtnText = document.getElementById('google-btn-text');
+
     // Privacy Policy Modal
     dom.privacyPolicyOverlay = document.getElementById('privacy-policy-overlay');
     dom.privacyPolicyCloseBtn = document.getElementById('privacy-policy-close-btn');

@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         
         showLoginGate: function() {
-            // FIX: Hide the loading overlay for unauthenticated users.
+            // Hide loading overlay
             if (dom.loadingOverlay.style.display !== 'none') {
                 dom.loadingOverlay.classList.add('fade-out');
                 dom.loadingOverlay.addEventListener('transitionend', () => {
@@ -295,14 +295,69 @@ document.addEventListener('DOMContentLoaded', () => {
             showView('login-gate');
             clearQuizState();
             state.userProfile = null; // Clear profile on logout
-
-            // DPDP Compliance: Consent checkbox logic
-            const updateSignInButtonState = () => {
-                dom.signInBtn.disabled = !(dom.ageConsentCheckbox.checked && dom.privacyConsentCheckbox.checked);
+        
+            // --- NEW AUTH FORM LOGIC ---
+            const updateSignUpButtonStates = () => {
+                const consentGiven = dom.ageConsentCheckbox.checked && dom.privacyConsentCheckbox.checked;
+                dom.signUpEmailBtn.disabled = !consentGiven;
+                // Disable Google button only when in sign-up mode
+                if (dom.signUpTab.classList.contains('active')) {
+                    dom.signInBtn.disabled = !consentGiven;
+                }
             };
-            dom.ageConsentCheckbox.onchange = updateSignInButtonState;
-            dom.privacyConsentCheckbox.onchange = updateSignInButtonState;
-            updateSignInButtonState(); // Set initial state
+        
+            const switchAuthTab = (tabToShow) => {
+                const isSignUp = tabToShow === 'sign-up-form';
+        
+                dom.signInTab.classList.toggle('active', !isSignUp);
+                dom.signUpTab.classList.toggle('active', isSignUp);
+        
+                dom.signInForm.classList.toggle('active', !isSignUp);
+                dom.signUpForm.classList.toggle('active', isSignUp);
+        
+                dom.consentSection.style.display = isSignUp ? 'block' : 'none';
+        
+                dom.googleBtnText.textContent = isSignUp ? 'Sign up with Google' : 'Sign in with Google';
+                dom.signInBtn.disabled = isSignUp ? !(dom.ageConsentCheckbox.checked && dom.privacyConsentCheckbox.checked) : false;
+            };
+        
+            // Event Listeners for new UI
+            dom.signInTab.onclick = () => switchAuthTab('sign-in-form');
+            dom.signUpTab.onclick = () => switchAuthTab('sign-up-form');
+        
+            dom.ageConsentCheckbox.onchange = updateSignUpButtonStates;
+            dom.privacyConsentCheckbox.onchange = updateSignUpButtonStates;
+        
+            dom.signInForm.onsubmit = (e) => {
+                e.preventDefault();
+                const email = dom.signinEmail.value;
+                const password = dom.signinPassword.value;
+                if (email && password) {
+                    auth.signInWithEmail(email, password);
+                } else {
+                    Toast.fire({ icon: 'warning', title: 'Please enter email and password.' });
+                }
+            };
+        
+            dom.signUpForm.onsubmit = (e) => {
+                e.preventDefault();
+                const fullName = dom.signupName.value;
+                const email = dom.signupEmail.value;
+                const password = dom.signupPassword.value;
+                if (fullName && email && password) {
+                    if (password.length < 6) {
+                         Toast.fire({ icon: 'warning', title: 'Password must be at least 6 characters.' });
+                         return;
+                    }
+                    auth.signUpWithEmail(fullName, email, password);
+                } else {
+                     Toast.fire({ icon: 'warning', title: 'Please fill out all fields.' });
+                }
+            };
+        
+            // Initial UI State
+            switchAuthTab('sign-in-form'); // Default to sign-in view
+            updateSignUpButtonStates();
         },
 
         checkPlanExpiry: async function(userId, profile) {
