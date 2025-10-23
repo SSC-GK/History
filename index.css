@@ -374,6 +374,11 @@ body[data-theme='dark'] .paid-tag {
     text-transform: capitalize;
     border: 1px solid var(--primary-color);
 }
+.subscription-badge.spark-plan {
+    background-color: #e0e7ff;
+    color: #3730a3;
+    border-color: #4338ca;
+}
 .subscription-badge.pro-plan {
     background-color: var(--accent-color);
     color: #111827;
@@ -391,6 +396,11 @@ body[data-theme='dark'] .subscription-badge {
     background-color: var(--primary-light);
     color: var(--text-color-dark);
     border-color: var(--primary-dark);
+}
+body[data-theme='dark'] .subscription-badge.spark-plan {
+    background-color: #3730a3;
+    color: #e0e7ff;
+    border-color: #6d28d9;
 }
 body[data-theme='dark'] .subscription-badge.pro-plan {
     color: #111827;
@@ -3049,9 +3059,13 @@ body[data-theme='dark'] #review-explanation {
 .content-modal-overlay.visible .content-modal-panel {
     transform: scale(1);
 }
-#privacy-policy-panel, .wide-modal {
+#privacy-policy-panel {
     max-width: 700px; /* Wider for more text content */
 }
+.wide-modal {
+    max-width: 900px;
+}
+
 
 .settings-header, .privacy-policy-header, .content-modal-header {
     display: flex;
@@ -3220,9 +3234,9 @@ button.button-danger:hover {
     grid-template-columns: 1fr;
     gap: 25px;
 }
-@media (min-width: 600px) {
+@media (min-width: 768px) {
     .plans-container {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 .plan-card {
@@ -3312,12 +3326,12 @@ button.button-danger:hover {
     cursor: pointer;
     transition: all 0.2s ease;
 }
-#upgrade-plan-btn {
+#upgrade-to-spark-btn, #upgrade-to-pro-btn {
     background-color: var(--primary-color);
     color: white;
     box-shadow: 0 4px 12px rgba(63, 81, 181, 0.4);
 }
-#upgrade-plan-btn:hover {
+#upgrade-to-spark-btn:hover, #upgrade-to-pro-btn:hover {
     background-color: var(--primary-dark);
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(63, 81, 181, 0.5);

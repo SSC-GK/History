@@ -8,6 +8,10 @@ export const config = {
         queries: 5,
         questions: 200,
     },
+    sparkPlanLimits: {
+        queries: 25,
+        questions: 1000,
+    },
     zoomableSelectors: [
         '.container h1', '.container h2', '.container #review-question-number', '.container #review-time-taken',
         '.container .options button', '.container #explanation', '.container #review-explanation', '.container .summary-item span',

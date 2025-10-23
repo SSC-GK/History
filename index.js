@@ -159,23 +159,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 const statusBadge = dom.sideMenuSubscriptionStatus;
                 const expiryBadge = dom.sideMenuExpiryDate;
                 
-                statusBadge.classList.remove('pro-plan'); // Reset class
+                statusBadge.classList.remove('pro-plan', 'spark-plan'); // Reset classes
                 
+                let planText = 'Free Plan';
+                let hasExpiry = false;
+
                 if (profile.subscription_status === 'pro') {
-                    statusBadge.textContent = 'Pro Plan';
+                    planText = 'Pro Plan';
                     statusBadge.classList.add('pro-plan');
-                    if (profile.plan_expiry_date) {
-                        const expiry = new Date(profile.plan_expiry_date);
-                        // Adjust for timezone to show correct local date
-                        const userTimezoneOffset = expiry.getTimezoneOffset() * 60000;
-                        const localDate = new Date(expiry.getTime() + userTimezoneOffset);
-                        expiryBadge.textContent = `Expires on: ${localDate.toLocaleDateString()}`;
-                        expiryBadge.style.display = 'block';
-                    } else {
-                        expiryBadge.style.display = 'none';
-                    }
+                    hasExpiry = true;
+                } else if (profile.subscription_status === 'spark') {
+                    planText = 'Spark Plan';
+                    statusBadge.classList.add('spark-plan');
+                    hasExpiry = true;
+                }
+                
+                statusBadge.textContent = planText;
+                
+                if (hasExpiry && profile.plan_expiry_date) {
+                    const expiry = new Date(profile.plan_expiry_date);
+                    // Adjust for timezone to show correct local date
+                    const userTimezoneOffset = expiry.getTimezoneOffset() * 60000;
+                    const localDate = new Date(expiry.getTime() + userTimezoneOffset);
+                    expiryBadge.textContent = `Expires on: ${localDate.toLocaleDateString()}`;
+                    expiryBadge.style.display = 'block';
                 } else {
-                    statusBadge.textContent = 'Free Plan';
                     expiryBadge.style.display = 'none';
                 }
                 
@@ -186,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 dom.sideMenuProfileName.textContent = user.user_metadata?.full_name || 'Quiz User';
                 dom.sideMenuProfilePic.src = user.user_metadata?.avatar_url || 'https://via.placeholder.com/60';
                 dom.sideMenuSubscriptionStatus.textContent = 'Free Plan';
-                dom.sideMenuSubscriptionStatus.classList.remove('pro-plan');
+                dom.sideMenuSubscriptionStatus.classList.remove('pro-plan', 'spark-plan');
                 dom.sideMenuExpiryDate.style.display = 'none';
             }
             
@@ -236,13 +244,13 @@ document.addEventListener('DOMContentLoaded', () => {
         },
 
         checkPlanExpiry: async function(userId, profile) {
-            if (profile && profile.subscription_status === 'pro' && profile.plan_expiry_date) {
+            if (profile && (profile.subscription_status === 'pro' || profile.subscription_status === 'spark') && profile.plan_expiry_date) {
                 const expiryDate = new Date(profile.plan_expiry_date);
                 const today = new Date();
                 today.setHours(0, 0, 0, 0); // Compare against the start of today
 
                 if (expiryDate < today) {
-                    console.log("Pro plan expired. Reverting user to free plan.");
+                    console.log("Paid plan expired. Reverting user to free plan.");
                     const updates = {
                         subscription_status: 'free',
                         plan_expiry_date: null,
@@ -251,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (updatedProfile) {
                         Toast.fire({
                             icon: 'info',
-                            title: 'Your Pro plan has expired.',
+                            title: 'Your paid plan has expired.',
                             text: 'You have been switched to the Free plan.'
                         });
                         return updatedProfile; // Return the new, reverted profile
@@ -516,42 +524,47 @@ document.addEventListener('DOMContentLoaded', () => {
             setupSideMenuLink(dom.sideMenuPrivacyLink, () => toggleModal('privacyPolicyOverlay'));
 
             // Manual Upgrade Flow
-            if (dom.upgradePlanBtn) {
-                dom.upgradePlanBtn.onclick = () => {
-                    const upiId = 'your-upi-id@okhdfcbank'; // Replace with your actual UPI ID
-                    Swal.fire({
-                        title: 'Upgrade to Pro Plan',
-                        html: `
-                            <p>To upgrade your account, please follow these steps:</p>
-                            <ol style="text-align: left; margin: 20px auto; max-width: 350px;">
-                                <li>Make a payment of <strong>₹49</strong> via UPI to the ID below.</li>
-                                <li>Email a screenshot of the transaction to <strong>support@quizlm.com</strong>.</li>
-                                <li>Your account will be manually upgraded to Pro within 24 hours.</li>
-                            </ol>
-                            <div class="upi-info">
-                                <strong>UPI ID:</strong> <span id="upi-id-text">${upiId}</span>
-                            </div>
-                        `,
-                        showCloseButton: true,
-                        confirmButtonText: '<i class="fas fa-copy"></i> Copy UPI ID',
-                        confirmButtonColor: 'var(--primary-color)',
-                        footer: 'Thank you for your support!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            navigator.clipboard.writeText(upiId).then(() => {
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: 'UPI ID copied to clipboard!'
-                                });
-                            }).catch(err => {
-                                Toast.fire({
-                                    icon: 'error',
-                                    title: 'Could not copy ID.'
-                                });
+            const showUpgradeModal = (planName, price) => {
+                const upiId = 'your-upi-id@okhdfcbank'; // Replace with your actual UPI ID
+                Swal.fire({
+                    title: `Upgrade to ${planName}`,
+                    html: `
+                        <p>To upgrade your account, please follow these steps:</p>
+                        <ol style="text-align: left; margin: 20px auto; max-width: 350px;">
+                            <li>Make a payment of <strong>₹${price}</strong> via UPI to the ID below.</li>
+                            <li>Email a screenshot of the transaction to <strong>support@quizlm.com</strong>.</li>
+                            <li>Your account will be manually upgraded within 24 hours.</li>
+                        </ol>
+                        <div class="upi-info">
+                            <strong>UPI ID:</strong> <span id="upi-id-text">${upiId}</span>
+                        </div>
+                    `,
+                    showCloseButton: true,
+                    confirmButtonText: '<i class="fas fa-copy"></i> Copy UPI ID',
+                    confirmButtonColor: 'var(--primary-color)',
+                    footer: 'Thank you for your support!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        navigator.clipboard.writeText(upiId).then(() => {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'UPI ID copied to clipboard!'
                             });
-                        }
-                    });
-                };
+                        }).catch(err => {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Could not copy ID.'
+                            });
+                        });
+                    }
+                });
+            };
+
+            if (dom.upgradeToSparkBtn) {
+                dom.upgradeToSparkBtn.onclick = () => showUpgradeModal('Spark Plan', 29);
+            }
+            if (dom.upgradeToProBtn) {
+                dom.upgradeToProBtn.onclick = () => showUpgradeModal('Pro Plan', 49);
             }
 
 

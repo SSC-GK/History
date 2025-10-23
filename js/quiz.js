@@ -54,23 +54,28 @@ function reorderQuizQuestions() {
 
 /**
  * Checks if a user can attempt another question based on their plan.
- * Increments the attempt counter for free users. Ends the quiz if the limit is reached.
+ * Increments the attempt counter for free/spark users. Ends the quiz if the limit is reached.
  * @returns {Promise<boolean>} True if the user can proceed, false otherwise.
  */
 async function handleQuestionAttempt() {
     const profile = state.userProfile;
-    // Allow pro users or if profile somehow failed to load
+    // Pro users can proceed without checks
     if (!profile || profile.subscription_status === 'pro') {
         return true;
     }
 
-    // We check *before* incrementing to allow the 200th question to be processed
-    if (profile.daily_questions_attempted >= config.freePlanLimits.questions) {
+    const isSpark = profile.subscription_status === 'spark';
+    const limits = isSpark ? config.sparkPlanLimits : config.freePlanLimits;
+    const planName = isSpark ? 'Spark' : 'Free';
+    const upgradePrompt = isSpark ? 'Upgrade to Pro for unlimited attempts!' : 'Upgrade your plan to keep practicing!';
+
+    // We check *before* incrementing to allow the last question to be processed
+    if (profile.daily_questions_attempted >= limits.questions) {
         stopTimer(); // Stop the timer immediately
         Swal.fire({
             target: dom.quizMainContainer,
-            title: 'Daily Question Limit Reached!',
-            html: `You've attempted your free limit of <b>${config.freePlanLimits.questions}</b> questions today. Your quiz will now end. <br>Upgrade to keep practicing!`,
+            title: `Daily Question Limit Reached for ${planName} Plan!`,
+            html: `You've attempted your limit of <b>${limits.questions}</b> questions today. Your quiz will now end. <br>${upgradePrompt}`,
             icon: 'warning',
             allowOutsideClick: false,
             allowEscapeKey: false,

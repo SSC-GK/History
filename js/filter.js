@@ -24,21 +24,24 @@ function triggerCountAnimation(element) {
 
 /**
  * Checks if the user can perform a query (start quiz, generate doc).
- * Increments the user's query count if they are on a free plan and within limits.
+ * Increments the user's query count if they are not on a Pro plan and are within limits.
  * @returns {Promise<boolean>} True if the user can proceed, false otherwise.
  */
 async function handleQueryAttempt() {
     const profile = state.userProfile;
-    // Allow pro users or if profile somehow failed to load
     if (!profile || profile.subscription_status === 'pro') {
         return true; 
     }
 
-    if (profile.daily_queries_used >= config.freePlanLimits.queries) {
+    const isSpark = profile.subscription_status === 'spark';
+    const limits = isSpark ? config.sparkPlanLimits : config.freePlanLimits;
+    const planName = isSpark ? 'Spark' : 'Free';
+
+    if (profile.daily_queries_used >= limits.queries) {
         Swal.fire({
             target: dom.filterSection,
-            title: 'Daily Query Limit Reached',
-            html: `You have used your <b>${config.freePlanLimits.queries}</b> free queries for today. <br>Upgrade to a paid plan for more!`,
+            title: `Daily Query Limit Reached for ${planName} Plan`,
+            html: `You have used your <b>${limits.queries}</b> queries for today. <br>Upgrade to a higher plan for more!`,
             icon: 'info',
             showCancelButton: true,
             confirmButtonColor: 'var(--primary-color)',
@@ -71,6 +74,40 @@ export function initFilterModule(callbacks) {
     bindFilterEventListeners();
     loadQuestionsForFiltering();
     state.callbacks.confirmGoBackToHome = callbacks.confirmGoBackToHome;
+     // Initialize the worker
+    if (window.Worker) {
+        docWorker = new Worker('./js/worker.js');
+        docWorker.onmessage = (e) => {
+            const { type, blob, filename, error, value, details } = e.data;
+            const overlayId = e.data.format === 'ppt' ? 'ppt-loading-overlay' : 'pdf-loading-overlay';
+            const progressBarId = e.data.format === 'ppt' ? 'ppt-loading-progress-bar' : 'pdf-loading-progress-bar';
+            const detailsId = e.data.format === 'ppt' ? 'ppt-loading-details' : 'pdf-loading-details';
+
+            if (type === 'progress') {
+                document.getElementById(progressBarId).style.width = `${value}%`;
+                document.getElementById(detailsId).textContent = details;
+            } else if (type === 'result') {
+                document.getElementById(overlayId).style.display = 'none';
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } else if (type === 'error') {
+                document.getElementById(overlayId).style.display = 'none';
+                console.error('Worker error:', error);
+                Swal.fire({
+                    target: dom.filterSection,
+                    icon: 'error',
+                    title: 'Generation Failed',
+                    text: 'An error occurred while creating your document.',
+                });
+            }
+        };
+    }
 }
 
 function initializeTabs() {
@@ -82,677 +119,371 @@ function initializeTabs() {
             button.classList.add('active');
 
             dom.tabPanels.forEach(panel => {
-                if (panel.id === targetPanelId) {
-                    panel.classList.add('active');
-                } else {
-                    panel.classList.remove('active');
-                }
+                panel.id === targetPanelId ? panel.classList.add('active') : panel.classList.remove('active');
             });
 
             dom.tabTaglines.forEach(tagline => {
-                if (tagline.dataset.tab === targetPanelId) {
-                    tagline.classList.add('active');
-                } else {
-                    tagline.classList.remove('active');
-                }
+                tagline.dataset.tab === targetPanelId ? tagline.classList.add('active') : tagline.classList.remove('active');
             });
         });
     });
 }
 
-const debouncedFetch = debounce(fetchAndApplyFilters, 500);
+const applyAllFiltersDebounced = debounce(applyAllFilters, 300);
 
 function bindFilterEventListeners() {
-    dom.startQuizBtn.onclick = () => startFilteredQuiz();
-    dom.createPptBtn.onclick = () => generateDocument('ppt');
-    dom.createPdfBtn.onclick = () => generateDocument('pdf');
-    dom.downloadJsonBtn.onclick = () => downloadJSON();
-    dom.resetFiltersBtnQuiz.onclick = () => resetFilters();
-    dom.resetFiltersBtnPpt.onclick = () => resetFilters();
-    dom.resetFiltersBtnJson.onclick = () => resetFilters();
-    dom.quickStartButtons.forEach(btn => {
-        btn.onclick = () => handleQuickStart(btn.dataset.preset);
-    });
-
     config.filterKeys.forEach(key => {
-        const elements = dom.filterElements[key];
-        if (elements.toggleBtn) {
-            elements.toggleBtn.onclick = () => toggleMultiSelectDropdown(key);
-        }
-        if (elements.searchInput) {
-            elements.searchInput.oninput = () => filterMultiSelectList(key);
+        if (dom.filterElements[key].toggleBtn) {
+            setupMultiselect(key);
+        } else if (dom.filterElements[key].segmentedControl) {
+            setupSegmentedControl(key);
         }
     });
 
-    document.addEventListener('click', (e) => {
-        config.filterKeys.forEach(key => {
-            if (!dom.filterElements[key] || !dom.filterElements[key].container) return;
-            const container = dom.filterElements[key].container;
-            if (container && !container.contains(e.target)) {
-                toggleMultiSelectDropdown(key, true); // Force close
-            }
-        });
-    });
+    dom.startQuizBtn.addEventListener('click', startQuiz);
+    dom.createPptBtn.addEventListener('click', createPPT);
+    dom.createPdfBtn.addEventListener('click', createPDF);
+    dom.downloadJsonBtn.addEventListener('click', downloadJSON);
 
-     if (dom.dynamicBreadcrumb) {
-        dom.dynamicBreadcrumb.addEventListener('click', (e) => {
-            if (e.target && e.target.id === 'breadcrumb-filters-link') {
-                e.preventDefault();
-                appCallbacks.confirmGoBackToHome();
-            } else if (e.target && e.target.id === 'breadcrumb-home-link') {
-                e.preventDefault();
-                appCallbacks.confirmGoBackToHome();
-            }
-        });
-    }
+    dom.resetFiltersBtnQuiz.addEventListener('click', resetAllFilters);
+    dom.resetFiltersBtnPpt.addEventListener('click', resetAllFilters);
+    dom.resetFiltersBtnJson.addEventListener('click', resetAllFilters);
+
+    dom.quickStartButtons.forEach(button => {
+        button.addEventListener('click', () => handleQuickStart(button.dataset.preset));
+    });
 }
 
 async function loadQuestionsForFiltering() {
-    try {
-        dom.loadingText.textContent = 'Connecting to database...';
-
-        // OPTIMIZATION: Only select columns needed for filtering to speed up initial load.
-        const { data, error } = await supabase
-            .from('questions')
-            .select('id, subject, topic, subTopic, difficulty, questionType, examName, examYear, tags');
-
-        if (error) {
-            throw new Error(`Supabase error: ${error.message}`);
-        }
-
-        if (!data || data.length === 0) {
-            throw new Error('No questions were found in the database.');
-        }
-
-        // This master list only contains filterable data, not full question text.
-        state.allQuestionsMasterList = data;
-
-        if (dom.loadingOverlay) {
-            dom.loadingOverlay.classList.add('fade-out');
-            dom.loadingOverlay.addEventListener('transitionend', () => {
-                dom.loadingOverlay.style.display = 'none';
-            }, { once: true });
-        }
-        
-        populateFilterControls();
-        onFilterStateChange(true); // Initial fetch, skip debounce
-    } catch (error) {
-        console.error(`Could not load quiz questions:`, error);
-        if (dom.loadingOverlay) {
-            dom.loadingOverlay.innerHTML = `<div class="loader-content"><h1>Error Loading Quiz</h1><p>Could not fetch questions from the database. Please check your connection and refresh the page.</p><p style="font-size:0.8em; color: var(--text-color-light)">${error.message}</p></div>`;
-        }
+    if (state.allQuestionsMasterList.length > 0) {
+        populateFilterOptions();
+        return;
     }
-}
-
-function populateFilterControls() {
-    const questions = state.allQuestionsMasterList;
-    const unique = {
-        subject: new Set(),
-        difficulty: new Set(), questionType: new Set(),
-        examName: new Set(), examYear: new Set(), tags: new Set()
-    };
-
-    questions.forEach(q => {
-        if (q.subject) unique.subject.add(q.subject);
-        if (q.difficulty) unique.difficulty.add(q.difficulty);
-        if (q.questionType) unique.questionType.add(q.questionType);
-        if (q.examName) unique.examName.add(q.examName);
-        if (q.examYear) unique.examYear.add(q.examYear);
-        if (q.tags && Array.isArray(q.tags)) q.tags.forEach(tag => unique.tags.add(tag));
-    });
-
-    populateMultiSelect('subject', [...unique.subject].sort());
-
-    const topicBtn = dom.filterElements.topic.toggleBtn;
-    topicBtn.disabled = true;
-    topicBtn.textContent = "Select a Subject first";
-    const subTopicBtn = dom.filterElements.subTopic.toggleBtn;
-    subTopicBtn.disabled = true;
-    subTopicBtn.textContent = "Select a Topic first";
-
-    populateSegmentedControl('difficulty', [...unique.difficulty].sort());
-    populateSegmentedControl('questionType', [...unique.questionType].sort());
-    populateMultiSelect('examName', [...unique.examName].sort());
-    populateMultiSelect('examYear', [...unique.examYear].sort((a,b) => b-a));
-    populateMultiSelect('tags', [...unique.tags].sort());
-}
-
-function populateMultiSelect(filterKey, options) {
-    const listElement = dom.filterElements[filterKey]?.list;
-    if (!listElement) return;
-
-    const selectedValues = state.selectedFilters[filterKey] || [];
-    listElement.innerHTML = '';
-    options.forEach(opt => {
-        const label = document.createElement('label');
-        label.className = 'multiselect-item';
-        
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = opt;
-        checkbox.checked = selectedValues.includes(opt);
-        checkbox.onchange = () => handleSelectionChange(filterKey, opt);
-        
-        const text = document.createElement('span');
-        text.textContent = opt;
-
-        const countSpan = document.createElement('span');
-        countSpan.className = 'filter-option-count';
-
-        label.appendChild(checkbox);
-        label.appendChild(text);
-        label.appendChild(countSpan);
-        listElement.appendChild(label);
-    });
-}
-
-function populateSegmentedControl(filterKey, options) {
-    const container = dom.filterElements[filterKey]?.segmentedControl;
-    if (!container) return;
-    container.innerHTML = '';
-    options.forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'segmented-btn';
-        btn.dataset.value = opt;
-        btn.onclick = () => handleSelectionChange(filterKey, opt);
-        
-        const text = document.createElement('span');
-        text.textContent = opt;
-        
-        const countSpan = document.createElement('span');
-        countSpan.className = 'filter-option-count';
-
-        btn.appendChild(text);
-        btn.appendChild(countSpan);
-        container.appendChild(btn);
-    });
-}
-
-function handleSelectionChange(filterKey, value) {
-    const selectedValues = state.selectedFilters[filterKey];
-    const index = selectedValues.indexOf(value);
-    if (index > -1) {
-        selectedValues.splice(index, 1);
-    } else {
-        selectedValues.push(value);
-    }
-
-    if (filterKey === 'subject') {
-        state.selectedFilters.topic = [];
-        state.selectedFilters.subTopic = [];
-    } else if (filterKey === 'topic') {
-        state.selectedFilters.subTopic = [];
-    }
-
-    onFilterStateChange();
-}
-
-function onFilterStateChange(immediate = false) {
-    updateDependentFilters();
-    updateAllFilterCountsAndAvailability(); // This remains client-side for speed
-    updateActiveFiltersSummaryBar();
-
-    if (immediate) {
-        fetchAndApplyFilters();
-    } else {
-        debouncedFetch(); 
-    }
-}
-
-function updateDependentFilters() {
-    const { subject: selectedSubjects, topic: selectedTopics } = state.selectedFilters;
-    const { topic: topicElements, subTopic: subTopicElements } = dom.filterElements;
-
-    if (selectedSubjects.length === 0) {
-        topicElements.toggleBtn.disabled = true;
-        topicElements.toggleBtn.textContent = "Select a Subject first";
-        topicElements.list.innerHTML = '';
-    } else {
-        topicElements.toggleBtn.disabled = false;
-        const relevantTopics = new Set();
-        state.allQuestionsMasterList.forEach(q => {
-            if (q.subject && selectedSubjects.includes(q.subject)) {
-                if (q.topic) {
-                    relevantTopics.add(q.topic);
-                }
-            }
-        });
-        populateMultiSelect('topic', [...relevantTopics].sort());
-    }
-
-    if (selectedTopics.length === 0) {
-        subTopicElements.toggleBtn.disabled = true;
-        subTopicElements.toggleBtn.textContent = "Select a Topic first";
-        subTopicElements.list.innerHTML = '';
-    } else {
-        subTopicElements.toggleBtn.disabled = false;
-        const relevantSubTopics = new Set();
-        state.allQuestionsMasterList.forEach(q => {
-            if (q.subject && selectedSubjects.includes(q.subject) &&
-                q.topic && selectedTopics.includes(q.topic)) {
-                if (q.subTopic) {
-                    relevantSubTopics.add(q.subTopic);
-                }
-            }
-        });
-        populateMultiSelect('subTopic', [...relevantSubTopics].sort());
-    }
-}
-
-async function fetchAndApplyFilters() {
-    setButtonsLoading(true);
-    const filters = state.selectedFilters;
-
-    let query = supabase
-        .from('questions')
-        .select('*', { count: 'exact' });
-
-    if (filters.subject.length > 0) query = query.in('subject', filters.subject);
-    if (filters.topic.length > 0) query = query.in('topic', filters.topic);
-    if (filters.subTopic.length > 0) query = query.in('subTopic', filters.subTopic);
-    if (filters.difficulty.length > 0) query = query.in('difficulty', filters.difficulty);
-    if (filters.questionType.length > 0) query = query.in('questionType', filters.questionType);
-    if (filters.examName.length > 0) query = query.in('examName', filters.examName);
-    if (filters.examYear.length > 0) query = query.in('examYear', filters.examYear);
-    if (filters.tags.length > 0) query = query.contains('tags', filters.tags);
     
-    const { data, error, count } = await query;
-
-    if (error) {
-        console.error('Error fetching filtered questions:', error);
-        state.filteredQuestionsMasterList = [];
-        updateQuestionCount(0);
-    } else {
-        state.filteredQuestionsMasterList = data;
-        updateQuestionCount(count);
+    dom.loadingOverlay.style.display = 'flex';
+    dom.loadingText.textContent = 'Loading Questions from Database...';
+    try {
+        const { data, error } = await supabase.from('questions').select('*').order('v1_id', { ascending: true });
+        if (error) throw error;
+        state.allQuestionsMasterList = data.map(q => ({...q, ...q.classification, ...q.sourceInfo, ...q.properties}));
+        populateFilterOptions();
+        applyAllFilters();
+    } catch (error) {
+        console.error('Error fetching questions:', error);
+        dom.loadingText.textContent = 'Failed to load questions. Please refresh.';
+    } finally {
+        dom.loadingOverlay.classList.add('fade-out');
+        dom.loadingOverlay.addEventListener('transitionend', () => {
+            dom.loadingOverlay.style.display = 'none';
+        }, { once: true });
     }
-    setButtonsLoading(false);
 }
 
+function populateFilterOptions() {
+    const uniqueValues = {};
+    config.filterKeys.forEach(key => uniqueValues[key] = new Map());
 
-function updateAllFilterCountsAndAvailability() {
-    // This function still runs client-side for UI responsiveness.
-    const clientSideFilter = (list, filters) => {
-        const checkCategory = (questionValue, selectedValues) => {
-            if (selectedValues.length === 0) return true;
-            if (questionValue === null || questionValue === undefined) return false;
-            if (Array.isArray(questionValue)) {
-                return questionValue.some(val => selectedValues.includes(val));
-            }
-            return selectedValues.includes(questionValue);
-        };
-        return list.filter(q =>
-            checkCategory(q.subject, filters.subject) &&
-            checkCategory(q.topic, filters.topic) &&
-            checkCategory(q.subTopic, filters.subTopic) &&
-            checkCategory(q.difficulty, filters.difficulty) &&
-            checkCategory(q.questionType, filters.questionType) &&
-            checkCategory(q.examName, filters.examName) &&
-            checkCategory(q.examYear, filters.examYear) &&
-            checkCategory(q.tags, filters.tags)
-        );
-    };
-
-    config.filterKeys.forEach(filterKey => {
-        const tempFilters = JSON.parse(JSON.stringify(state.selectedFilters));
-        tempFilters[filterKey] = [];
-        const contextualList = clientSideFilter(state.allQuestionsMasterList, tempFilters);
-
-        const counts = {};
-        contextualList.forEach(q => {
-            const value = getQuestionValue(q, filterKey);
-            if (Array.isArray(value)) {
-                value.forEach(v => { counts[v] = (counts[v] || 0) + 1; });
+    state.allQuestionsMasterList.forEach(q => {
+        config.filterKeys.forEach(key => {
+            let value = q[key];
+            if (key === 'tags' && Array.isArray(value)) {
+                value.forEach(tag => {
+                    uniqueValues.tags.set(tag, (uniqueValues.tags.get(tag) || 0) + 1);
+                });
             } else if (value) {
-                counts[value] = (counts[value] || 0) + 1;
+                uniqueValues[key].set(value, (uniqueValues[key].get(value) || 0) + 1);
             }
         });
+    });
 
-        updateFilterUI(filterKey, counts);
+    config.filterKeys.forEach(key => {
+        const sortedValues = new Map([...uniqueValues[key].entries()].sort((a, b) => a[0] > b[0] ? 1 : -1));
+        const filterEl = dom.filterElements[key];
+
+        if (filterEl.list) {
+            filterEl.list.innerHTML = '';
+            sortedValues.forEach((count, value) => {
+                const item = document.createElement('div');
+                item.className = 'multiselect-item';
+                item.innerHTML = `
+                    <label>
+                        <input type="checkbox" value="${value}" data-filter-key="${key}">
+                        ${value}
+                    </label>
+                    <span class="filter-option-count">${count}</span>`;
+                filterEl.list.appendChild(item);
+            });
+        } else if (filterEl.segmentedControl) {
+            filterEl.segmentedControl.innerHTML = '';
+            sortedValues.forEach((count, value) => {
+                const button = document.createElement('button');
+                button.className = 'segmented-btn';
+                button.dataset.value = value;
+                button.dataset.filterKey = key;
+                button.innerHTML = `${value} <span class="filter-option-count">(${count})</span>`;
+                filterEl.segmentedControl.appendChild(button);
+            });
+        }
     });
 }
 
-function updateFilterUI(filterKey, counts) {
-    const { list, segmentedControl } = dom.filterElements[filterKey];
-    if (list) {
-        list.querySelectorAll('.multiselect-item').forEach(label => {
-            const checkbox = label.querySelector('input');
-            const value = checkbox.value;
-            const count = counts[value] || 0;
-            label.querySelector('.filter-option-count').textContent = `(${count})`;
-            const isDisabled = count === 0 && !checkbox.checked;
-            label.classList.toggle('disabled', isDisabled);
-            checkbox.disabled = isDisabled;
-        });
-        updateMultiSelectButtonText(filterKey);
-    } else if (segmentedControl) {
-        segmentedControl.querySelectorAll('.segmented-btn').forEach(btn => {
-            const value = btn.dataset.value;
-            const count = counts[value] || 0;
-            btn.querySelector('.filter-option-count').textContent = `(${count})`;
-            btn.classList.toggle('active', state.selectedFilters[filterKey].includes(value));
-        });
-    }
+function setupMultiselect(key) {
+    const el = dom.filterElements[key];
+    el.toggleBtn.addEventListener('click', () => toggleDropdown(key));
+    el.list.addEventListener('change', (e) => {
+        if (e.target.type === 'checkbox') {
+            updateSelectedFiltersFromUI();
+            applyAllFiltersDebounced();
+            updateMultiselectToggleText(key);
+        }
+    });
+    el.searchInput.addEventListener('input', () => filterDropdownList(key));
+    document.addEventListener('click', (e) => {
+        if (!el.container || !el.container.contains(e.target)) {
+            if (el.dropdown) el.dropdown.style.display = 'none';
+        }
+    });
 }
 
-function getQuestionValue(q, filterKey) {
-    return q[filterKey];
+function setupSegmentedControl(key) {
+    const el = dom.filterElements[key];
+    el.segmentedControl.addEventListener('click', (e) => {
+        const button = e.target.closest('.segmented-btn');
+        if (button) {
+            button.classList.toggle('active');
+            updateSelectedFiltersFromUI();
+            applyAllFiltersDebounced();
+        }
+    });
+}
+
+function toggleDropdown(key) {
+    const dropdown = dom.filterElements[key].dropdown;
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+}
+
+function filterDropdownList(key) {
+    const { searchInput, list } = dom.filterElements[key];
+    const filter = searchInput.value.toLowerCase();
+    list.querySelectorAll('.multiselect-item').forEach(item => {
+        const label = item.querySelector('label').textContent.toLowerCase();
+        item.style.display = label.includes(filter) ? '' : 'none';
+    });
+}
+
+function updateSelectedFiltersFromUI() {
+    config.filterKeys.forEach(key => {
+        state.selectedFilters[key] = [];
+        const filterEl = dom.filterElements[key];
+
+        if (filterEl.list) { // Multiselect
+            filterEl.list.querySelectorAll('input:checked').forEach(input => {
+                state.selectedFilters[key].push(input.value);
+            });
+        } else if (filterEl.segmentedControl) { // Segmented Control
+            filterEl.segmentedControl.querySelectorAll('.segmented-btn.active').forEach(button => {
+                state.selectedFilters[key].push(button.dataset.value);
+            });
+        }
+    });
+}
+
+function applyAllFilters() {
+    let filtered = [...state.allQuestionsMasterList];
+    
+    config.filterKeys.forEach(key => {
+        const selected = state.selectedFilters[key];
+        if (selected.length > 0) {
+            filtered = filtered.filter(q => {
+                if (key === 'tags' && Array.isArray(q.tags)) {
+                    return selected.some(tag => q.tags.includes(tag));
+                }
+                return selected.includes(q[key]);
+            });
+        }
+    });
+
+    state.filteredQuestionsMasterList = filtered;
+    updateQuestionCount(filtered.length);
+    updateActiveFiltersSummary();
 }
 
 function updateQuestionCount(count) {
     const countElements = [
-        dom.questionCount,
-        dom.pptQuestionCount,
-        dom.pdfQuestionCount,
+        dom.questionCount, 
+        dom.pptQuestionCount, 
+        dom.pdfQuestionCount, 
         dom.jsonQuestionCount
     ];
-    
-    // Check if the count has actually changed to avoid unnecessary animations
-    const hasChanged = dom.questionCount.textContent !== String(count);
-
     countElements.forEach(el => {
         if (el) {
             el.textContent = count;
-            if (hasChanged) {
-                triggerCountAnimation(el);
-            }
+            triggerCountAnimation(el);
         }
     });
-
-    const hasQuestions = count > 0;
-    dom.startQuizBtn.disabled = !hasQuestions;
-    dom.createPptBtn.disabled = !hasQuestions;
-    dom.createPdfBtn.disabled = !hasQuestions;
-    dom.downloadJsonBtn.disabled = !hasQuestions;
-}
-
-
-function setButtonsLoading(isLoading) {
-    dom.startQuizBtn.classList.toggle('loading', isLoading);
-    dom.createPptBtn.classList.toggle('loading', isLoading);
-    dom.createPdfBtn.classList.toggle('loading', isLoading);
-    dom.downloadJsonBtn.classList.toggle('loading', isLoading);
-}
-
-function resetFilters() {
-    state.selectedFilters = {
-        subject: [], topic: [], subTopic: [], 
-        difficulty: [], questionType: [], 
-        examName: [], examYear: [], 
-        tags: []
-    };
-    config.filterKeys.forEach(key => {
-         if (!dom.filterElements[key]) return;
-         const elements = dom.filterElements[key];
-         if (elements.list) {
-             elements.list.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-         }
-         if(elements.searchInput) elements.searchInput.value = '';
-         filterMultiSelectList(key);
-    });
-    onFilterStateChange(true);
-}
-
-async function startFilteredQuiz() {
-    if (!(await handleQueryAttempt())) return;
-
-    if (state.filteredQuestionsMasterList.length === 0) {
-        Swal.fire('No Questions Found', 'Please adjust your filters to select at least one question.', 'warning');
-        return;
-    }
-    appCallbacks.startQuiz();
-}
-
-async function generateDocument(format) {
-    if (!(await handleQueryAttempt())) return;
-
-    const questions = state.filteredQuestionsMasterList;
-    if (questions.length === 0) {
-        Swal.fire({
-            target: dom.filterSection,
-            title: 'No Questions Selected',
-            text: `Please apply filters to select questions before creating a ${format.toUpperCase()}.`,
-            icon: 'info'
-        });
-        return;
-    }
-
-    const overlay = dom[`${format}LoadingOverlay`];
-    const textEl = dom[`${format}LoadingText`];
-    const detailsEl = dom[`${format}LoadingDetails`];
-    const progressBarEl = dom[`${format}LoadingProgressBar`];
-
-    overlay.style.display = 'flex';
-    textEl.textContent = `Generating Your ${format.toUpperCase()}...`;
-    detailsEl.textContent = 'Initializing worker...';
-    progressBarEl.style.width = '0%';
-
-    if (docWorker) {
-        docWorker.terminate();
-    }
-    docWorker = new Worker('./js/worker.js');
     
-    docWorker.postMessage({
-        type: 'generate',
-        format: format,
-        questions: questions,
-        selectedFilters: state.selectedFilters
-    });
-
-    docWorker.onmessage = (e) => {
-        const { type, value, details, blob, filename, error } = e.data;
-        if (type === 'progress') {
-            progressBarEl.style.width = `${value}%`;
-            detailsEl.textContent = details;
-        } else if (type === 'result') {
-            textEl.textContent = 'Finalizing & Downloading...';
-            detailsEl.textContent = 'Please wait, this may take a moment.';
-            
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            overlay.style.display = 'none';
-            docWorker.terminate();
-            docWorker = null;
-        } else if (type === 'error') {
-            console.error(`Error from ${format} worker:`, error);
-            Swal.fire({
-                target: dom.filterSection,
-                title: 'Error',
-                text: `An unexpected error occurred while generating the ${format.toUpperCase()}: ${error}`,
-                icon: 'error'
-            });
-            overlay.style.display = 'none';
-            docWorker.terminate();
-            docWorker = null;
-        }
-    };
-
-    docWorker.onerror = (e) => {
-        console.error(`Unhandled error in ${format} worker:`, e);
-        Swal.fire({
-            target: dom.filterSection,
-            title: 'Worker Error',
-            text: `A critical error occurred in the document generation process. Please check the console for details.`,
-            icon: 'error'
-        });
-        overlay.style.display = 'none';
-        if (docWorker) {
-            docWorker.terminate();
-            docWorker = null;
-        }
-    };
+    dom.startQuizBtn.disabled = count === 0;
+    dom.createPptBtn.disabled = count === 0;
+    dom.createPdfBtn.disabled = count === 0;
+    dom.downloadJsonBtn.disabled = count === 0;
 }
 
-
-function toggleMultiSelectDropdown(filterKey, forceClose = false) {
-    const dropdown = dom.filterElements[filterKey]?.dropdown;
-    if (!dropdown) return;
-    const isVisible = dropdown.style.display === 'flex';
-    if (forceClose) {
-        dropdown.style.display = 'none';
-    } else {
-        dropdown.style.display = isVisible ? 'none' : 'flex';
-    }
-}
-
-function filterMultiSelectList(filterKey) {
-    const elements = dom.filterElements[filterKey];
-    if (!elements || !elements.searchInput || !elements.list) return;
-
-    const searchTerm = elements.searchInput.value.toLowerCase();
-    elements.list.querySelectorAll('.multiselect-item').forEach(label => {
-        const itemText = label.querySelector('span:not(.filter-option-count)').textContent.trim().toLowerCase();
-        label.style.display = itemText.includes(searchTerm) ? 'flex' : 'none';
-    });
-}
-
-function updateMultiSelectButtonText(filterKey) {
-    const toggleBtn = dom.filterElements[filterKey]?.toggleBtn;
-    if (!toggleBtn || toggleBtn.disabled) return;
-
-    const selected = state.selectedFilters[filterKey] || [];
-    const count = selected.length;
-    const labelText = dom.filterElements[filterKey].container.previousElementSibling.textContent;
-
-    if (count === 0) {
-        let plural = labelText.endsWith('s') ? labelText : labelText + 's';
-        toggleBtn.textContent = `Select ${plural}`;
-    } else if (count === 1) {
+function updateMultiselectToggleText(key) {
+    const { toggleBtn } = dom.filterElements[key];
+    const selected = state.selectedFilters[key];
+    const keyName = key.replace(/([A-Z])/g, ' $1');
+    if (selected.length === 0) {
+        toggleBtn.textContent = `Select ${keyName}s`;
+    } else if (selected.length === 1) {
         toggleBtn.textContent = selected[0];
     } else {
-        let plural = labelText.endsWith('s') ? labelText : labelText + 's';
-        toggleBtn.textContent = `${count} ${plural} Selected`;
+        toggleBtn.textContent = `${selected.length} ${keyName}s selected`;
     }
 }
 
-function updateActiveFiltersSummaryBar() {
+function updateActiveFiltersSummary() {
     dom.activeFiltersSummaryBar.innerHTML = '';
-    let totalSelected = 0;
-    config.filterKeys.forEach(key => {
-        const selected = state.selectedFilters[key] || [];
-        totalSelected += selected.length;
-        selected.forEach(value => {
-            const tag = document.createElement('span');
-            tag.className = 'filter-tag';
-            tag.textContent = value;
-            
-            const closeBtn = document.createElement('button');
-            closeBtn.className = 'tag-close-btn';
-            closeBtn.innerHTML = '&times;';
-            closeBtn.setAttribute('aria-label', `Remove ${value} filter`);
-            closeBtn.onclick = () => handleSelectionChange(key, value);
-            
-            tag.appendChild(closeBtn);
-            dom.activeFiltersSummaryBar.appendChild(tag);
+    let hasFilters = false;
+    for (const key in state.selectedFilters) {
+        if (state.selectedFilters[key].length > 0) {
+            hasFilters = true;
+            state.selectedFilters[key].forEach(value => {
+                const tag = document.createElement('div');
+                tag.className = 'filter-tag';
+                tag.innerHTML = `${value} <button class="tag-close-btn" data-key="${key}" data-value="${value}">&times;</button>`;
+                dom.activeFiltersSummaryBar.appendChild(tag);
+            });
+        }
+    }
+    dom.activeFiltersSummaryBarContainer.style.display = hasFilters ? 'block' : 'none';
+
+    dom.activeFiltersSummaryBar.querySelectorAll('.tag-close-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const { key, value } = e.target.dataset;
+            removeFilter(key, value);
         });
     });
-    dom.activeFiltersSummaryBarContainer.style.display = totalSelected > 0 ? 'block' : 'none';
 }
 
-async function handleQuickStart(preset) {
-    resetFilters();
-    let difficultyFilter = [];
+function removeFilter(key, value) {
+    const filterEl = dom.filterElements[key];
+    if (filterEl.list) {
+        const checkbox = filterEl.list.querySelector(`input[value="${value}"]`);
+        if (checkbox) checkbox.checked = false;
+    } else if (filterEl.segmentedControl) {
+        const button = filterEl.segmentedControl.querySelector(`[data-value="${value}"]`);
+        if (button) button.classList.remove('active');
+    }
+    updateSelectedFiltersFromUI();
+    applyAllFiltersDebounced();
+    updateMultiselectToggleText(key);
+}
+
+function resetAllFilters() {
+    config.filterKeys.forEach(key => {
+        state.selectedFilters[key] = [];
+        const filterEl = dom.filterElements[key];
+        if (filterEl.list) {
+            filterEl.list.querySelectorAll('input:checked').forEach(input => input.checked = false);
+            updateMultiselectToggleText(key);
+        } else if (filterEl.segmentedControl) {
+            filterEl.segmentedControl.querySelectorAll('.active').forEach(button => button.classList.remove('active'));
+        }
+    });
+    applyAllFilters();
+}
+
+function handleQuickStart(preset) {
+    resetAllFilters();
+    state.selectedFilters['difficulty'] = [];
     switch (preset) {
-        case 'quick_25_easy': difficultyFilter = ['Easy']; break;
-        case 'quick_25_moderate': difficultyFilter = ['Medium']; break;
-        case 'quick_25_hard': difficultyFilter = ['Hard']; break;
-        case 'quick_25_mix': /* No filter */ break;
+        case 'quick_25_easy': state.selectedFilters['difficulty'].push('Easy'); break;
+        case 'quick_25_moderate': state.selectedFilters['difficulty'].push('Medium'); break;
+        case 'quick_25_hard': state.selectedFilters['difficulty'].push('Hard'); break;
+        case 'quick_25_mix': break;
     }
     
-    setButtonsLoading(true);
+    dom.filterElements['difficulty'].segmentedControl.querySelectorAll('.active').forEach(btn => btn.classList.remove('active'));
+    state.selectedFilters['difficulty'].forEach(val => {
+        const btn = dom.filterElements['difficulty'].segmentedControl.querySelector(`[data-value="${val}"]`);
+        if (btn) btn.classList.add('active');
+    });
 
-    try {
-        let countQuery = supabase.from('questions').select('*', { count: 'exact', head: true });
-        if (difficultyFilter.length > 0) {
-            countQuery = countQuery.in('difficulty', difficultyFilter);
-        }
-        const { count, error: countError } = await countQuery;
+    applyAllFilters();
+    let questionsForQuiz = [...state.filteredQuestionsMasterList];
+    if (questionsForQuiz.length > 25) {
+        shuffleArray(questionsForQuiz);
+        state.filteredQuestionsMasterList = questionsForQuiz.slice(0, 25);
+    }
+    startQuiz(true);
+}
+
+async function startQuiz(isQuickStart = false) {
+    if (state.filteredQuestionsMasterList.length === 0) {
+        Swal.fire({ target: dom.filterSection, icon: 'error', title: 'No questions found for the selected filters.' });
+        return;
+    }
+
+    if (!isQuickStart) {
+        const canProceed = await handleQueryAttempt();
+        if (!canProceed) return;
+    }
+    
+    if (appCallbacks.startQuiz) {
+        appCallbacks.startQuiz();
+    }
+}
+
+async function createPPT() {
+    if (docWorker && state.filteredQuestionsMasterList.length > 0) {
+        const canProceed = await handleQueryAttempt();
+        if (!canProceed) return;
         
-        if (countError) throw countError;
+        dom.pptLoadingOverlay.style.display = 'flex';
+        dom.pptLoadingProgressBar.style.width = '0%';
+        dom.pptLoadingDetails.textContent = 'Preparing questions...';
 
-        if (count === 0) {
-            Swal.fire({
-                target: dom.filterSection,
-                title: 'No Questions Found',
-                text: 'This quick start preset yielded no questions. Please try another or use the custom filters.',
-                icon: 'warning'
-            });
-            resetFilters();
-            return;
-        }
-
-        const limit = Math.min(25, count);
-        const randomOffset = count > limit ? Math.floor(Math.random() * (count - limit + 1)) : 0;
-
-        let dataQuery = supabase.from('questions').select('*');
-        if (difficultyFilter.length > 0) {
-            dataQuery = dataQuery.in('difficulty', difficultyFilter);
-        }
-        const { data, error: dataError } = await dataQuery.range(randomOffset, randomOffset + limit - 1);
-
-        if (dataError) throw dataError;
-
-        state.filteredQuestionsMasterList = data;
-        updateQuestionCount(data.length);
-        await startFilteredQuiz();
-
-    } catch (error) {
-        console.error('Quick Start failed:', error);
-        Swal.fire({
-            target: dom.filterSection,
-            title: 'Error',
-            text: `Could not fetch questions for Quick Start: ${error.message}`,
-            icon: 'error'
+        docWorker.postMessage({
+            type: 'generate',
+            format: 'ppt',
+            questions: state.filteredQuestionsMasterList,
+            selectedFilters: state.selectedFilters
         });
-    } finally {
-        setButtonsLoading(false);
+    }
+}
+
+async function createPDF() {
+    if (docWorker && state.filteredQuestionsMasterList.length > 0) {
+        const canProceed = await handleQueryAttempt();
+        if (!canProceed) return;
+
+        dom.pdfLoadingOverlay.style.display = 'flex';
+        dom.pdfLoadingProgressBar.style.width = '0%';
+        dom.pdfLoadingDetails.textContent = 'Preparing questions...';
+
+        docWorker.postMessage({
+            type: 'generate',
+            format: 'pdf',
+            questions: state.filteredQuestionsMasterList,
+            selectedFilters: state.selectedFilters
+        });
     }
 }
 
 async function downloadJSON() {
-    if (!(await handleQueryAttempt())) return;
-    
-    const questions = state.filteredQuestionsMasterList;
-    if (questions.length === 0) {
-        Swal.fire({
-            target: dom.filterSection,
-            title: 'No Questions Selected',
-            text: 'Please apply filters to select questions before downloading.',
-            icon: 'info'
-        });
-        return;
-    }
-
-    try {
-        // Pretty print the JSON with an indentation of 2 spaces
-        const jsonString = JSON.stringify(questions, null, 2);
-        const blob = new Blob([jsonString], { type: 'application/json' });
+    if (state.filteredQuestionsMasterList.length > 0) {
+        const canProceed = await handleQueryAttempt();
+        if (!canProceed) return;
+        
+        const dataStr = JSON.stringify(state.filteredQuestionsMasterList, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
-
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'Quiz_LM_Questions.json';
+        a.download = 'quiz_lm_questions.json';
         document.body.appendChild(a);
         a.click();
-
-        // Clean up
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-
-    } catch (error) {
-        console.error("Error generating JSON file:", error);
-        Swal.fire({
-            target: dom.filterSection,
-            title: 'Error',
-            text: `An unexpected error occurred while generating the JSON file: ${error.message}`,
-            icon: 'error'
-        });
     }
 }

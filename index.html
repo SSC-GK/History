@@ -727,6 +727,7 @@
                 <button id="paid-services-close-btn" class="content-modal-close-btn">&times;</button>
             </div>
             <div class="content-modal-body plans-container">
+                <!-- Free Plan -->
                 <div class="plan-card">
                     <div class="plan-badge current-plan-badge">Your Current Plan</div>
                     <div class="plan-header">
@@ -741,8 +742,23 @@
                     </ul>
                     <button class="plan-button disabled-plan" disabled>Selected</button>
                 </div>
+                <!-- Spark Plan -->
                 <div class="plan-card recommended">
                     <div class="plan-badge recommended-badge">Recommended</div>
+                    <div class="plan-header">
+                        <h3>Spark Plan</h3>
+                        <p class="plan-price">₹29 <span>/ month</span></p>
+                    </div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check-circle"></i> 25 Quizzes/Documents per Day</li>
+                        <li><i class="fas fa-check-circle"></i> 1000 Question Attempts per Day</li>
+                        <li><i class="fas fa-times-circle"></i> Unlimited Access</li>
+                        <li><i class="fas fa-times-circle"></i> Priority Support</li>
+                    </ul>
+                    <button id="upgrade-to-spark-btn" class="plan-button">Upgrade Now</button>
+                </div>
+                <!-- Pro Plan -->
+                <div class="plan-card">
                     <div class="plan-header">
                         <h3>Pro Plan</h3>
                         <p class="plan-price">₹49 <span>/ month</span></p>
@@ -753,7 +769,7 @@
                         <li><i class="fas fa-check-circle"></i> Priority Support</li>
                         <li><i class="fas fa-check-circle"></i> Access All Future Features</li>
                     </ul>
-                    <button id="upgrade-plan-btn" class="plan-button">Upgrade Now</button>
+                    <button id="upgrade-to-pro-btn" class="plan-button">Upgrade Now</button>
                 </div>
             </div>
         </div>

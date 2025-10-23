@@ -45,7 +45,8 @@ export function cacheDomElements() {
     dom.userGuideCloseBtn = document.getElementById('user-guide-close-btn');
     dom.paidServicesOverlay = document.getElementById('paid-services-overlay');
     dom.paidServicesCloseBtn = document.getElementById('paid-services-close-btn');
-    dom.upgradePlanBtn = document.getElementById('upgrade-plan-btn');
+    dom.upgradeToSparkBtn = document.getElementById('upgrade-to-spark-btn');
+    dom.upgradeToProBtn = document.getElementById('upgrade-to-pro-btn');
 
     // Loading Overlay
     dom.loadingOverlay = document.getElementById('loading-overlay');
