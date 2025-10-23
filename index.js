@@ -145,21 +145,49 @@ document.addEventListener('DOMContentLoaded', () => {
         showApp: async function(user) {
             showView('homepage-section');
             
-            const profile = await auth.fetchUserProfile(user.id);
-            state.userProfile = profile;
+            let profile = await auth.fetchUserProfile(user.id);
+            
+            // NEW: Check for plan expiry and update profile if needed
+            profile = await this.checkPlanExpiry(user.id, profile);
+            state.userProfile = profile; // Set the potentially updated profile to state
 
             if (profile) {
                 dom.sideMenuProfileName.textContent = profile.full_name || 'Quiz User';
                 dom.sideMenuProfilePic.src = profile.avatar_url || 'https://via.placeholder.com/60';
-                dom.sideMenuSubscriptionStatus.textContent = profile.subscription_status || 'free';
+                
+                // NEW: Enhanced UI for subscription status
+                const statusBadge = dom.sideMenuSubscriptionStatus;
+                const expiryBadge = dom.sideMenuExpiryDate;
+                
+                statusBadge.classList.remove('pro-plan'); // Reset class
+                
+                if (profile.subscription_status === 'pro') {
+                    statusBadge.textContent = 'Pro Plan';
+                    statusBadge.classList.add('pro-plan');
+                    if (profile.plan_expiry_date) {
+                        const expiry = new Date(profile.plan_expiry_date);
+                        // Adjust for timezone to show correct local date
+                        const userTimezoneOffset = expiry.getTimezoneOffset() * 60000;
+                        const localDate = new Date(expiry.getTime() + userTimezoneOffset);
+                        expiryBadge.textContent = `Expires on: ${localDate.toLocaleDateString()}`;
+                        expiryBadge.style.display = 'block';
+                    } else {
+                        expiryBadge.style.display = 'none';
+                    }
+                } else {
+                    statusBadge.textContent = 'Free Plan';
+                    expiryBadge.style.display = 'none';
+                }
                 
                 // NEW: Check and reset daily limits if it's a new day
-                await this.checkAndResetDailyLimits(user.id, profile);
+                await this.checkAndResetDailyLimits(user.id, state.userProfile);
 
             } else if (user) { // Fallback to auth metadata if profile is somehow missing
                 dom.sideMenuProfileName.textContent = user.user_metadata?.full_name || 'Quiz User';
                 dom.sideMenuProfilePic.src = user.user_metadata?.avatar_url || 'https://via.placeholder.com/60';
-                dom.sideMenuSubscriptionStatus.textContent = 'free';
+                dom.sideMenuSubscriptionStatus.textContent = 'Free Plan';
+                dom.sideMenuSubscriptionStatus.classList.remove('pro-plan');
+                dom.sideMenuExpiryDate.style.display = 'none';
             }
             
             const wasResumed = await this.promptToResumeQuiz();
@@ -205,6 +233,32 @@ document.addEventListener('DOMContentLoaded', () => {
             dom.ageConsentCheckbox.onchange = updateSignInButtonState;
             dom.privacyConsentCheckbox.onchange = updateSignInButtonState;
             updateSignInButtonState(); // Set initial state
+        },
+
+        checkPlanExpiry: async function(userId, profile) {
+            if (profile && profile.subscription_status === 'pro' && profile.plan_expiry_date) {
+                const expiryDate = new Date(profile.plan_expiry_date);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); // Compare against the start of today
+
+                if (expiryDate < today) {
+                    console.log("Pro plan expired. Reverting user to free plan.");
+                    const updates = {
+                        subscription_status: 'free',
+                        plan_expiry_date: null,
+                    };
+                    const updatedProfile = await auth.updateUserProfile(userId, updates);
+                    if (updatedProfile) {
+                        Toast.fire({
+                            icon: 'info',
+                            title: 'Your Pro plan has expired.',
+                            text: 'You have been switched to the Free plan.'
+                        });
+                        return updatedProfile; // Return the new, reverted profile
+                    }
+                }
+            }
+            return profile; // Return original profile if not expired or not pro
         },
         
         checkAndResetDailyLimits: async function(userId, profile) {

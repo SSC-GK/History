@@ -1,5 +1,3 @@
-
-
 /* ======================================================= */
 /* === MASTER STYLESHEET FOR ALL SCHOOL QUIZZES (V2.0) === */
 /* ======================================================= */
@@ -376,11 +374,26 @@ body[data-theme='dark'] .paid-tag {
     text-transform: capitalize;
     border: 1px solid var(--primary-color);
 }
+.subscription-badge.pro-plan {
+    background-color: var(--accent-color);
+    color: #111827;
+    border-color: var(--accent-dark);
+}
+
+.expiry-date-badge {
+    font-size: 0.8em;
+    color: var(--text-color-light);
+    margin-top: 5px;
+}
+
 
 body[data-theme='dark'] .subscription-badge {
     background-color: var(--primary-light);
     color: var(--text-color-dark);
     border-color: var(--primary-dark);
+}
+body[data-theme='dark'] .subscription-badge.pro-plan {
+    color: #111827;
 }
 
 .side-menu-nav ul {

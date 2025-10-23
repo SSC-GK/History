@@ -29,8 +29,8 @@ function triggerCountAnimation(element) {
  */
 async function handleQueryAttempt() {
     const profile = state.userProfile;
-    // Allow non-free users or if profile somehow failed to load
-    if (!profile || profile.subscription_status !== 'free') {
+    // Allow pro users or if profile somehow failed to load
+    if (!profile || profile.subscription_status === 'pro') {
         return true; 
     }
 
