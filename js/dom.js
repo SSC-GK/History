@@ -45,8 +45,15 @@ export function cacheDomElements() {
     dom.userGuideCloseBtn = document.getElementById('user-guide-close-btn');
     dom.paidServicesOverlay = document.getElementById('paid-services-overlay');
     dom.paidServicesCloseBtn = document.getElementById('paid-services-close-btn');
-    dom.upgradeToSparkBtn = document.getElementById('upgrade-to-spark-btn');
-    dom.upgradeToProBtn = document.getElementById('upgrade-to-pro-btn');
+    
+    // Plan Cards and Buttons for dynamic modal
+    dom.freePlanCard = document.querySelector('.plan-card[data-plan="free"]');
+    dom.sparkPlanCard = document.querySelector('.plan-card[data-plan="spark"]');
+    dom.proPlanCard = document.querySelector('.plan-card[data-plan="pro"]');
+    dom.freePlanButton = document.getElementById('free-plan-btn');
+    dom.sparkPlanButton = document.getElementById('upgrade-to-spark-btn');
+    dom.proPlanButton = document.getElementById('upgrade-to-pro-btn');
+
 
     // Loading Overlay
     dom.loadingOverlay = document.getElementById('loading-overlay');

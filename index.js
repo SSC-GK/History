@@ -121,6 +121,57 @@ function toggleModal(modalKey, forceClose = false) {
     }
 }
 
+function updatePlansModal() {
+    if (!state.userProfile) return;
+
+    const currentPlan = state.userProfile.subscription_status || 'free';
+    const plans = {
+        free: { card: dom.freePlanCard, button: dom.freePlanButton },
+        spark: { card: dom.sparkPlanCard, button: dom.sparkPlanButton },
+        pro: { card: dom.proPlanCard, button: dom.proPlanButton }
+    };
+
+    // Reset all cards and buttons to their default state
+    Object.values(plans).forEach(({ card, button }) => {
+        if (!card || !button) return;
+        card.classList.remove('current-plan', 'lower-plan');
+        button.disabled = false;
+    });
+
+    // Set default button text for upgradeable plans
+    if (plans.spark.button) plans.spark.button.textContent = 'Upgrade Now';
+    if (plans.pro.button) plans.pro.button.textContent = 'Upgrade Now';
+
+    // Configure the card for the user's current plan
+    if (plans[currentPlan] && plans[currentPlan].card) {
+        plans[currentPlan].card.classList.add('current-plan');
+        if (plans[currentPlan].button) {
+            plans[currentPlan].button.textContent = 'Your Current Plan';
+            plans[currentPlan].button.disabled = true;
+        }
+    }
+
+    // Disable cards for plans that are lower than the user's current plan
+    if (currentPlan === 'spark') {
+        if (plans.free.card) plans.free.card.classList.add('lower-plan');
+        if (plans.free.button) plans.free.button.disabled = true;
+    } else if (currentPlan === 'pro') {
+        if (plans.free.card) plans.free.card.classList.add('lower-plan');
+        if (plans.free.button) plans.free.button.disabled = true;
+        if (plans.spark.card) plans.spark.card.classList.add('lower-plan');
+        if (plans.spark.button) plans.spark.button.disabled = true;
+    }
+
+    // Special text handling for the free plan button based on its state
+    if (plans.free.button) {
+        if (currentPlan === 'free') {
+            plans.free.button.textContent = 'Selected';
+        } else {
+            plans.free.button.textContent = 'N/A';
+        }
+    }
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -209,7 +260,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 restartFullQuiz: this.restartFullQuiz.bind(this),
                 confirmGoBackToHome: this.confirmGoBackToHome.bind(this),
                 updateDynamicHeaders: this.updateDynamicHeaders.bind(this),
-                openPaidServicesModal: () => toggleModal('paidServicesOverlay'),
+                openPaidServicesModal: () => {
+                    updatePlansModal();
+                    toggleModal('paidServicesOverlay');
+                },
                 toggleQuizInternalNavigation: () => { /* Placeholder, will be populated by quiz module */ },
             };
 
@@ -354,7 +408,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 restartFullQuiz: this.restartFullQuiz.bind(this),
                 confirmGoBackToHome: this.confirmGoBackToHome.bind(this),
                 updateDynamicHeaders: this.updateDynamicHeaders.bind(this),
-                openPaidServicesModal: () => toggleModal('paidServicesOverlay'),
+                openPaidServicesModal: () => {
+                    updatePlansModal();
+                    toggleModal('paidServicesOverlay');
+                },
                 toggleQuizInternalNavigation: () => {}, // Placeholder
             };
             state.callbacks = callbacks;
@@ -482,7 +539,10 @@ document.addEventListener('DOMContentLoaded', () => {
             dom.homeCustomQuizCard.onclick = goToFilters;
             
             // New Modal Triggers from Homepage
-            dom.homeContentCreationCard.onclick = () => toggleModal('paidServicesOverlay');
+            dom.homeContentCreationCard.onclick = () => {
+                updatePlansModal();
+                toggleModal('paidServicesOverlay');
+            };
             dom.homeUserGuideCard.onclick = () => toggleModal('userGuideOverlay');
             
             dom.backToHomeLink.onclick = (e) => {
@@ -509,7 +569,10 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             setupSideMenuLink(dom.sideMenuQuizlmLink, () => showView('filter-section', { mode: 'quiz' }));
-            setupSideMenuLink(dom.sideMenuPaidCourseLink, () => toggleModal('paidServicesOverlay'));
+            setupSideMenuLink(dom.sideMenuPaidCourseLink, () => {
+                updatePlansModal();
+                toggleModal('paidServicesOverlay');
+            });
             setupSideMenuLink(dom.sideMenuUserGuideLink, () => toggleModal('userGuideOverlay'));
             setupSideMenuLink(dom.sideMenuAboutUsLink, () => toggleModal('aboutUsOverlay'));
             setupSideMenuLink(dom.sideMenuSettingsLink, async () => {
@@ -560,11 +623,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             };
 
-            if (dom.upgradeToSparkBtn) {
-                dom.upgradeToSparkBtn.onclick = () => showUpgradeModal('Spark Plan', 29);
+            if (dom.sparkPlanButton) {
+                dom.sparkPlanButton.onclick = () => showUpgradeModal('Spark Plan', 29);
             }
-            if (dom.upgradeToProBtn) {
-                dom.upgradeToProBtn.onclick = () => showUpgradeModal('Pro Plan', 49);
+            if (dom.proPlanButton) {
+                dom.proPlanButton.onclick = () => showUpgradeModal('Pro Plan', 49);
             }
 
 

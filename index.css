@@ -3254,6 +3254,22 @@ button.button-danger:hover {
     border-color: var(--primary-color);
     transform: scale(1.02);
 }
+.plan-card.current-plan {
+    border-color: var(--correct-color);
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.4);
+    transform: scale(1.03);
+}
+.plan-card.lower-plan {
+    opacity: 0.6;
+    background-color: var(--button-hover-bg);
+}
+.plan-card.lower-plan .plan-button {
+    background-color: transparent;
+    border: 2px solid var(--text-color-light);
+    color: var(--text-color-light);
+    cursor: not-allowed;
+}
+
 .plan-badge {
     position: absolute;
     top: -15px;
@@ -3340,6 +3356,11 @@ button.button-danger:hover {
     background-color: transparent;
     border: 2px solid var(--text-color-light);
     color: var(--text-color-light);
+    cursor: not-allowed;
+}
+.plan-card.current-plan .plan-button {
+    background-color: var(--correct-color);
+    color: white;
     cursor: not-allowed;
 }
 

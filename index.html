@@ -728,7 +728,7 @@
             </div>
             <div class="content-modal-body plans-container">
                 <!-- Free Plan -->
-                <div class="plan-card">
+                <div class="plan-card" data-plan="free">
                     <div class="plan-badge current-plan-badge">Your Current Plan</div>
                     <div class="plan-header">
                         <h3>Free Plan</h3>
@@ -740,10 +740,10 @@
                         <li><i class="fas fa-times-circle"></i> Unlimited Access</li>
                         <li><i class="fas fa-times-circle"></i> Priority Support</li>
                     </ul>
-                    <button class="plan-button disabled-plan" disabled>Selected</button>
+                    <button id="free-plan-btn" class="plan-button disabled-plan" disabled>Selected</button>
                 </div>
                 <!-- Spark Plan -->
-                <div class="plan-card recommended">
+                <div class="plan-card recommended" data-plan="spark">
                     <div class="plan-badge recommended-badge">Recommended</div>
                     <div class="plan-header">
                         <h3>Spark Plan</h3>
@@ -758,7 +758,7 @@
                     <button id="upgrade-to-spark-btn" class="plan-button">Upgrade Now</button>
                 </div>
                 <!-- Pro Plan -->
-                <div class="plan-card">
+                <div class="plan-card" data-plan="pro">
                     <div class="plan-header">
                         <h3>Pro Plan</h3>
                         <p class="plan-price">₹49 <span>/ month</span></p>
