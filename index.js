@@ -33,7 +33,7 @@ const mainSections = [
 ];
 const modalOverlays = [
     'sideMenuOverlay', 'quizSettingsOverlay', 'profileSettingsOverlay', 'privacyPolicyOverlay',
-    'aboutUsOverlay', 'userGuideOverlay', 'contentCreationOverlay'
+    'aboutUsOverlay', 'userGuideOverlay', 'paidServicesOverlay'
 ];
 
 
@@ -145,15 +145,17 @@ document.addEventListener('DOMContentLoaded', () => {
         showApp: async function(user) {
             showView('homepage-section');
             
-            // Fetch user profile from Supabase and store it in the state
             const profile = await auth.fetchUserProfile(user.id);
             state.userProfile = profile;
 
-            // Populate side menu with user info from the 'profiles' table for consistency
             if (profile) {
                 dom.sideMenuProfileName.textContent = profile.full_name || 'Quiz User';
                 dom.sideMenuProfilePic.src = profile.avatar_url || 'https://via.placeholder.com/60';
                 dom.sideMenuSubscriptionStatus.textContent = profile.subscription_status || 'free';
+                
+                // NEW: Check and reset daily limits if it's a new day
+                await this.checkAndResetDailyLimits(user.id, profile);
+
             } else if (user) { // Fallback to auth metadata if profile is somehow missing
                 dom.sideMenuProfileName.textContent = user.user_metadata?.full_name || 'Quiz User';
                 dom.sideMenuProfilePic.src = user.user_metadata?.avatar_url || 'https://via.placeholder.com/60';
@@ -171,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 restartFullQuiz: this.restartFullQuiz.bind(this),
                 confirmGoBackToHome: this.confirmGoBackToHome.bind(this),
                 updateDynamicHeaders: this.updateDynamicHeaders.bind(this),
+                openPaidServicesModal: () => toggleModal('paidServicesOverlay'),
                 toggleQuizInternalNavigation: () => { /* Placeholder, will be populated by quiz module */ },
             };
 
@@ -204,6 +207,26 @@ document.addEventListener('DOMContentLoaded', () => {
             updateSignInButtonState(); // Set initial state
         },
         
+        checkAndResetDailyLimits: async function(userId, profile) {
+            const today = new Date().toISOString().split('T')[0]; // Get YYYY-MM-DD
+            if (profile.last_reset_date !== today) {
+                console.log("New day detected. Resetting daily limits for user.");
+                const updates = {
+                    daily_queries_used: 0,
+                    daily_questions_attempted: 0,
+                    last_reset_date: today,
+                };
+                const updatedProfile = await auth.updateUserProfile(userId, updates);
+                if (updatedProfile) {
+                    state.userProfile = updatedProfile; // Update state with reset values
+                    Toast.fire({
+                        icon: 'info',
+                        title: 'Daily limits have been reset!'
+                    });
+                }
+            }
+        },
+
         promptToResumeQuiz: async function() {
             loadQuizState();
             if (state.isQuizActive && state.questionGroups && state.questionGroups.length > 0) {
@@ -269,6 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 restartFullQuiz: this.restartFullQuiz.bind(this),
                 confirmGoBackToHome: this.confirmGoBackToHome.bind(this),
                 updateDynamicHeaders: this.updateDynamicHeaders.bind(this),
+                openPaidServicesModal: () => toggleModal('paidServicesOverlay'),
                 toggleQuizInternalNavigation: () => {}, // Placeholder
             };
             state.callbacks = callbacks;
@@ -396,7 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
             dom.homeCustomQuizCard.onclick = goToFilters;
             
             // New Modal Triggers from Homepage
-            dom.homeContentCreationCard.onclick = () => toggleModal('contentCreationOverlay');
+            dom.homeContentCreationCard.onclick = () => toggleModal('paidServicesOverlay');
             dom.homeUserGuideCard.onclick = () => toggleModal('userGuideOverlay');
             
             dom.backToHomeLink.onclick = (e) => {
@@ -423,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             setupSideMenuLink(dom.sideMenuQuizlmLink, () => showView('filter-section', { mode: 'quiz' }));
-            setupSideMenuLink(dom.sideMenuPaidCourseLink, () => toggleModal('contentCreationOverlay'));
+            setupSideMenuLink(dom.sideMenuPaidCourseLink, () => toggleModal('paidServicesOverlay'));
             setupSideMenuLink(dom.sideMenuUserGuideLink, () => toggleModal('userGuideOverlay'));
             setupSideMenuLink(dom.sideMenuAboutUsLink, () => toggleModal('aboutUsOverlay'));
             setupSideMenuLink(dom.sideMenuSettingsLink, async () => {
@@ -437,19 +461,44 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             setupSideMenuLink(dom.sideMenuPrivacyLink, () => toggleModal('privacyPolicyOverlay'));
 
-            // Content Creation Modal Actions
-            const setupContentCreationAction = (button, tabId) => {
-                if (button) {
-                    button.onclick = () => {
-                        toggleModal('contentCreationOverlay', true);
-                        showView('filter-section'); // This will show all tabs by default now
-                        document.querySelector(`.tab-btn[data-tab="${tabId}"]`).click();
-                    };
-                }
-            };
-            setupContentCreationAction(dom.modalCreatePptBtn, 'ppt-panel');
-            setupContentCreationAction(dom.modalCreatePdfBtn, 'ppt-panel');
-            setupContentCreationAction(dom.modalDownloadJsonBtn, 'json-panel');
+            // Manual Upgrade Flow
+            if (dom.upgradePlanBtn) {
+                dom.upgradePlanBtn.onclick = () => {
+                    const upiId = 'your-upi-id@okhdfcbank'; // Replace with your actual UPI ID
+                    Swal.fire({
+                        title: 'Upgrade to Pro Plan',
+                        html: `
+                            <p>To upgrade your account, please follow these steps:</p>
+                            <ol style="text-align: left; margin: 20px auto; max-width: 350px;">
+                                <li>Make a payment of <strong>₹49</strong> via UPI to the ID below.</li>
+                                <li>Email a screenshot of the transaction to <strong>support@quizlm.com</strong>.</li>
+                                <li>Your account will be manually upgraded to Pro within 24 hours.</li>
+                            </ol>
+                            <div class="upi-info">
+                                <strong>UPI ID:</strong> <span id="upi-id-text">${upiId}</span>
+                            </div>
+                        `,
+                        showCloseButton: true,
+                        confirmButtonText: '<i class="fas fa-copy"></i> Copy UPI ID',
+                        confirmButtonColor: 'var(--primary-color)',
+                        footer: 'Thank you for your support!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            navigator.clipboard.writeText(upiId).then(() => {
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'UPI ID copied to clipboard!'
+                                });
+                            }).catch(err => {
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: 'Could not copy ID.'
+                                });
+                            });
+                        }
+                    });
+                };
+            }
 
 
             // --- Generic Modal Close Logic ---

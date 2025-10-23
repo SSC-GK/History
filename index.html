@@ -718,23 +718,46 @@
         </div>
     </div>
 
-    <!-- CONTENT CREATION MODAL -->
-    <div id="content-creation-overlay" class="content-modal-overlay">
-        <div class="content-modal-panel">
+    <!-- PAID SERVICES MODAL (Formerly Content Creation) -->
+    <div id="paid-services-overlay" class="content-modal-overlay">
+        <div class="content-modal-panel wide-modal">
             <div class="content-modal-header">
-                <h2><i class="fas fa-file-export"></i> Content Creation Tools</h2>
-                <button id="content-creation-close-btn" class="content-modal-close-btn">&times;</button>
+                <h2><i class="fas fa-gem"></i> Our Plans</h2>
+                <button id="paid-services-close-btn" class="content-modal-close-btn">&times;</button>
             </div>
-            <div class="content-modal-body">
-                <p class="modal-intro">Select your desired format to begin. You will be taken to the filter page to select the questions for your document.</p>
-                <div class="content-creation-actions">
-                    <button id="modal-create-ppt-btn"><i class="fas fa-file-powerpoint"></i> Create PPT Presentation</button>
-                    <button id="modal-create-pdf-btn"><i class="fas fa-file-pdf"></i> Create PDF Document</button>
-                    <button id="modal-download-json-btn"><i class="fas fa-file-code"></i> Download as JSON</button>
+            <div class="content-modal-body plans-container">
+                <div class="plan-card">
+                    <div class="plan-badge current-plan-badge">Your Current Plan</div>
+                    <div class="plan-header">
+                        <h3>Free Plan</h3>
+                        <p class="plan-price">₹0 <span>/ month</span></p>
+                    </div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check-circle"></i> 5 Quizzes/Documents per Day</li>
+                        <li><i class="fas fa-check-circle"></i> 200 Question Attempts per Day</li>
+                        <li><i class="fas fa-times-circle"></i> Unlimited Access</li>
+                        <li><i class="fas fa-times-circle"></i> Priority Support</li>
+                    </ul>
+                    <button class="plan-button disabled-plan" disabled>Selected</button>
+                </div>
+                <div class="plan-card recommended">
+                    <div class="plan-badge recommended-badge">Recommended</div>
+                    <div class="plan-header">
+                        <h3>Pro Plan</h3>
+                        <p class="plan-price">₹49 <span>/ month</span></p>
+                    </div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check-circle"></i> Unlimited Quizzes & Documents</li>
+                        <li><i class="fas fa-check-circle"></i> Unlimited Question Attempts</li>
+                        <li><i class="fas fa-check-circle"></i> Priority Support</li>
+                        <li><i class="fas fa-check-circle"></i> Access All Future Features</li>
+                    </ul>
+                    <button id="upgrade-plan-btn" class="plan-button">Upgrade Now</button>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- PDF Render Container -->
     <div id="pdf-render-container"></div>

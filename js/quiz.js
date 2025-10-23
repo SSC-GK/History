@@ -3,6 +3,7 @@ import { dom } from './dom.js';
 import { playSound, triggerHapticFeedback, shuffleArray, buildExplanationHtml, Toast } from './utils.js';
 import { typewriterAnimate } from './animations.js';
 import { applyTextZoom } from './settings.js';
+import * as auth from './auth.js';
 
 let appCallbacks = {};
 
@@ -49,6 +50,54 @@ function reorderQuizQuestions() {
     // Update navigation to reflect new order
     populateQuizInternalNavigation();
 }
+
+/**
+ * Checks if a user can attempt another question based on their plan.
+ * Increments the attempt counter for free users. Ends the quiz if the limit is reached.
+ * @returns {Promise<boolean>} True if the user can proceed, false otherwise.
+ */
+async function handleQuestionAttempt() {
+    const profile = state.userProfile;
+    // Allow non-free users or if profile somehow failed to load
+    if (!profile || profile.subscription_status !== 'free') {
+        return true;
+    }
+
+    // We check *before* incrementing to allow the 200th question to be processed
+    if (profile.daily_questions_attempted >= config.freePlanLimits.questions) {
+        stopTimer(); // Stop the timer immediately
+        Swal.fire({
+            target: dom.quizMainContainer,
+            title: 'Daily Question Limit Reached!',
+            html: `You've attempted your free limit of <b>${config.freePlanLimits.questions}</b> questions today. Your quiz will now end. <br>Upgrade to keep practicing!`,
+            icon: 'warning',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showCancelButton: true,
+            confirmButtonColor: 'var(--primary-color)',
+            cancelButtonColor: 'var(--wrong-color)',
+            confirmButtonText: '<i class="fas fa-dollar-sign"></i> View Plans & End Quiz',
+            cancelButtonText: 'End Quiz Now'
+        }).then((result) => {
+            appCallbacks.endQuiz(); // Always end the quiz after the modal
+            if (result.isConfirmed && appCallbacks.openPaidServicesModal) {
+                appCallbacks.openPaidServicesModal();
+            }
+        });
+        return false; // Prevent further action
+    }
+
+    // Increment the counter
+    const newCount = profile.daily_questions_attempted + 1;
+    const updatedProfile = await auth.updateUserProfile(profile.id, { daily_questions_attempted: newCount });
+
+    if (updatedProfile) {
+        state.userProfile = updatedProfile; // Keep local state in sync
+    }
+    // Optimistically allow the user to proceed
+    return true;
+}
+
 
 export function initQuizModule(callbacks) {
     appCallbacks = callbacks;
@@ -180,7 +229,10 @@ function startQuizLogicForGroup() {
     updateQuizProgressBar();
 }
 
-function checkAnswer(selectedEnglishOption, button) {
+async function checkAnswer(selectedEnglishOption, button) {
+    const canProceed = await handleQuestionAttempt();
+    if (!canProceed) return;
+
     stopTimer();
     dom.timerBar.classList.add('paused');
     let q = state.currentQuizData.shuffledQuestions[state.currentQuizData.currentQuestionIndex];
@@ -566,7 +618,10 @@ function stopTimer() {
     if (dom.timerElement) dom.timerElement.classList.remove('timeout');
 }
 
-function handleTimeout() {
+async function handleTimeout() {
+    const canProceed = await handleQuestionAttempt();
+    if (!canProceed) return;
+
     stopTimer();
     triggerHapticFeedback('wrong');
     dom.timerBar.style.width = '0%';

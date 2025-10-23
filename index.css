@@ -3036,7 +3036,7 @@ body[data-theme='dark'] #review-explanation {
 .content-modal-overlay.visible .content-modal-panel {
     transform: scale(1);
 }
-#privacy-policy-panel {
+#privacy-policy-panel, .wide-modal {
     max-width: 700px; /* Wider for more text content */
 }
 
@@ -3201,32 +3201,129 @@ button.button-danger:hover {
 .guide-section h4 { margin: 0 0 8px 0; color: var(--primary-dark); display: flex; align-items: center; gap: 8px; }
 .guide-section p { margin: 0; color: var(--text-color-medium); font-size: 0.95em; }
 
-.modal-intro { color: var(--text-color-medium); margin-bottom: 25px; }
-.content-creation-actions { display: flex; flex-direction: column; gap: 15px; }
-.content-creation-actions button {
-    padding: 15px;
-    font-size: 1em;
-    font-weight: 600;
-    cursor: pointer;
-    border: 1px solid transparent;
-    border-radius: 8px;
-    color: var(--button-text-color);
-    transition: all 0.2s ease;
+/* NEW: Plans Modal Styles */
+.plans-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px;
+}
+@media (min-width: 600px) {
+    .plans-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+.plan-card {
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
     text-align: left;
+    transition: all 0.3s ease;
+    position: relative;
+    background-color: var(--settings-header-bg);
+}
+.plan-card.recommended {
+    border-color: var(--primary-color);
+    transform: scale(1.02);
+}
+.plan-badge {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 15px;
+    border-radius: 16px;
+    font-size: 0.8em;
+    font-weight: 700;
+    color: white;
+}
+.current-plan-badge {
+    background-color: var(--text-color-light);
+}
+.recommended-badge {
+    background-color: var(--primary-color);
+}
+.plan-header {
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+.plan-header h3 {
+    font-size: 1.5em;
+    color: var(--text-color-dark);
+    margin: 10px 0 5px 0;
+}
+.plan-price {
+    font-size: 2em;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin: 0;
+}
+.plan-price span {
+    font-size: 0.5em;
+    font-weight: 400;
+    color: var(--text-color-light);
+}
+.plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 25px 0;
+    flex-grow: 1;
+}
+.plan-features li {
     display: flex;
     align-items: center;
     gap: 12px;
+    margin-bottom: 15px;
+    font-size: 0.95em;
+    color: var(--text-color-medium);
 }
-.content-creation-actions button i {
+.plan-features li i {
     font-size: 1.2em;
 }
-.content-creation-actions button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px var(--shadow-color);
+.plan-features .fa-check-circle {
+    color: var(--correct-color);
 }
-#modal-create-ppt-btn { background-color: #f57c00; }
-#modal-create-pdf-btn { background-color: #d32f2f; }
-#modal-download-json-btn { background-color: #1976d2; }
+.plan-features .fa-times-circle {
+    color: var(--wrong-color);
+}
+.plan-button {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1em;
+    font-weight: 700;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+#upgrade-plan-btn {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 12px rgba(63, 81, 181, 0.4);
+}
+#upgrade-plan-btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(63, 81, 181, 0.5);
+}
+.disabled-plan {
+    background-color: transparent;
+    border: 2px solid var(--text-color-light);
+    color: var(--text-color-light);
+    cursor: not-allowed;
+}
+
+/* SweetAlert UPI Modal styles */
+.upi-info {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: var(--settings-header-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
 
 /* Privacy Policy Modal */
 .privacy-policy-body {

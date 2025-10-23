@@ -42,11 +42,9 @@ export function cacheDomElements() {
     dom.aboutUsCloseBtn = document.getElementById('about-us-close-btn');
     dom.userGuideOverlay = document.getElementById('user-guide-overlay');
     dom.userGuideCloseBtn = document.getElementById('user-guide-close-btn');
-    dom.contentCreationOverlay = document.getElementById('content-creation-overlay');
-    dom.contentCreationCloseBtn = document.getElementById('content-creation-close-btn');
-    dom.modalCreatePptBtn = document.getElementById('modal-create-ppt-btn');
-    dom.modalCreatePdfBtn = document.getElementById('modal-create-pdf-btn');
-    dom.modalDownloadJsonBtn = document.getElementById('modal-download-json-btn');
+    dom.paidServicesOverlay = document.getElementById('paid-services-overlay');
+    dom.paidServicesCloseBtn = document.getElementById('paid-services-close-btn');
+    dom.upgradePlanBtn = document.getElementById('upgrade-plan-btn');
 
     // Loading Overlay
     dom.loadingOverlay = document.getElementById('loading-overlay');

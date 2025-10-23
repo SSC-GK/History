@@ -2,6 +2,7 @@ import { config, state } from './state.js';
 import { dom } from './dom.js';
 import { debounce, shuffleArray } from './utils.js';
 import { supabase } from './supabaseClient.js';
+import * as auth from './auth.js';
 
 let appCallbacks = {};
 let docWorker = null;
@@ -20,6 +21,49 @@ function triggerCountAnimation(element) {
         element.classList.add('count-updated');
     });
 }
+
+/**
+ * Checks if the user can perform a query (start quiz, generate doc).
+ * Increments the user's query count if they are on a free plan and within limits.
+ * @returns {Promise<boolean>} True if the user can proceed, false otherwise.
+ */
+async function handleQueryAttempt() {
+    const profile = state.userProfile;
+    // Allow non-free users or if profile somehow failed to load
+    if (!profile || profile.subscription_status !== 'free') {
+        return true; 
+    }
+
+    if (profile.daily_queries_used >= config.freePlanLimits.queries) {
+        Swal.fire({
+            target: dom.filterSection,
+            title: 'Daily Query Limit Reached',
+            html: `You have used your <b>${config.freePlanLimits.queries}</b> free queries for today. <br>Upgrade to a paid plan for more!`,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: 'var(--primary-color)',
+            cancelButtonColor: 'var(--wrong-color)',
+            confirmButtonText: '<i class="fas fa-dollar-sign"></i> View Plans',
+            cancelButtonText: 'Maybe Later'
+        }).then((result) => {
+            if (result.isConfirmed && appCallbacks.openPaidServicesModal) {
+                appCallbacks.openPaidServicesModal();
+            }
+        });
+        return false;
+    }
+
+    // Increment the counter
+    const newCount = profile.daily_queries_used + 1;
+    const updatedProfile = await auth.updateUserProfile(profile.id, { daily_queries_used: newCount });
+
+    if (updatedProfile) {
+        state.userProfile = updatedProfile; // Keep local state in sync
+    }
+    // Optimistically allow the user to proceed even if the update fails
+    return true;
+}
+
 
 export function initFilterModule(callbacks) {
     appCallbacks = callbacks;
@@ -449,7 +493,9 @@ function resetFilters() {
     onFilterStateChange(true);
 }
 
-function startFilteredQuiz() {
+async function startFilteredQuiz() {
+    if (!(await handleQueryAttempt())) return;
+
     if (state.filteredQuestionsMasterList.length === 0) {
         Swal.fire('No Questions Found', 'Please adjust your filters to select at least one question.', 'warning');
         return;
@@ -458,6 +504,8 @@ function startFilteredQuiz() {
 }
 
 async function generateDocument(format) {
+    if (!(await handleQueryAttempt())) return;
+
     const questions = state.filteredQuestionsMasterList;
     if (questions.length === 0) {
         Swal.fire({
@@ -653,7 +701,7 @@ async function handleQuickStart(preset) {
 
         state.filteredQuestionsMasterList = data;
         updateQuestionCount(data.length);
-        startFilteredQuiz();
+        await startFilteredQuiz();
 
     } catch (error) {
         console.error('Quick Start failed:', error);
@@ -669,6 +717,8 @@ async function handleQuickStart(preset) {
 }
 
 async function downloadJSON() {
+    if (!(await handleQueryAttempt())) return;
+    
     const questions = state.filteredQuestionsMasterList;
     if (questions.length === 0) {
         Swal.fire({

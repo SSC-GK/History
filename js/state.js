@@ -4,6 +4,10 @@ export const config = {
     zoomStep: 0.1,
     minZoom: 0.7,
     maxZoom: 1.5,
+    freePlanLimits: {
+        queries: 5,
+        questions: 200,
+    },
     zoomableSelectors: [
         '.container h1', '.container h2', '.container #review-question-number', '.container #review-time-taken',
         '.container .options button', '.container #explanation', '.container #review-explanation', '.container .summary-item span',

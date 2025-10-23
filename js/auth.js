@@ -85,6 +85,30 @@ export async function fetchUserProfile(userId) {
     }
 }
 
+/**
+ * Updates a user's profile in the 'profiles' table.
+ * @param {string} userId The UUID of the user.
+ * @param {object} updates An object containing the fields to update.
+ * @returns {Promise<object|null>} The updated user profile object or null on error.
+ */
+export async function updateUserProfile(userId, updates) {
+    if (!userId || !updates) return null;
+    try {
+        const { data, error } = await supabase
+            .from('profiles')
+            .update(updates)
+            .eq('id', userId)
+            .select() // Use select() to get the updated row back
+            .single();
+
+        if (error) throw error;
+        return data;
+    } catch (error) {
+        console.error('Error updating user profile:', error.message);
+        return null;
+    }
+}
+
 
 /**
  * Handles the account deletion process.
