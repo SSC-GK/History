@@ -161,7 +161,7 @@ async function loadQuestionsForFiltering() {
     }
     
     dom.loadingOverlay.style.display = 'flex';
-    dom.loadingText.textContent = 'Loading Questions from Database...';
+    dom.loadingText.textContent = 'Welcome to QuizLM...';
     try {
         const { data, error } = await supabase.from('questions').select('*').order('v1_id', { ascending: true });
         if (error) throw error;
